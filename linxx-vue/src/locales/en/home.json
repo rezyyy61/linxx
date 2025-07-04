@@ -1,0 +1,24 @@
+{
+    "welcome": "Welcome to the App",
+    "nav": {
+        "home": "Home",
+        "register": "Register",
+        "login": "Login",
+        "logout": "Logout"
+    },
+    "adnav": {
+        "parties": "Parties & Groups",
+        "articles": "Articles",
+        "topics": "Topics",
+        "media": "Media",
+        "campaigns": "Campaigns",
+        "profiles": "Profiles",
+        "events": "Events",
+        "faq": "FAQ",
+        "about": "About",
+        "announcements": "Announcements",
+        "trending": "Trending",
+        "support": "Support",
+        "contact": "Contact"
+    }
+}

@@ -1,0 +1,103 @@
+{
+
+        "sections": {
+            "general": "General Information",
+            "ideologies": "Ideological Positions",
+            "description": "Full Description",
+            "links": "Social Media & Links",
+            "files": "Logo & Manifesto",
+            "submit": "Final Submission"
+        },
+        "placeholders": {
+            "general": "Fill in name, type, year, location...",
+            "ideologies": "Choose or add political ideologies",
+            "description": "Describe your mission and background",
+            "links": "Provide website and social links",
+            "files": "Upload your logo and manifesto file",
+            "submit": "Submit and publish your profile"
+        },
+
+    "general": {
+        "save": "Save",
+        "groupName": "Group or Person Name",
+        "groupNamePlaceholder": "e.g. Solidarity Workers Collective",
+        "tagline": "Slogan / Short Description",
+        "taglinePlaceholder": "e.g. Anti-capitalist voices from the margins",
+        "entityType": "Entity Type",
+        "entityTypePlaceholder": "Choose your entity type",
+        "uploadButton": "Upload Logo",
+        "logoPlaceholder": "Upload Logo",
+        "types": {
+            "party": "Political Party",
+            "collective": "Collective / Network",
+            "media": "Media",
+            "individual": "Individual Activist"
+        },
+        "location": "Location",
+        "locationPlaceholder": "e.g. Berlin, Germany",
+        "foundedYear": "Founded Year",
+        "foundedYearPlaceholder": "e.g. 2010"
+    },
+
+    "ideologies": {
+        "label": "Political Ideologies",
+        "keywordsLabel": "Keywords",
+        "optional": "Optional",
+        "addButton": "Add",
+        "keywordsPlaceholder": "e.g. anti-war, social justice, self-determination",
+        "list": {
+            "socialism": "Socialism",
+            "feminism": "Feminism",
+            "anarchism": "Anarchism",
+            "environmentalism": "Environmentalism",
+            "antiCapitalism": "Anti-Capitalism",
+            "marxism": "Marxism",
+            "humanRights": "Human Rights"
+        }
+    },
+    "description": {
+        "about": "Background and Formation Philosophy",
+        "goals": "Goals and Vision",
+        "activities": "Activities and Fields of Action",
+        "structure": "Structure and Organization",
+        "optional": "Optional",
+        "uploadHint": "If you already have the text ready (e.g., PDF or Word), you can upload it instead."
+    },
+    "links": {
+        "title": "Contact & Links",
+        "customLinks": "Custom Links",
+        "addButton": "Add Link",
+        "remove": "Remove",
+        "placeholders": {
+            "title": "e.g., Official site, membership form, blog...",
+            "url": "https://example.com"
+        }
+    },
+    "contact": {
+        "website": "Website",
+        "twitter": "Twitter",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "telegram": "Telegram",
+        "email": "Email",
+        "phone": "Phone",
+        "placeholders": {
+            "website": "https://example.com",
+            "twitter": "https://twitter.com/yourhandle",
+            "facebook": "https://facebook.com/yourpage",
+            "instagram": "https://instagram.com/yourpage",
+            "telegram": "https://t.me/yourchannel",
+            "email": "example\\\\u0040email.com",
+            "phone": "+98..."
+        }
+    },
+    "submit": {
+        "title": "Review & Submit",
+        "subtitle": "Please review all information before sending.",
+        "confirmText": "I confirm that the above information is correct.",
+        "button": "Submit",
+        "sending": "Sending..."
+    }
+
+}
+

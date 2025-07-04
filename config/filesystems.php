@@ -38,11 +38,11 @@ return [
             'report' => false,
         ],
 
-        'public' => [
+        'home' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => storage_path('app/home'),
             'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
+            'visibility' => 'home',
             'throw' => false,
             'report' => false,
         ],
@@ -74,7 +74,7 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        public_path('storage') => storage_path('app/home'),
     ],
 
 ];

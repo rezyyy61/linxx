@@ -1,0 +1,101 @@
+{
+
+        "sections": {
+            "general": "اطلاعات کلی و لوگو",
+            "ideologies": "گرایش‌های سیاسی",
+            "description": "توضیحات کامل و مانیفست",
+            "links": "شبکه‌های اجتماعی",
+            "submit": "ارسال نهایی"
+        },
+        "placeholders": {
+            "general": "نام، نوع، سال، موقعیت را وارد کنید...",
+            "ideologies": "گرایش‌های سیاسی را انتخاب یا اضافه کنید",
+            "description": "اهداف، دیدگاه‌ها و پیش‌زمینه را شرح دهید",
+            "links": "لینک‌های شبکه اجتماعی و وب‌سایت را وارد کنید",
+            "submit": "پروفایل را ذخیره و منتشر کنید"
+        },
+
+    "general": {
+        "save": "ذخیره",
+        "groupName": "نام فرد یا گروه",
+        "groupNamePlaceholder": "مثلاً: جمع همبستگی کارگران",
+        "tagline": "شعار / معرفی کوتاه",
+        "taglinePlaceholder": "مثلاً: صدای ضدسرمایه‌داری از حاشیه‌ها",
+        "entityType": "نوع هویت",
+        "entityTypePlaceholder": "نوع هویت خود را انتخاب کنید",
+        "uploadButton": "آپلود لوگو",
+        "logoPlaceholder": "آپلود لوگو",
+        "types": {
+            "party": "حزب سیاسی",
+            "collective": "جمع / شبکه",
+            "media": "رسانه",
+            "individual": "فرد فعال"
+        },
+        "location": "موقعیت مکانی",
+        "locationPlaceholder": "مثلاً: برلین، آلمان",
+        "foundedYear": "سال تأسیس",
+        "foundedYearPlaceholder": "مثلاً: ۲۰۱۰"
+    },
+
+    "ideologies": {
+        "label": "گرایش‌های سیاسی",
+        "keywordsLabel": "کلیدواژه‌ها",
+        "optional": "اختیاری",
+        "addButton": "افزودن",
+        "keywordsPlaceholder": "مثلاً: ضد جنگ، عدالت اجتماعی، حق تعیین سرنوشت",
+        "list": {
+            "socialism": "سوسیالیسم",
+            "feminism": "فمینیسم",
+            "anarchism": "آنارشیسم",
+            "environmentalism": "محیط‌زیستی",
+            "antiCapitalism": "ضد سرمایه‌داری",
+            "marxism": "مارکسیسم",
+            "humanRights": "حقوق بشر"
+        }
+    },
+    "description": {
+        "about": "تاریخچه و فلسفه شکل‌گیری",
+        "goals": "اهداف و چشم‌اندازها",
+        "activities": "فعالیت‌ها و حوزه‌های عمل",
+        "structure": "ساختار و سازمان‌دهی",
+        "optional": "اختیاری",
+        "uploadHint": "اگر متن آماده دارید (مثلاً PDF یا Word)، می‌توانید آن را بارگذاری کنید."
+    },
+
+    "links": {
+        "title": "راه‌های ارتباطی",
+        "customLinks": "لینک‌های سفارشی",
+        "addButton": "افزودن لینک",
+        "remove": "حذف",
+        "placeholders": {
+            "title": "مثلاً: سایت رسمی، فرم عضویت، بلاگ...",
+            "url": "https://example.com"
+        }
+    },
+    "contact": {
+        "website": "سایت رسمی",
+        "twitter": "توییتر",
+        "facebook": "فیس‌بوک",
+        "instagram": "اینستاگرام",
+        "telegram": "تلگرام",
+        "email": "ایمیل",
+        "phone": "شماره تماس",
+        "placeholders": {
+            "website": "https://example.com",
+            "twitter": "https://twitter.com/yourhandle",
+            "facebook": "https://facebook.com/yourpage",
+            "instagram": "https://instagram.com/yourpage",
+            "telegram": "https://t.me/yourchannel",
+            "email": "example\\\\u0040email.com",
+            "phone": "+1..."
+        }
+    },
+    "submit": {
+        "title": "بازبینی و ارسال",
+        "subtitle": "لطفاً پیش از ارسال، تمام اطلاعات را بررسی کنید.",
+        "confirmText": "صحت اطلاعات فوق را تأیید می‌کنم.",
+        "button": "ارسال",
+        "sending": "در حال ارسال..."
+    }
+
+}
