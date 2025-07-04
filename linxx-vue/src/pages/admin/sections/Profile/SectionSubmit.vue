@@ -1,3 +1,83 @@
+<script setup>
+import { ref, computed, defineAsyncComponent } from 'vue'
+import { usePoliticalProfileStore } from '@/stores/politicalProfile'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import { ChevronDown } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+import { usePoliticalProfileSubmit } from "@/composables/usePoliticalProfile";
+
+/* i18n & Store */
+const { t } = useI18n()
+const store = usePoliticalProfileStore()
+const { submit } = usePoliticalProfileSubmit()
+
+/* Async preview cards */
+const reviewCards = [
+    {
+        key: 'general',
+        title: t('politicalProfile.sections.general'),
+        component: defineAsyncComponent(() =>
+            import('@/pages/admin/sections/Profile/SectionGeneral.vue')
+        )
+    },
+    {
+        key: 'ideologies',
+        title: t('politicalProfile.sections.ideologies'),
+        component: defineAsyncComponent(() =>
+            import('@/pages/admin/sections/Profile/SectionIdeologies.vue')
+        )
+    },
+    {
+        key: 'description',
+        title: t('politicalProfile.sections.description'),
+        component: defineAsyncComponent(() =>
+            import('@/pages/admin/sections/Profile/SectionDescription.vue')
+        )
+    },
+    {
+        key: 'links',
+        title: t('politicalProfile.sections.links'),
+        component: defineAsyncComponent(() =>
+            import('@/pages/admin/sections/Profile/SectionLinks.vue')
+        )
+    }
+]
+
+/* UI States */
+const confirmed = ref(false)
+const loading = ref(false)
+const success = ref(false)
+const error = ref(null)
+
+const disableSubmit = computed(() => loading.value || !confirmed.value)
+
+/* Combined payload */
+const allData = computed(() => ({
+    general: store.general,
+    ideologies: store.ideologies,
+    description: store.description,
+    links: store.links
+}))
+
+/* Handle form submission */
+async function handleSubmit() {
+    loading.value = true
+    error.value = null
+    success.value = false
+
+    try {
+        const response = await submit('create') // mode = 'create'
+        success.value = true
+        console.log('✅ API response:', response.data)
+    } catch (err) {
+        error.value = err.response?.data?.message || err.message
+        console.error('❌ Submit failed:', err)
+    } finally {
+        loading.value = false
+    }
+}
+</script>
+
 <template>
     <div class="space-y-10">
         <!-- Heading -->
@@ -10,25 +90,20 @@
             </p>
         </div>
 
-        <!-- Review cards -->
-        <Disclosure
-            v-for="card in reviewCards"
-            :key="card.key"
-            v-slot="{ open }"
-        >
+        <!-- Preview sections -->
+        <Disclosure v-for="card in reviewCards" :key="card.key" v-slot="{ open }">
             <DisclosureButton
                 class="w-full flex justify-between items-center bg-gray-100 dark:bg-gray-800 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-600 text-left"
             >
                 <span class="font-medium">{{ card.title }}</span>
                 <ChevronDown :class="open ? 'rotate-180' : ''" class="w-5 h-5 transition" />
             </DisclosureButton>
-
             <DisclosurePanel class="mt-2 px-4 py-3 border-l border-gray-300 dark:border-gray-600">
                 <component :is="card.component" />
             </DisclosurePanel>
         </Disclosure>
 
-        <!-- Confirmation (optional) -->
+        <!-- Confirmation -->
         <div class="flex items-start gap-2">
             <input
                 type="checkbox"
@@ -39,6 +114,16 @@
             <label for="confirm" class="text-sm text-gray-700 dark:text-gray-300">
                 {{ $t('politicalProfile.submit.confirmText') }}
             </label>
+        </div>
+
+        <!-- Errors -->
+        <div v-if="error" class="text-sm text-red-600">
+            {{ error }}
+        </div>
+
+        <!-- Success -->
+        <div v-if="success" class="text-sm text-green-600">
+            {{ $t('politicalProfile.submit.success') }}
         </div>
 
         <!-- Submit -->
@@ -85,78 +170,3 @@
         </details>
     </div>
 </template>
-
-<script setup>
-import { ref, computed, defineAsyncComponent } from 'vue'
-import { usePoliticalProfileStore } from '@/stores/politicalProfile'
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronDown } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
-
-/* i18n & Pinia */
-const { t } = useI18n()
-const store = usePoliticalProfileStore()
-
-/* Async review cards */
-const reviewCards = [
-    {
-        key: 'general',
-        title: t('politicalProfile.sections.general'),
-        component: defineAsyncComponent(() =>
-            import('@/pages/admin/sections/Profile/SectionGeneral.vue')
-        )
-    },
-    {
-        key: 'ideologies',
-        title: t('politicalProfile.sections.ideologies'),
-        component: defineAsyncComponent(() =>
-            import('@/pages/admin/sections/Profile/SectionIdeologies.vue')
-        )
-    },
-    {
-        key: 'description',
-        title: t('politicalProfile.sections.description'),
-        component: defineAsyncComponent(() =>
-            import('@/pages/admin/sections/Profile/SectionDescription.vue')
-        )
-    },
-    {
-        key: 'links',
-        title: t('politicalProfile.sections.links'),
-        component: defineAsyncComponent(() =>
-            import('@/pages/admin/sections/Profile/SectionLinks.vue')
-        )
-    }
-]
-
-/* Whole payload */
-const allData = computed(() => ({
-    general: store.general,
-    ideologies: store.ideologies,
-    description: store.description,
-    links: store.links
-}))
-
-/* UI states */
-const confirmed      = ref(false)
-const loading        = ref(false)
-const disableSubmit  = computed(() => loading.value || !confirmed.value)
-
-/* Mock submit */
-async function handleSubmit () {
-    loading.value = true
-    try {
-        localStorage.setItem('politicalProfileDraft', JSON.stringify(allData.value))
-        await new Promise(r => setTimeout(r, 1200))
-        console.log('✅ saved to LocalStorage', allData.value)
-    } catch (e) {
-        console.error('❌ submit failed', e)
-    } finally {
-        loading.value = false
-    }
-}
-</script>
-
-<style scoped>
-/* Tailwind handles styling */
-</style>

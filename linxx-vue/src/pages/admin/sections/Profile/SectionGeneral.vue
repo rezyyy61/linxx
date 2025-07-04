@@ -7,6 +7,7 @@
                 @dragover.prevent
                 @drop.prevent="handleDrop"
             >
+                <!-- Preview -->
                 <img
                     v-if="store.general.logoPreview"
                     :src="store.general.logoPreview"
@@ -17,6 +18,7 @@
           {{ $t('politicalProfile.general.logoPlaceholder') }}
         </span>
 
+                <!-- Hidden File Input -->
                 <input
                     type="file"
                     id="logoFileInput"
@@ -25,6 +27,7 @@
                     accept="image/*"
                 />
 
+                <!-- Remove Button -->
                 <button
                     v-if="store.general.logoPreview"
                     @click="removeLogo"
@@ -122,21 +125,15 @@ const triggerFileInput = () => {
 
 const handleLogoUpload = (e) => {
     const file = e.target.files[0]
-    if (!file || !file.type.startsWith('image/')) return
-
-    const reader = new FileReader()
-    reader.onload = () => {
-        store.saveGeneral({
-            ...store.general,
-            logo: file,
-            logoPreview: reader.result
-        })
-    }
-    reader.readAsDataURL(file)
+    previewAndSaveLogo(file)
 }
 
 const handleDrop = (e) => {
     const file = e.dataTransfer.files[0]
+    previewAndSaveLogo(file)
+}
+
+const previewAndSaveLogo = (file) => {
     if (!file || !file.type.startsWith('image/')) return
 
     const reader = new FileReader()
@@ -159,7 +156,7 @@ const removeLogo = () => {
 }
 
 const handleSave = () => {
-    console.log('✅ General section saved in Pinia store:', store.general)
+    console.log('✅ Saved General section in Pinia:', store.general)
 }
 </script>
 

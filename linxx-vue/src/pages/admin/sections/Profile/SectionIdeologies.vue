@@ -13,14 +13,14 @@
                     :key="option.key"
                     class="flex items-center gap-2 px-3 py-2 border rounded-lg transition bg-white dark:bg-gray-800"
                     :class="{
-            'border-red-500 shadow': store.ideologies.ideologies.includes(option.key),
-            'border-gray-300 dark:border-gray-600': !store.ideologies.ideologies.includes(option.key)
+            'border-red-500 shadow': selectedKeys.includes(option.key),
+            'border-gray-300 dark:border-gray-600': !selectedKeys.includes(option.key)
           }"
                 >
                     <input
                         type="checkbox"
                         :value="option.key"
-                        v-model="store.ideologies.ideologies"
+                        v-model="selectedKeys"
                         class="checkbox"
                     />
                     <span class="text-sm font-medium">{{ option.label }}</span>
@@ -30,7 +30,7 @@
             <!-- Custom Ideologies -->
             <div class="flex flex-wrap gap-2 mb-4">
         <span
-            v-for="(item, index) in customIdeologies"
+            v-for="(item, index) in customKeys"
             :key="'custom-' + index"
             class="tag-chip"
         >
@@ -106,7 +106,7 @@ import { usePoliticalProfileStore } from '@/stores/politicalProfile'
 const { t } = useI18n()
 const store = usePoliticalProfileStore()
 
-// predefined ideologies
+// --- Ideologies
 const ideologyKeys = [
     'socialism',
     'feminism',
@@ -124,25 +124,31 @@ const predefinedIdeologies = computed(() =>
     }))
 )
 
-const customIdeologies = computed(() =>
-    store.ideologies.ideologies.filter(i => !ideologyKeys.includes(i))
+const selectedKeys = ref(
+    store.ideologies.ideologies.map(i => typeof i === 'string' ? i : i.value)
+)
+
+const customKeys = computed(() =>
+    selectedKeys.value.filter(key => !ideologyKeys.includes(key))
 )
 
 const customIdeology = ref('')
 const newKeyword = ref('')
 
+// Add/remove custom ideology
 const addCustomIdeology = () => {
     const val = customIdeology.value.trim()
-    if (val && !store.ideologies.ideologies.includes(val)) {
-        store.ideologies.ideologies.push(val)
+    if (val && !selectedKeys.value.includes(val)) {
+        selectedKeys.value.push(val)
         customIdeology.value = ''
     }
 }
 
 const removeCustomIdeology = (val) => {
-    store.ideologies.ideologies = store.ideologies.ideologies.filter(i => i !== val)
+    selectedKeys.value = selectedKeys.value.filter(i => i !== val)
 }
 
+// --- Keywords
 const addKeyword = () => {
     const val = newKeyword.value.trim()
     if (val && !store.ideologies.keywords.includes(val)) {
@@ -155,8 +161,18 @@ const removeKeyword = (index) => {
     store.ideologies.keywords.splice(index, 1)
 }
 
+// --- Save
 const handleSave = () => {
-    store.saveIdeologies({ ...store.ideologies })
+    const mapped = selectedKeys.value.map(key => ({
+        value: key,
+        type: ideologyKeys.includes(key) ? 'predefined' : 'custom'
+    }))
+
+    store.saveIdeologies({
+        ideologies: mapped,
+        keywords: [...store.ideologies.keywords]
+    })
+
     console.log('✅ Ideologies saved to store:', store.ideologies)
 }
 </script>

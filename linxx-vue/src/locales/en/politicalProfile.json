@@ -96,7 +96,8 @@
         "subtitle": "Please review all information before sending.",
         "confirmText": "I confirm that the above information is correct.",
         "button": "Submit",
-        "sending": "Sending..."
+        "sending": "Sending...",
+        "success": "✅ Profile submitted successfully!"
     }
 
 }

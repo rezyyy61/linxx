@@ -61,7 +61,9 @@
                     />
                     <!-- Non-image file -->
                     <div v-else class="text-sm p-2 text-center text-gray-800 dark:text-gray-300">
-                        📄 {{ file.name }}
+                        <a :href="file.url ?? filePreviewUrl(file)" target="_blank" class="underline">
+                            {{ file.name }}
+                        </a>
                     </div>
 
                     <!-- Remove Button -->
@@ -94,69 +96,52 @@ import { reactive } from 'vue'
 
 const store = usePoliticalProfileStore()
 
-/* ---------- refs برای input فایل‌ها ---------- */
 const fileInputs = reactive({})
 const setFileInputRef = (key, el) => { if (el) fileInputs[key] = el }
-const triggerFileInput = k => fileInputs[k]?.click()
+const triggerFileInput = key => fileInputs[key]?.click()
 
-/* ---------- افزودن فایل‌ها (حداکثر ۵) ---------- */
-function handleMultiFileUpload (e, key) {
-    const newFiles   = Array.from(e.target.files).slice(0, 5)
-    const currentArr = store.description[`${key}Files`] || []
-    const freeSlots  = 5 - currentArr.length
-    store.description[`${key}Files`] = [
-        ...currentArr,
-        ...newFiles.slice(0, freeSlots)
-    ]
+function handleMultiFileUpload(e, key) {
+    const files = Array.from(e.target.files || []).slice(0, 5)
+    const existing = store.description[`${key}Files`] || []
+    const freeSlots = 5 - existing.length
+    const updated = [...existing, ...files.slice(0, freeSlots)]
+
+    store.saveDescription({
+        ...store.description,
+        [`${key}Files`]: updated
+    })
 }
 
-/* ---------- حذف یک فایل ---------- */
-function removeFile (key, idx) {
-    const arr = store.description[`${key}Files`]
-    if (arr) arr.splice(idx, 1)
+function removeFile(key, index) {
+    const updated = [...(store.description[`${key}Files`] || [])]
+    updated.splice(index, 1)
+    store.saveDescription({
+        ...store.description,
+        [`${key}Files`]: updated
+    })
 }
 
-/* ---------- ابزارهای کمکی ---------- */
 const fields = [
     { key: 'about' },
     { key: 'goals' },
     { key: 'activities' },
     { key: 'structure', optional: true }
 ]
-const isImage = f => f?.type?.startsWith('image/')
-const filePreviewUrl = f => URL.createObjectURL(f)
 
-/* تبدیل File به Base64 */
-const toBase64 = file =>
-    new Promise(res => {
-        const reader = new FileReader()
-        reader.onload = () => res(reader.result) // data:url
-        reader.readAsDataURL(file)
-    })
+const isImage = f =>
+    (f instanceof File && f.type.startsWith('image/')) ||
+    (f.mime_type && f.mime_type.startsWith('image/'))
 
-/* ‌ساخت نسخه‌ی «سبک» برای ذخیره */
-const meta = f => ({ name: f.name, size: f.size, type: f.type })
+const filePreviewUrl = f =>
+    f instanceof File ? URL.createObjectURL(f) : f.url
 
-/* ---------- ذخیره (Pinia + LocalStorage با فایل Base64) ---------- */
-async function handleSave () {
-    /* 1️⃣ ذخیرهٔ کامل در Pinia */
+
+function handleSave() {
     store.saveDescription({ ...store.description })
-
-    /* 2️⃣ تبدیل فایل‌ها به Base64 و ذخیره در LocalStorage */
-    const lightCopy = JSON.parse(JSON.stringify(store.description)) // متن‌ها
-    for (const k of ['about', 'goals', 'activities', 'structure']) {
-        const files = store.description[`${k}Files`] || []
-        lightCopy[`${k}Files`] = await Promise.all(
-            files.map(async f => ({
-                ...meta(f),
-                data: await toBase64(f)       // ⬅ Base64
-            }))
-        )
-    }
-    localStorage.setItem('descriptionDraft', JSON.stringify(lightCopy))
-    console.log('✅ Saved to Pinia + LocalStorage (Base64):', lightCopy)
+    console.log('✅ Saved to store:', store.description)
 }
 </script>
+
 
 
 <style scoped>

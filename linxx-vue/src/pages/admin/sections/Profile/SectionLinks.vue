@@ -111,7 +111,9 @@ import {
     Mail,
     Phone
 } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const store = usePoliticalProfileStore()
 
 const staticFields = [
@@ -124,7 +126,7 @@ const staticFields = [
     { key: 'phone', i18nKey: 'phone', type: 'text', placeholderKey: 'phone', icon: Phone }
 ]
 
-// بخش لینک سفارشی
+// لینک سفارشی
 const newLink = reactive({ title: '', url: '' })
 const error = ref('')
 
@@ -134,24 +136,36 @@ const isValidLink = computed(() =>
 
 function addLink() {
     if (!isValidLink.value) {
-        error.value = 'لینک معتبر وارد کنید.'
+        error.value = t('politicalProfile.links.validationError')
         return
     }
-    store.links.custom.push({ ...newLink })
+
+    const updated = [...store.links.custom, { ...newLink }]
+    store.saveLinks({
+        ...store.links,
+        custom: updated
+    })
+
     newLink.title = ''
     newLink.url = ''
     error.value = ''
 }
 
 function removeLink(index) {
-    store.links.custom.splice(index, 1)
+    const updated = [...store.links.custom]
+    updated.splice(index, 1)
+    store.saveLinks({
+        ...store.links,
+        custom: updated
+    })
 }
 
-const handleSave = () => {
+function handleSave() {
     store.saveLinks({ ...store.links })
-    console.log('✅ Links saved in Pinia:', store.links)
+    console.log('✅ Links saved in store:', store.links)
 }
 </script>
+
 
 <style scoped>
 .form-input {

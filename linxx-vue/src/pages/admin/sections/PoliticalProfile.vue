@@ -6,25 +6,18 @@
         <!-- Title -->
         <h1
             class="text-2xl sm:text-3xl font-extrabold mb-8 lg:mb-10
-             text-red-700 dark:text-red-400 tracking-wide"
+           text-red-700 dark:text-red-400 tracking-wide"
         >
             {{ $t('dashboard.political_profile') }}
         </h1>
 
         <!-- Stepper Buttons -->
         <div
-            class="flex flex-wrap
-             sm:flex-nowrap
-             lg:grid
-             gap-3 sm:gap-4 mb-8
-             overflow-x-visible
-             sm:overflow-x-auto
-             lg:overflow-visible
-             pb-2 lg:pb-0
-             scrollbar-hide items-center
+            class="flex flex-wrap sm:flex-nowrap lg:grid gap-3 sm:gap-4 mb-8
+             overflow-x-visible sm:overflow-x-auto lg:overflow-visible
+             pb-2 lg:pb-0 scrollbar-hide items-center
              lg:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]
-             sticky top-0 z-30
-             sm:static
+             sticky top-0 z-30 sm:static
              bg-white/90 dark:bg-gray-800/90 backdrop-blur shadow-sm"
         >
             <button
@@ -32,13 +25,10 @@
                 :key="section.name"
                 @click="currentStep = index"
                 class="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200
-               border-2 whitespace-nowrap
-               w-full sm:w-auto
-               flex-shrink-0
+               border-2 whitespace-nowrap w-full sm:w-auto flex-shrink-0
                lg:justify-center"
                 :class="{
-          'border-red-600 text-red-600 bg-white dark:bg-gray-800 shadow':
-            currentStep === index,
+          'border-red-600 text-red-600 bg-white dark:bg-gray-800 shadow': currentStep === index,
           'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-red-500 hover:text-red-500':
             currentStep !== index
         }"
@@ -54,18 +44,27 @@
         <div
             class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg animate-fade-in"
         >
-            <component
-                :is="sections[currentStep].component"
-                :model-value="formData"
-                @update:model-value="val => (formData = val)"
-            />
+            <component :is="sections[currentStep].component" />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, defineAsyncComponent } from 'vue'
+import {ref, defineAsyncComponent, onMounted} from 'vue'
 import { Info, Brain, FileText, Link, Send } from 'lucide-vue-next'
+import {usePoliticalProfileSubmit} from "@/composables/usePoliticalProfile";
+import {useAuthStore} from "@/stores/auth";
+
+const { loadProfile } = usePoliticalProfileSubmit()
+
+onMounted(async () => {
+    const auth = useAuthStore()
+    if (!auth.user) {
+        await auth.fetchUser()
+    }
+    await loadProfile()
+})
+
 
 const currentStep = ref(0)
 
@@ -111,33 +110,6 @@ const sections = [
         )
     }
 ]
-
-const formData = ref({
-    general: {
-        groupName: '',
-        tagline: '',
-        entityType: '',
-        location: '',
-        foundedYear: '',
-        logo: null,
-        logoPreview: null
-    },
-    ideologies: [],
-    description: {
-        about: '',
-        goals: '',
-        activities: '',
-        structure: '',
-        aboutFiles: [],
-        goalsFiles: [],
-        activitiesFiles: [],
-        structureFiles: []
-    },
-    links: {
-        static: {},
-        custom: []
-    }
-})
 </script>
 
 <style scoped>
