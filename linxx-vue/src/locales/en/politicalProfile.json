@@ -1,5 +1,7 @@
 {
 
+    "_comment_about": "این بخش مربوط به ترجمه Dashboard است",
+
         "sections": {
             "general": "General Information",
             "ideologies": "Ideological Positions",
@@ -98,7 +100,26 @@
         "button": "Submit",
         "sending": "Sending...",
         "success": "✅ Profile submitted successfully!"
+    },
+
+    "_comment_about2": "این بخش مربوط به ترجمه Public است",
+
+    "list": {
+        "title": "List of Political Parties",
+        "loading": "Loading..."
+    },
+
+    "description-public": {
+        "about_title": "About the Group",
+        "about": "Introduction",
+        "goals": "Goals",
+        "activities": "Activities",
+        "structure": "Structure",
+        "attachments": "Attachments",
+        "no_content": "No content has been added for this section.",
+        "download": "Download"
     }
+
 
 }
 

@@ -7,6 +7,7 @@
         "logout": "Logout"
     },
     "adnav": {
+        "feed": "Feed",
         "parties": "Parties & Groups",
         "articles": "Articles",
         "topics": "Topics",
@@ -14,11 +15,6 @@
         "campaigns": "Campaigns",
         "profiles": "Profiles",
         "events": "Events",
-        "faq": "FAQ",
-        "about": "About",
-        "announcements": "Announcements",
-        "trending": "Trending",
-        "support": "Support",
-        "contact": "Contact"
+        "announcements": "Announcements"
     }
 }

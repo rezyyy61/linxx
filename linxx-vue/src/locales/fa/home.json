@@ -7,6 +7,7 @@
         "logout": "خروج"
     },
     "adnav": {
+        "feed": "جدیدترین ها",
         "parties": "احزاب و گروه‌ها",
         "articles": "نوشته‌ها",
         "topics": "موضوعات",
@@ -14,11 +15,6 @@
         "campaigns": "کمپین‌ها",
         "profiles": "نویسندگان",
         "events": "رویدادها",
-        "faq": "سوالات متداول",
-        "about": "درباره پروژه",
-        "announcements": "اطلاعیه‌ها",
-        "trending": "محبوب‌ها",
-        "support": "پشتیبانی",
-        "contact": "تماس با ما"
+        "announcements": "اطلاعیه‌ها"
     }
 }

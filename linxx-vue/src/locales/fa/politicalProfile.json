@@ -1,5 +1,7 @@
 {
 
+    "_comment_about": "این بخش مربوط به ترجمه Dashboard است",
+
         "sections": {
             "general": "اطلاعات کلی و لوگو",
             "ideologies": "گرایش‌های سیاسی",
@@ -97,6 +99,25 @@
         "button": "ارسال",
         "sending": "در حال ارسال...",
         "success": "✅ پروفایل با موفقیت ثبت شد!"
+    },
+
+
+    "_comment_about2": "این بخش مربوط به ترجمه Public است",
+
+    "list": {
+        "title": "لیست احزاب سیاسی",
+        "loading": "در حال بارگذاری..."
+    },
+
+"description-public": {
+        "about_title": "درباره حزب",
+        "about": "معرفی",
+        "goals": "اهداف",
+        "activities": "فعالیت‌ها",
+        "structure": "ساختار",
+        "attachments": "فایل‌های پیوست",
+        "no_content": "محتوایی برای این بخش ثبت نشده است.",
+        "download": "دانلود"
     }
 
 }

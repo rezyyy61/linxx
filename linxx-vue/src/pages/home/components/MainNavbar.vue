@@ -3,14 +3,15 @@
         class="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-gray-900/80 shadow-sm border-b border-gray-200 dark:border-gray-700"
         dir="ltr"
     >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div class="w-full px-8 py-4 flex justify-between items-center">
             <!-- Brand -->
             <router-link
                 to="/"
-                class="text-3xl font-extrabold tracking-wide text-red-700 dark:text-red-400 hover:opacity-90 transition"
+                class="font-playfair text-3xl font-extrabold tracking-wide text-red-700 dark:text-red-400 hover:opacity-90 transition"
             >
                 Linxx
             </router-link>
+
 
             <!-- Right Side: Actions -->
             <div class="flex items-center gap-6">
@@ -42,16 +43,12 @@
                             {{ $t('home.nav.register') }}
                         </router-link>
                     </template>
-
                     <!-- If logged in -->
-                    <template v-else>
-                        <router-link to="/" class="nav-btn">
-                            👤 {{ auth.user.name }}
-                        </router-link>
-                        <button @click="auth.logout" class="nav-btn text-red-600 hover:text-red-800">
-                            {{ $t('home.nav.logout') }}
-                        </button>
+                    <template v-if="auth.user">
+                        <UserDropdown />
                     </template>
+
+
                 </div>
             </div>
         </div>
@@ -62,13 +59,16 @@
 import { useI18n } from 'vue-i18n'
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import UserDropdown from "@/pages/home/components/UserDropdown.vue";
 
 export default {
     name: 'MainNavbar',
+    components: {UserDropdown},
     setup() {
         const { locale } = useI18n()
         const isDark = ref(false)
         const auth = useAuthStore()
+        const dropdownOpen = ref(false)
 
         const toggleLocale = () => {
             locale.value = locale.value === 'en' ? 'fa' : 'en'
@@ -89,15 +89,28 @@ export default {
             toggleTheme,
             currentLocale: locale,
             isDark,
-            auth
+            auth,
+            dropdownOpen
         }
     }
 }
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
+
 .nav-btn {
     @apply text-sm font-medium px-4 py-2 rounded-md border border-transparent transition
     text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400;
 }
+
+.dropdown-item {
+    @apply w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 block transition;
+}
+
 </style>
