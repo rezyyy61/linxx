@@ -1,6 +1,6 @@
 <template>
     <div v-if="party" class="space-y-10">
-        <!-- سربرگ -->
+        <!-- Header -->
         <HeaderPage :party="party" />
 
         <PartyAbout
@@ -11,47 +11,26 @@
             :files="party.files"
         />
 
-
-        <!--        &lt;!&ndash; اهداف &ndash;&gt;-->
-<!--        <PartyGoals :goals="party.goals" />-->
-
-<!--        &lt;!&ndash; ایدئولوژی‌ها &ndash;&gt;-->
-<!--        <PartyIdeologies :ideologies="party.ideologies" />-->
-
-<!--        &lt;!&ndash; لینک‌ها &ndash;&gt;-->
-<!--        <PartyLinks :links="party.links" />-->
-
-<!--        &lt;!&ndash; فایل‌ها / رسانه‌ها &ndash;&gt;-->
-<!--        <PartyMedia v-if="party.files?.length" :files="party.files" />-->
+        <PartyPublication />
     </div>
 
-    <!-- حالت لودینگ -->
     <div v-else class="text-center text-gray-400 dark:text-gray-500 py-12">
-        در حال بارگذاری اطلاعات...
+        {{ $t('home.party.loading') }}
     </div>
 </template>
 
 <script>
 import { getPoliticalProfile } from '@/api/politicalProfile'
-
-// ایمپورت کامپوننت‌های داخلی
 import HeaderPage from './HeaderPage.vue'
 import PartyAbout from "./PartyAbout.vue";
-// import PartyGoals from './Goals.vue'
-// import PartyIdeologies from './Ideologies.vue'
-// import PartyLinks from './Links.vue'
-// import PartyMedia from './Media.vue'
+import PartyPublication from "./PartyPublication.vue";
 
 export default {
     name: 'PartyProfile',
     components: {
+        PartyPublication,
         PartyAbout,
         HeaderPage,
-        // PartyAbout,
-        // PartyGoals,
-        // PartyIdeologies,
-        // PartyLinks,
-        // PartyMedia
     },
     data() {
         return {
@@ -65,7 +44,7 @@ export default {
             const res = await getPoliticalProfile(id)
             this.party = res.data.data
         } catch (err) {
-            console.error('❌ خطا در دریافت اطلاعات حزب:', err)
+            console.error('❌ Error loading party data:', err)
         }
     }
 }

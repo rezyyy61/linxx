@@ -109,6 +109,11 @@ const protectedRoutes = [
         name: 'political_profile',
         component: () => import('@/pages/admin/sections/PoliticalProfile.vue')
       },
+        {
+            path: 'publications',
+            name: 'publications',
+            component: () => import('@/pages/admin/sections/publications.vue')
+        },
       {
         path: 'settings',
         name: 'settings',

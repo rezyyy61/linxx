@@ -33,7 +33,6 @@ class PoliticalProfileService
                 $profile->update(['logo_path' => $logoPath]);
             }
 
-            // decode کردن لینک‌ها اگر به صورت JSON string باشند
             $links = collect($data['links'] ?? [])
                 ->map(fn($item) => is_string($item) ? json_decode($item, true) : $item)
                 ->filter();

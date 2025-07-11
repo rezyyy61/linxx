@@ -6,5 +6,56 @@
     "archive": "بایگانی",
     "my_posts": "پست‌های من",
     "political_profile": "پروفایل سیاسی",
-    "settings": "تنظیمات"
+    "publications": "نشریات",
+    "settings": "تنظیمات",
+
+    "publication": {
+        "title": "مدیریت نشریات",
+        "new": "نشریه جدید",
+
+        "tip_message": "لطفاً ابتدا فایل نشریه را بارگذاری کرده و سپس اطلاعات آن را وارد نمایید.",
+        "title_form": "فرم ثبت نشریه",
+        "file_note": "فایل باید PDF، DOC یا DOCX باشد و حداکثر ۲۰ مگابایت حجم داشته باشد.",
+        "basic_info": "اطلاعات اصلی",
+        "issue": "شماره",
+        "published_at": "تاریخ انتشار",
+        "description_title": "توضیحات",
+        "description": "توضیح مختصر درباره این شماره از نشریه",
+        "upload_file": "آپلود فایل نشریه",
+        "file": "فایل نشریه",
+        "remove_file": "حذف فایل",
+        "uploading": "در حال بارگذاری فایل...",
+        "submit": "ثبت نشریه",
+        "suggest_description": "✦ پیشنهاد هوش مصنوعی",
+        "loading": "در حال دریافت توضیح...",
+        "missing_fields": "لطفاً عنوان و فایل را وارد کنید.",
+        "file_too_large": "حجم فایل نباید بیشتر از ۱۰ مگابایت باشد.",
+        "upload_success": "نشریه با موفقیت ثبت شد.",
+        "upload_error": "در ثبت نشریه مشکلی رخ داد.",
+        "ai_description_loaded": "توضیح پیشنهادی با موفقیت بارگذاری شد.",
+        "no_ai_response": "پاسخی از هوش مصنوعی دریافت نشد.",
+        "ai_error": "خطا در دریافت توضیح از سرور.",
+        "suggested_description_applied": "توضیح پیشنهادی هوش مصنوعی اعمال شد.",
+        "validation_failed": "لطفاً خطاهای فرم را بررسی کنید.",
+        "title_required": "عنوان الزامی است.",
+        "file_required": "فایل الزامی است.",
+        "file_invalid_type": "نوع فایل باید PDF یا DOC باشد.",
+        "select_file_first": "برای دریافت توضیحات هوشمند، ابتدا فایل نشریه را انتخاب کنید.",
+
+
+
+        "search_placeholder": "جستجوی عنوان یا شماره...",
+        "loadingList": "در حال بارگذاری...",
+        "empty": "هیچ موردی یافت نشد.",
+        "label": "بدون شماره",
+        "download": "دانلود فایل",
+        "delete": "حذف",
+        "confirm_delete": "آیا از حذف این مورد اطمینان دارید؟",
+        "delete_success": "با موفقیت حذف شد.",
+        "delete_error": "خطا در حذف فایل.",
+        "read_more": "ادامه",
+        "read_less": "بستن"
+
+    }
+
 }

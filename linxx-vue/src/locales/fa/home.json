@@ -16,5 +16,13 @@
         "profiles": "نویسندگان",
         "events": "رویدادها",
         "announcements": "اطلاعیه‌ها"
+    },
+
+    "party": {
+        "loading": "در حال بارگذاری اطلاعات...",
+        "publication_list": "لیست نشریه‌ها",
+        "view_file": "مشاهده فایل",
+        "no_description": "توضیحی برای این نشریه ثبت نشده است.",
+        "no_publications": "هیچ نشریه‌ای ثبت نشده است."
     }
 }

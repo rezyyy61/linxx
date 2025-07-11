@@ -11,6 +11,8 @@ import 'vue-toastification/dist/index.css'
 
 import clickOutside from './directives/click-outside'
 
+
+
 const app = createApp(App)
 
 app.directive('click-outside', clickOutside)

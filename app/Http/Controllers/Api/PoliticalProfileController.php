@@ -9,7 +9,6 @@ use App\Http\Resources\PoliticalProfileResource;
 use App\Models\PoliticalProfile;
 use App\Services\PoliticalProfileService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PoliticalProfileController extends Controller

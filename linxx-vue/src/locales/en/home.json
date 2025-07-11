@@ -16,5 +16,13 @@
         "profiles": "Profiles",
         "events": "Events",
         "announcements": "Announcements"
+    },
+
+    "party": {
+        "loading": "Loading information...",
+        "publication_list": "Publications List",
+        "view_file": "View file",
+        "no_description": "No description provided.",
+        "no_publications": "No publications found."
     }
 }

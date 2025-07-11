@@ -26,8 +26,9 @@
             </Transition>
 
             <!-- 🔸 Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
-                <router-view />
+            <main class="flex-1 overflow-y-auto h-[calc(100vh-64px)]">
+
+            <router-view />
             </main>
         </div>
     </div>

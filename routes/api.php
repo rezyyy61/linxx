@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PoliticalProfileController;
+use App\Http\Controllers\Api\PublicationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -9,7 +10,9 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/political-profiles', [PoliticalProfileController::class, 'index']);
 Route::get('/political-profiles/{politicalProfile}', [PoliticalProfileController::class, 'show'])
-    ->where('politicalProfile', '[0-9]+');;
+    ->where('politicalProfile', '[0-9]+');
+Route::get('/parties/{id}/publications', [PublicationController::class, 'listByParty']);
+
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -21,4 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/political-profiles', [PoliticalProfileController::class, 'store']);
     Route::put('/political-profiles/{politicalProfile}', [PoliticalProfileController::class, 'update']);
     Route::delete('/political-profiles/{politicalProfile}', [PoliticalProfileController::class, 'destroy']);
+
+    Route::get('/publications', [PublicationController::class, 'index']);
+    Route::post('/publications', [PublicationController::class, 'store']);
+    Route::delete('/publications/{publication}', [PublicationController::class, 'destroy']);
+    Route::post('/publications/suggest-description', [PublicationController::class, 'suggestDescription']);
+
 });

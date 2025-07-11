@@ -22,6 +22,7 @@ import {
     Home,
     PenSquare,
     Landmark,
+    BookOpen,
     Settings
 } from 'lucide-vue-next'
 
@@ -31,6 +32,7 @@ const menu = [
     { name: 'archive', to: '/dashboard/archive', icon: Archive },
     { name: 'my_posts', to: '/dashboard/myposts', icon: FileEdit },
     { name: 'political_profile', to: '/dashboard/political-profile', icon: Landmark },
+    { name: 'publications', to: '/dashboard/publications', icon: BookOpen },
     { name: 'settings', to: '/dashboard/settings', icon: Settings }
 ]
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="space-y-6"    :dir="$i18n.locale === 'fa' ? 'rtl' : 'ltr'">
+    <div class="space-y-6" :dir="$i18n.locale === 'fa' ? 'rtl' : 'ltr'">
         <h2 class="text-2xl font-extrabold text-gray-800 dark:text-white tracking-tight">
             {{ $t('politicalProfile.list.title') }}
         </h2>

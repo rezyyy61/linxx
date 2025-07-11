@@ -22,7 +22,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+RUN apt-get update && apt-get install -y \
+    libwebp-dev \
+    poppler-utils \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) \
         gd \
         mysqli \
@@ -31,6 +34,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         zip \
         opcache \
         pcntl
+
 
 # Install phpredis extension
 RUN pecl install redis \

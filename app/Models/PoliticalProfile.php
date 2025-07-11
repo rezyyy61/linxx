@@ -44,4 +44,10 @@ class PoliticalProfile extends Model
     {
         return $this->hasMany(ProfileFile::class);
     }
+
+    public function publications(): HasMany
+    {
+        return $this->hasMany(Publication::class);
+    }
+
 }
