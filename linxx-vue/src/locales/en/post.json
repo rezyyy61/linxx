@@ -1,0 +1,17 @@
+{
+    "create_title": "Create New Post",
+    "create_subtitle": "Please enter the content of your post",
+    "text_label": "Post Text",
+    "text_placeholder": "Write here...",
+    "media_section": "Media Upload",
+    "upload_images": "Upload Images",
+    "upload_video": "Upload Video",
+    "upload_audio": "Upload Audio",
+    "upload_files": "Upload Files",
+    "show_preview": "Show Preview",
+    "hide_preview": "Hide Preview",
+    "submit_button": "Submit Post",
+    "submitting": "Submitting...",
+    "submit_success": "Post submitted successfully!",
+    "remove": "remove"
+}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PoliticalProfileController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PublicationController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,7 @@ Route::get('/political-profiles', [PoliticalProfileController::class, 'index']);
 Route::get('/political-profiles/{politicalProfile}', [PoliticalProfileController::class, 'show'])
     ->where('politicalProfile', '[0-9]+');
 Route::get('/parties/{id}/publications', [PublicationController::class, 'listByParty']);
+Route::get('/posts', [PostController::class, 'index']);
 
 
 
@@ -29,5 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/publications', [PublicationController::class, 'store']);
     Route::delete('/publications/{publication}', [PublicationController::class, 'destroy']);
     Route::post('/publications/suggest-description', [PublicationController::class, 'suggestDescription']);
+
+
+    Route::post('/posts', [PostController::class, 'store']);
+
 
 });

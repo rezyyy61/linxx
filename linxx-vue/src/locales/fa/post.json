@@ -1,0 +1,18 @@
+{
+    "create_title": "ایجاد پست جدید",
+    "create_subtitle": "لطفاً محتوای پست خود را وارد کنید",
+    "text_label": "متن پست",
+    "text_placeholder": "اینجا بنویسید...",
+    "media_section": "بارگذاری رسانه",
+    "upload_images": "افزودن تصویر",
+    "upload_video": "افزودن ویدیو",
+    "upload_audio": "افزودن صدا",
+    "upload_files": "افزودن فایل",
+    "show_preview": "نمایش پیش‌نمایش",
+    "hide_preview": "مخفی کردن پیش‌نمایش",
+    "submit_button": "ارسال پست",
+    "submitting": "در حال ارسال...",
+    "submit_success": "پست با موفقیت ارسال شد!",
+    "submit_error": "ارسال پست با خطا مواجه شد.",
+    "remove": "حذف"
+}
