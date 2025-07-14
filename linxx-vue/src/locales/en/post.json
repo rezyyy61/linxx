@@ -13,5 +13,10 @@
     "submit_button": "Submit Post",
     "submitting": "Submitting...",
     "submit_success": "Post submitted successfully!",
-    "remove": "remove"
+    "remove": "remove",
+
+    "showMore": "Show more",
+    "showLess": "Show less",
+
+    "downloadAudio": "Download audio"
 }

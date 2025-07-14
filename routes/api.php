@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MediaDownloadController;
 use App\Http\Controllers\Api\PoliticalProfileController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PublicationController;
@@ -14,6 +15,9 @@ Route::get('/political-profiles/{politicalProfile}', [PoliticalProfileController
     ->where('politicalProfile', '[0-9]+');
 Route::get('/parties/{id}/publications', [PublicationController::class, 'listByParty']);
 Route::get('/posts', [PostController::class, 'index']);
+Route::get('/media/download/{id}', [MediaDownloadController::class, 'show'])
+    ->name('media.download')
+    ->whereNumber('id');
 
 
 

@@ -11,7 +11,7 @@ use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 class ImageProcessor
 {
     /**
-     * @param \SplFileInfo|string $file مسیر کامل فایل یا آبجکت فایل
+     * @param \SplFileInfo|string $file
      * @param int $postId
      * @return array
      */
@@ -22,7 +22,7 @@ class ImageProcessor
         $path = "posts/{$postId}/{$filename}";
 
         try {
-            // اینجا کلید حل مشکله: بررسی می‌کنیم فایل مسیر متنی داره یا آبجکت
+
             $image = is_string($file)
                 ? Image::read($file)
                 : Image::read($file->getRealPath());

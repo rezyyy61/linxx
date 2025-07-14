@@ -9,6 +9,7 @@ export const usePostStore = defineStore('post', () => {
     const videos = ref([])
     const audio = ref(null)
     const files = ref([])
+    const posts = ref([])
     async function submitPost() {
         try {
             const formData = new FormData()
@@ -18,9 +19,10 @@ export const usePostStore = defineStore('post', () => {
                 formData.append(`images[${i}]`, item.file)
             })
 
-            videos.value.forEach((item, i) => {
-                formData.append(`videos[${i}]`, item.file)
-            })
+            if (videos.value.length > 0) {
+                formData.append('video', videos.value[0].file)
+            }
+
 
             if (audio.value) {
                 formData.append('audio', audio.value.file)
@@ -50,13 +52,25 @@ export const usePostStore = defineStore('post', () => {
         files.value = []
     }
 
+    async function fetchPosts() {
+        try {
+            const response = await axios.get('/api/posts')
+            posts.value = response.data.data
+        } catch (err) {
+            console.error('error posts:', err)
+            throw err
+        }
+    }
+
     return {
         postText,
         images,
         videos,
         audio,
         files,
+        posts,
         submitPost,
+        fetchPosts,
         reset
     }
 })

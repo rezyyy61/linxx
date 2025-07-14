@@ -49,18 +49,15 @@ class AudioProcessor
             throw $e;
         }
 
-        // دریافت متادیتا
         $meta     = $this->ffprobe->format($absOutput);
         $duration = (int) $meta->get('duration');
         $size     = filesize($absOutput);
 
-        // ذخیره در public
         $folder    = "posts/{$postId}";
         $audioRel  = "{$folder}/{$uuid}.mp3";
 
         Storage::disk($publicDisk)->put($audioRel, fopen($absOutput, 'rb'));
 
-        // پاکسازی فایل tmp خروجی
         unlink($absOutput);
 
         return [

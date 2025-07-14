@@ -62,7 +62,6 @@ import { usePoliticalProfileStore } from '@/stores/politicalProfile'
 import { listPoliticalProfiles } from '@/api/politicalProfile'
 import { useRouter } from 'vue-router'
 
-// Lucide icons
 import {
     Globe,
     Twitter,

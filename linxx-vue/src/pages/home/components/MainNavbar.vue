@@ -12,7 +12,6 @@
                 Linxx
             </router-link>
 
-
             <!-- Right Side: Actions -->
             <div class="flex items-center gap-6">
                 <!-- Locale Toggle -->
@@ -34,7 +33,6 @@
 
                 <!-- Auth Section -->
                 <div class="hidden sm:flex gap-4 items-center">
-                    <!-- If NOT logged in -->
                     <template v-if="!auth.user">
                         <router-link to="/login" class="nav-btn">
                             {{ $t('home.nav.login') }}
@@ -43,12 +41,10 @@
                             {{ $t('home.nav.register') }}
                         </router-link>
                     </template>
-                    <!-- If logged in -->
+
                     <template v-if="auth.user">
                         <UserDropdown />
                     </template>
-
-
                 </div>
             </div>
         </div>
@@ -56,41 +52,26 @@
 </template>
 
 <script>
-import { useI18n } from 'vue-i18n'
-import { ref, onMounted } from 'vue'
+import { usePreferencesStore } from '@/stores/preferences'
 import { useAuthStore } from '@/stores/auth'
-import UserDropdown from "@/pages/home/components/UserDropdown.vue";
+import { storeToRefs } from 'pinia'
+import UserDropdown from "@/pages/home/components/UserDropdown.vue"
 
 export default {
     name: 'MainNavbar',
-    components: {UserDropdown},
+    components: { UserDropdown },
     setup() {
-        const { locale } = useI18n()
-        const isDark = ref(false)
+        const prefs = usePreferencesStore()
         const auth = useAuthStore()
-        const dropdownOpen = ref(false)
 
-        const toggleLocale = () => {
-            locale.value = locale.value === 'en' ? 'fa' : 'en'
-        }
-
-        const toggleTheme = () => {
-            const html = document.documentElement
-            html.classList.toggle('dark')
-            isDark.value = html.classList.contains('dark')
-        }
-
-        onMounted(() => {
-            isDark.value = document.documentElement.classList.contains('dark')
-        })
+        const { isDark, locale: currentLocale } = storeToRefs(prefs)
 
         return {
-            toggleLocale,
-            toggleTheme,
-            currentLocale: locale,
+            toggleTheme: prefs.toggleTheme,
+            toggleLocale: prefs.toggleLocale,
+            currentLocale,
             isDark,
-            auth,
-            dropdownOpen
+            auth
         }
     }
 }
@@ -103,7 +84,6 @@ export default {
     font-family: 'Playfair Display', serif;
 }
 
-
 .nav-btn {
     @apply text-sm font-medium px-4 py-2 rounded-md border border-transparent transition
     text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400;
@@ -112,5 +92,4 @@ export default {
 .dropdown-item {
     @apply w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 block transition;
 }
-
 </style>

@@ -2,6 +2,8 @@ import { createApp, watchEffect } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createPinia } from 'pinia'
+import '@/assets/global.css'
+
 
 import './assets/tailwind.css'
 import i18n from './i18n'
@@ -10,6 +12,7 @@ import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
 import clickOutside from './directives/click-outside'
+import './echo.js'
 
 
 

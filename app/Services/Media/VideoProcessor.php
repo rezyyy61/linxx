@@ -44,7 +44,6 @@ class VideoProcessor
 
         $inputPath = "tmp/{$tmpInput}";
 
-        // ذخیره فایل در لوکال (اگر فایل از قبل در لوکال هست، فقط کپی می‌شه)
         Storage::disk($tmpDisk)->put($inputPath, fopen(is_string($file) ? $file : $file->getRealPath(), 'rb'));
 
         $absInput  = Storage::disk($tmpDisk)->path($inputPath);

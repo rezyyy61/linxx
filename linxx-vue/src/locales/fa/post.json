@@ -14,5 +14,10 @@
     "submitting": "در حال ارسال...",
     "submit_success": "پست با موفقیت ارسال شد!",
     "submit_error": "ارسال پست با خطا مواجه شد.",
-    "remove": "حذف"
+    "remove": "حذف",
+
+    "showMore": "نمایش بیشتر",
+    "showLess": "نمایش کمتر",
+
+    "downloadAudio": "دانلود فایل صوتی"
 }

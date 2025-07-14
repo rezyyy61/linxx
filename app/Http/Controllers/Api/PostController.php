@@ -46,7 +46,7 @@ class PostController extends Controller
     {
         $posts = Post::with(['user', 'media'])
             ->latest()
-            ->paginate(10);
+            ->get();
 
         return PostResource::collection($posts);
     }
