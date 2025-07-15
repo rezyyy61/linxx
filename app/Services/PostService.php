@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Events\PostQueued;
 use App\Jobs\ProcessPostMedia;
 use App\Models\Post;
 use App\Models\PostMedia;
@@ -34,6 +35,8 @@ class PostService
                 'text'       => $data['text'] ?? null,
                 'visibility' => 'public',
             ]);
+
+            PostQueued::dispatch($post);
 
             $this->storeMedia($post, $media);
 
@@ -98,6 +101,4 @@ class PostService
             }
         }
     }
-
-
 }

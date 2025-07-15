@@ -32,7 +32,8 @@
                 </p>
             </div>
 
-            <PostMedia v-if="hasMedia" :post="post" />
+            <PostMedia :post="post" />
+
         </div>
 
         <PostFooter />
@@ -41,29 +42,23 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import PostHeader from './PostHeader.vue'
 import PostMedia from './PostMedia.vue'
 import PostFooter from './PostFooter.vue'
 
-const { t: $t } = useI18n()
+const props = defineProps({ post: Object })
 const authStore = useAuthStore()
-
-const props = defineProps({
-    post: Object
-})
 
 const currentUserId = computed(() => authStore.user?.id ?? null)
 const showFull = ref(false)
 const limit = 400
 
-const shouldTruncate = computed(() => props.post.text && props.post.text.length > limit)
+const shouldTruncate = computed(() =>
+    props.post.text && props.post.text.length > limit
+)
+const textDirection = computed(() =>
+    /[\u0600-\u06FF]/.test(props.post.text) ? 'rtl' : 'ltr'
+)
 
-const textDirection = computed(() => {
-    const rtlChars = /[\u0600-\u06FF]/
-    return rtlChars.test(props.post.text) ? 'rtl' : 'ltr'
-})
-
-const hasMedia = computed(() => props.post.media && props.post.media.length > 0)
 </script>

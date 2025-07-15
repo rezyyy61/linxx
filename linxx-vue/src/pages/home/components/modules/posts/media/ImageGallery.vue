@@ -8,7 +8,7 @@
             :src="validImages[0].url"
             alt="Post image"
             loading="lazy"
-            class="rounded-2xl object-cover aspect-square w-full max-w-[400px] transition-transform duration-200 hover:scale-105"
+            class="rounded-2xl object-cover aspect-square w-full transition-transform duration-200 hover:scale-105"
         />
     </div>
 

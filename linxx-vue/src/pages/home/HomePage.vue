@@ -3,20 +3,28 @@
         <MainNavbar />
 
         <div class="flex w-full h-[calc(100vh-64px)]">
-            <aside class="hidden lg:flex flex-col w-[360px] h-full space-y-6 px-4 border-l border-gray-200 dark:border-gray-600 overflow-y-auto custom-scroll bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow">
+            <!-- Left Sidebar: visible from md up -->
+            <aside
+                class="hidden md:flex flex-col w-0 md:w-[340px] xl:w-[420px] h-full space-y-6 px-2 xl:px-4 border-l border-gray-200 dark:border-gray-600 overflow-y-auto custom-scroll bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow">
                 <LeftSidebar />
             </aside>
 
-            <main class="flex-1 max-w-4xl h-full overflow-y-auto space-y-6 px-4 py-6 custom-scroll mx-auto">
+            <!-- Main Content -->
+            <main class="flex-1 h-full overflow-y-auto space-y-6 px-12 py-6 custom-scroll mx-auto">
                 <MainContent />
             </main>
 
-            <aside class="hidden lg:flex flex-col w-[360px] h-full space-y-6 px-4 border-r border-gray-200 dark:border-gray-600 overflow-y-auto custom-scroll bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow">
+            <!-- Right Sidebar: only visible in xl and up -->
+            <aside
+                class="hidden xl:flex flex-col w-[420px] h-full space-y-6 px-4 border-r border-gray-200 dark:border-gray-600 overflow-y-auto custom-scroll bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow">
                 <RightSidebar />
             </aside>
         </div>
     </div>
 </template>
+
+
+
 
 <script>
 import MainNavbar from '@/pages/home/components/MainNavbar.vue'
@@ -31,8 +39,11 @@ export default {
         RightSidebar,
         LeftSidebar,
         MainNavbar
-    }
+    },
 }
+
+
+
 </script>
 
 <style scoped>

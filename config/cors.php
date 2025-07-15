@@ -2,14 +2,20 @@
 
 return [
 
-    'paths' => ['api/*', 'login', 'logout', 'sanctum/csrf-cookie', 'register', 'user'],
-
-    'allowed_methods' => ['*'],
-
+    'paths' => [
+        'api/*',
+        'broadcasting/*',
+        'sanctum/csrf-cookie',
+        'login',
+        'logout',
+        'register',
+        'user',
+    ],
     'allowed_origins' => [
-        'http://localhost:8080',
         'http://localhost:8081',
     ],
+
+    'allowed_methods' => ['*'],
 
     'allowed_origins_patterns' => [],
 

@@ -5,10 +5,19 @@ window.Pusher = Pusher
 
 window.Echo = new Echo({
     broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST || window.location.hostname,
-    wsPort: import.meta.env.VITE_REVERB_PORT || 6001,
-    wssPort: import.meta.env.VITE_REVERB_PORT || 6001,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
+    key: process.env.VUE_APP_REVERB_APP_KEY,
+    wsHost: process.env.VUE_APP_REVERB_HOST || window.location.hostname,
+    wsPort: Number(process.env.VUE_APP_REVERB_PORT) || 6001,
+    wssPort: Number(process.env.VUE_APP_REVERB_PORT) || 6001,
+    forceTLS: process.env.VUE_APP_REVERB_SCHEME === 'https',
     enabledTransports: ['ws', 'wss'],
+    namespace: null,
+    authEndpoint: 'http://localhost:8080/broadcasting/auth',
+    auth: {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+
+        },
+        withCredentials: true,
+    },
 })

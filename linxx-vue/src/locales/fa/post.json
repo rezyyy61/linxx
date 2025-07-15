@@ -19,5 +19,8 @@
     "showMore": "نمایش بیشتر",
     "showLess": "نمایش کمتر",
 
-    "downloadAudio": "دانلود فایل صوتی"
+    "downloadAudio": "دانلود فایل صوتی",
+
+    "processingMedia": "در حال پردازش رسانه..."
+
 }

@@ -29,7 +29,6 @@ class PostResource extends JsonResource
                         'type' => $media->type,
                         'url'  => asset('storage/' . $media->path),
                         'meta' => $media->meta,
-                        'original_name' => $this->meta['original_name'] ?? basename($this->path),
                         'download_url' => route('media.download', $media->id),
                     ];
                 })->values(),

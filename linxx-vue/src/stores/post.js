@@ -62,6 +62,34 @@ export const usePostStore = defineStore('post', () => {
         }
     }
 
+    function subscribeRealtime () {
+        window.Echo.channel('public-feed')
+            .listen('PostCreated', p => posts.value.unshift(p.post))
+            .listen('PostReady', payload => {
+                const idx = posts.value.findIndex(p => p.id === payload.post.id)
+                if (idx !== -1) {
+                    posts.value.splice(idx, 1, payload.post)
+                } else {
+                    posts.value.unshift(payload.post)
+                }
+            })
+    }
+
+
+    function subscribeUserChannel (userId) {
+        if (!userId) return
+        window.Echo.private(`user.${userId}`)
+            .listen('PostQueued', payload => {
+                if (!posts.value.find(p => p.id === payload.post.id)) {
+                    posts.value.unshift({
+                        ...payload.post,
+                        media: [],
+                        _localPending: true
+                    })
+                }
+            })
+    }
+
     return {
         postText,
         images,
@@ -71,6 +99,8 @@ export const usePostStore = defineStore('post', () => {
         posts,
         submitPost,
         fetchPosts,
-        reset
+        reset,
+        subscribeRealtime,
+        subscribeUserChannel
     }
 })

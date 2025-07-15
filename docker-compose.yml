@@ -83,6 +83,61 @@ services:
             - linxx_net
 
 
+    queue-default:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: linxx_app
+        container_name: linxx_queue_default
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan queue:work --queue=default,emails,notifications,high,low --tries=3 --timeout=90
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+            - redis
+        networks:
+            - linxx_net
+
+
+    queue-media:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: linxx_app
+        container_name: linxx_queue_media
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan queue:work --queue=media --tries=3 --timeout=300
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+            - redis
+        networks:
+            - linxx_net
+
+
+    reverb:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: linxx_app
+        container_name: linxx_reverb
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan reverb:start
+        ports:
+            - "6001:6001"
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - app
+        networks:
+            - linxx_net
+
+
 volumes:
     linxx_mysql_data:
 

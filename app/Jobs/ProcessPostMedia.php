@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\PostReady;
 use App\Models\PostMedia;
 use App\Services\Media\AudioProcessor;
 use App\Services\Media\ImageProcessor;
@@ -68,6 +69,21 @@ class ProcessPostMedia implements ShouldQueue
                 'status'   => 'done',
                 'error'    => null,
             ]);
+
+
+            if ($media->post->media()->where('status','pending')->doesntExist()) {
+                Log::info('🔥 condition true', ['post'=>$media->post_id]);
+                broadcast(new PostReady(
+                    $media->post->fresh()->load(['media','user'])
+                ));
+            } else {
+                Log::info('⌛ still pending', [
+                    'post'   => $media->post_id,
+                    'remain' => $media->post->media()->where('status','pending')->count()
+                ]);
+            }
+
+
 
         } catch (\Throwable $e) {
             report($e);

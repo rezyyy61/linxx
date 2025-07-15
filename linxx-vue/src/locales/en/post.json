@@ -18,5 +18,8 @@
     "showMore": "Show more",
     "showLess": "Show less",
 
-    "downloadAudio": "Download audio"
+    "downloadAudio": "Download audio",
+
+    "processingMedia": "Media is being processed"
+
 }
