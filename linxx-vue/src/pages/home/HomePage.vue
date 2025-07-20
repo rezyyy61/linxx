@@ -1,30 +1,53 @@
 <template>
-    <div class="font-sans h-screen bg-white dark:bg-gradient-to-b dark:from-[#1F2937] dark:to-[#374151] text-gray-900 dark:text-gray-100 transition-colors duration-500 ease-in-out overflow-hidden">
-        <MainNavbar />
+    <div class="font-sans min-h-screen bg-white dark:bg-gradient-to-b dark:from-[#1F2937] dark:to-[#374151] text-gray-900 dark:text-gray-100 transition-colors duration-500 ease-in-out">
+        <MainNavbar @toggle-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen" />
 
-        <div class="flex w-full h-[calc(100vh-64px)]">
-            <!-- Left Sidebar: visible from md up -->
+        <!-- Mobile Sidebar Overlay -->
+        <transition name="fade">
+            <div
+                v-if="isMobileSidebarOpen"
+                class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                @click="isMobileSidebarOpen = false"
+            />
+        </transition>
+
+        <!-- Mobile Sidebar Drawer -->
+        <transition name="slide">
             <aside
-                class="hidden md:flex flex-col w-0 md:w-[340px] xl:w-[420px] h-full space-y-6 px-2 xl:px-4 border-l border-gray-200 dark:border-gray-600 overflow-y-auto custom-scroll bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow">
+                v-if="isMobileSidebarOpen"
+                class="fixed z-50 top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg p-4 md:hidden overflow-y-auto custom-scroll"
+            >
+                <LeftSidebar />
+            </aside>
+        </transition>
+
+        <div
+            class="grid h-[calc(100vh-64px)]
+         grid-cols-1
+         md:grid-cols-[minmax(200px,1fr)_minmax(500px,2fr)]
+         xl:grid-cols-[minmax(200px,280px)_minmax(600px,1fr)_minmax(200px,320px)]"
+        >
+
+        <!-- Left Sidebar -->
+            <aside class="hidden md:block h-full border-r ...">
                 <LeftSidebar />
             </aside>
 
             <!-- Main Content -->
-            <main class="flex-1 h-full overflow-y-auto space-y-6 px-12 py-6 custom-scroll mx-auto">
-                <MainContent />
+            <main class="h-full overflow-y-auto px-4 py-6 custom-scroll">
+                <div class="max-w-5xl mx-auto w-full">
+                    <MainContent />
+                </div>
             </main>
 
-            <!-- Right Sidebar: only visible in xl and up -->
-            <aside
-                class="hidden xl:flex flex-col w-[420px] h-full space-y-6 px-4 border-r border-gray-200 dark:border-gray-600 overflow-y-auto custom-scroll bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow">
+            <!-- Right Sidebar -->
+            <aside class="hidden xl:block h-full border-l ...">
                 <RightSidebar />
             </aside>
         </div>
+
     </div>
 </template>
-
-
-
 
 <script>
 import MainNavbar from '@/pages/home/components/MainNavbar.vue'
@@ -35,15 +58,17 @@ import RightSidebar from '@/pages/home/components/RightSidebar.vue'
 export default {
     name: 'MainLayout',
     components: {
-        MainContent,
-        RightSidebar,
+        MainNavbar,
         LeftSidebar,
-        MainNavbar
+        MainContent,
+        RightSidebar
     },
+    data() {
+        return {
+            isMobileSidebarOpen: false
+        }
+    }
 }
-
-
-
 </script>
 
 <style scoped>
@@ -56,5 +81,20 @@ export default {
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.35);
+}
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+.slide-enter-active, .slide-leave-active {
+    transition: transform 0.3s ease;
+}
+.slide-enter-from {
+    transform: translateX(-100%);
+}
+.slide-leave-to {
+    transform: translateX(-100%);
 }
 </style>

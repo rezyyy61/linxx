@@ -5,8 +5,10 @@
             <div class="p-6 space-y-8 max-w-7xl mx-auto h-full flex flex-col">
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <h1 class="text-2xl sm:text-3xl font-extrabold mb-8 lg:mb-10
-           text-red-700 dark:text-red-400 tracking-wide">
+                    <h1
+class="text-2xl sm:text-3xl font-extrabold mb-8 lg:mb-10
+           text-red-700 dark:text-red-400 tracking-wide"
+>
                         {{ $t('dashboard.publication.title') }}
                     </h1>
                     <button

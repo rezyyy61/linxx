@@ -62,13 +62,15 @@ class ProcessPostMedia implements ShouldQueue
 
             $media->update([
                 'path'     => $meta['path']
-                    ?? $meta['video_path']
+                    ?? $meta['hls_path']
+                        ?? $meta['video_path']
                         ?? $meta['audio_path'],
                 'duration' => $meta['duration'] ?? null,
                 'meta'     => $meta,
                 'status'   => 'done',
                 'error'    => null,
             ]);
+
 
 
             if ($media->post->media()->where('status','pending')->doesntExist()) {

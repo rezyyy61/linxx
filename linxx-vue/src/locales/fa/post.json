@@ -18,6 +18,13 @@
 
     "showMore": "نمایش بیشتر",
     "showLess": "نمایش کمتر",
+    "viewAllComments": "مشاهده همهٔ {count} نظر",
+    "noComments": "هنوز نظری ثبت نشده",
+    "comments": "دیدگاه‌ها",
+    "deleteConfirm": "آیا از حذف این کامنت مطمئن هستید؟",
+    "loginPrompt": "برای ثبت نظر، ابتدا",
+    "loginButton": "وارد حساب کاربری",
+    "loginEnd": "شوید.",
 
     "downloadAudio": "دانلود فایل صوتی",
 

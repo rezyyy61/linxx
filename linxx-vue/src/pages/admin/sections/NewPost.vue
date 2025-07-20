@@ -36,7 +36,7 @@
                     <!-- Image -->
                     <MediaUploadBox
                         icon="image"
-                        labelKey="post.upload_images"
+                        label-key="post.upload_images"
                         accept="image/*"
                         :disabled="isDisabled('image')"
                         multiple
@@ -46,7 +46,7 @@
                     <!-- Video -->
                     <MediaUploadBox
                         icon="video"
-                        labelKey="post.upload_video"
+                        label-key="post.upload_video"
                         accept="video/*"
                         :disabled="isDisabled('video')"
                         @change="handleVideoUpload"
@@ -55,7 +55,7 @@
                     <!-- Audio -->
                     <MediaUploadBox
                         icon="audio"
-                        labelKey="post.upload_audio"
+                        label-key="post.upload_audio"
                         accept="audio/*"
                         :disabled="isDisabled('audio')"
                         @change="handleAudioUpload"
@@ -64,7 +64,7 @@
                     <!-- File -->
                     <MediaUploadBox
                         icon="file"
-                        labelKey="post.upload_files"
+                        label-key="post.upload_files"
                         accept="*"
                         :disabled="isDisabled('file')"
                         multiple
@@ -94,15 +94,15 @@
             <!-- Preview -->
             <PostPreview
                 v-if="showPreview"
-                :postText="postStore.postText"
+                :post-text="postStore.postText"
                 :images="postStore.images"
                 :videos="postStore.videos"
                 :files="postStore.files"
                 :audio="postStore.audio"
-                @removeImage="index => postStore.images.splice(index, 1)"
-                @removeVideo="index => postStore.videos.splice(index, 1)"
-                @removeFile="index => postStore.files.splice(index, 1)"
-                @removeAudio="postStore.audio = null"
+                @remove-image="index => postStore.images.splice(index, 1)"
+                @remove-video="index => postStore.videos.splice(index, 1)"
+                @remove-file="index => postStore.files.splice(index, 1)"
+                @remove-audio="postStore.audio = null"
             />
         </div>
     </div>

@@ -33,6 +33,7 @@ export const useAuthStore = defineStore('auth', {
         throw error.response?.data || error
       }
     },
+
     async login (payload) {
       try {
         const response = await axios.post('/api/login', payload)

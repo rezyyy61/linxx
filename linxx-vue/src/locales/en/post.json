@@ -17,6 +17,14 @@
 
     "showMore": "Show more",
     "showLess": "Show less",
+    "viewAllComments": "View all {count} comments",
+    "noComments": "No comments yet",
+    "comments": "Comments",
+    "deleteConfirm": "Are you sure you want to delete this comment?",
+    "loginPrompt": "To leave a comment, please",
+    "loginButton": "log in",
+    "loginEnd": "first.",
+
 
     "downloadAudio": "Download audio",
 
