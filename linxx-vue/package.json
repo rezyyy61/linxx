@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@liripeng/vue-audio-player": "^2.0.4",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "axios": "^1.10.0",
     "core-js": "^3.8.3",
     "date-fns": "^4.1.0",
@@ -18,6 +19,7 @@
     "lucide-vue-next": "^0.525.0",
     "pinia": "^3.0.3",
     "plyr": "^3.7.8",
+    "video.js": "^8.23.3",
     "vue": "^3.2.13",
     "vue-audio-player": "^0.0.2",
     "vue-easy-lightbox": "^1.19.0",

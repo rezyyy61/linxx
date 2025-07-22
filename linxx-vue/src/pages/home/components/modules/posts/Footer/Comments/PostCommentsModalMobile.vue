@@ -18,7 +18,8 @@
                     :truncate="true"
                     :limits="{ sm: 160, md: 320, lg: 600 }"
                 />
-                <PostMedia :post="post" />
+                <PostMedia :post="post" base-url="http://localhost:8080" />
+
             </div>
 
             <!-- Comments List -->

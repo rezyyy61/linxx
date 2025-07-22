@@ -21,7 +21,7 @@ class StorePublicationRequest extends FormRequest
             'file'         => [
                 'required',
                 'file',
-                'mimes:pdf,doc,docx',
+                'mimes:pdf,doc,docx,zip',
                 'max:20480',   // 20 MB
             ],
         ];

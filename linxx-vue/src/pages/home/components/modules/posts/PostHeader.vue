@@ -1,6 +1,5 @@
 <template>
     <div class="flex items-center justify-between gap-4 p-4 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
-        <!-- آواتار و نام کاربر -->
         <div class="flex items-center gap-4">
             <img
                 :src="avatarUrl"
@@ -14,7 +13,6 @@
             </div>
         </div>
 
-        <!-- سه نقطه عمودی (نمایش فقط برای کاربر خودش) -->
         <button
             v-if="isOwner"
             @click="$emit('menu')"
@@ -49,7 +47,8 @@ const props = defineProps({
     },
     createdAt: {
         type: String,
-        required: true
+        required: false,
+        default: ''
     },
     isOwner: {
         type: Boolean,

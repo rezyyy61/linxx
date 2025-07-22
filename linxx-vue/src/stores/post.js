@@ -68,12 +68,16 @@ export const usePostStore = defineStore('post', () => {
             .listen('PostReady', payload => {
                 const idx = posts.value.findIndex(p => p.id === payload.post.id)
                 if (idx !== -1) {
-                    posts.value.splice(idx, 1, payload.post)
+                    posts.value.splice(idx, 1, {
+                        ...payload.post,
+                        _localPending: false,
+                    })
                 } else {
                     posts.value.unshift(payload.post)
                 }
             })
     }
+
 
 
     function subscribeUserChannel (userId) {
@@ -84,11 +88,13 @@ export const usePostStore = defineStore('post', () => {
                     posts.value.unshift({
                         ...payload.post,
                         media: [],
-                        _localPending: true
+                        _localPending: true,
+                        created_at: null,
                     })
                 }
             })
     }
+
 
     return {
         postText,

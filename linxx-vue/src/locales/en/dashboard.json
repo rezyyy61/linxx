@@ -53,7 +53,13 @@
         "delete_success": "Successfully deleted.",
         "delete_error": "Error deleting file.",
         "read_more": "Read more",
-        "read_less": "Show less"
+        "read_less": "Show less",
+
+        "badge": "Official Publication",
+        "format": "Format",
+        "view": "View / Download",
+        "defaultTitle": "Publication",
+        "defaultFile": "Publication File"
 
     }
 

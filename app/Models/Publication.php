@@ -18,6 +18,7 @@ class Publication extends Model
         'published_at',
         'file_path',
         'file_type',
+        'post_id'
     ];
 
     protected $casts = [
@@ -35,6 +36,11 @@ class Publication extends Model
     public function politicalProfile(): BelongsTo
     {
         return $this->belongsTo(PoliticalProfile::class);
+    }
+
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
     }
 
 }

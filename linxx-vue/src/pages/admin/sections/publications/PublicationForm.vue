@@ -158,13 +158,20 @@ class="opacity-75" fill="currentColor"
 
 
 <script setup>
-import {ref, watch} from 'vue'
+import { ref, watch, computed } from 'vue'
 import {
     FileText as FileTextIcon,
     CloudUpload as CloudUploadIcon,
     Upload as UploadIcon,
     InfoIcon,
-    TrashIcon
+    TrashIcon,
+    FileText,
+    FileArchive,
+    FileAudio,
+    FileVideo,
+    FileImage,
+    FileCode,
+    FileBadge
 } from 'lucide-vue-next'
 
 import { useI18n } from 'vue-i18n'
@@ -173,7 +180,31 @@ import BaseInput from '@/pages/admin/components/BaseInput.vue'
 import { usePublicationStore } from '@/stores/publications'
 import { useToast } from 'vue-toastification'
 
+const { t } = useI18n()
+const toast = useToast()
+const emit = defineEmits(['uploaded'])
+const publicationStore = usePublicationStore()
+
+// Form State
+const form = ref({
+    title: '',
+    issue: '',
+    description: '',
+    publishedAt: '',
+    file: null
+})
+
+// UI States
+const uploading = ref(false)
+const generatingDescription = ref(false)
+const progress = ref(0)
 const errors = ref({})
+const suggestedDescription = ref('')
+const fileInput = ref(null)
+const selectedFileName = ref('')
+const selectedFileSize = ref('')
+
+// Error Auto-scroll
 watch(errors, (newVal) => {
     const keys = Object.keys(newVal)
     if (keys.length) {
@@ -183,28 +214,23 @@ watch(errors, (newVal) => {
     }
 })
 
-const { t } = useI18n()
-const toast = useToast()
-const emit = defineEmits(['uploaded'])
-const publicationStore = usePublicationStore()
+// File Preview Icon (based on extension)
+const fileIconComponent = computed(() => {
+    const name = form.value.file?.name || ''
+    const ext = name.split('.').pop()?.toLowerCase()
 
-const form = ref({
-    title: '',
-    issue: '',
-    description: '',
-    publishedAt: '',
-    file: null
+    if (!ext) return FileBadge
+    if (['pdf', 'doc', 'docx', 'txt'].includes(ext)) return FileText
+    if (['zip', 'rar'].includes(ext)) return FileArchive
+    if (['mp3', 'wav', 'm4a', 'aac'].includes(ext)) return FileAudio
+    if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return FileImage
+    if (['mp4', 'webm', 'avi'].includes(ext)) return FileVideo
+    if (['js', 'vue', 'html', 'css', 'ts'].includes(ext)) return FileCode
+
+    return FileBadge
 })
 
-const suggestedDescription = ref('')
-const uploading = ref(false)
-const generatingDescription = ref(false)
-const progress = ref(0)
-
-const fileInput = ref(null)
-const selectedFileName = ref('')
-const selectedFileSize = ref('')
-
+// File Handlers
 function triggerFileSelect() {
     fileInput.value?.click()
 }
@@ -226,28 +252,23 @@ function removeFile() {
 }
 
 function formatFileSize(bytes) {
-    if (bytes === 0) return '0 B'
+    if (!bytes) return '0 B'
     const k = 1024
     const sizes = ['B', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
+    return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`
 }
 
+// Submit Publication
 async function handleSubmit() {
     if (!form.value.title || !form.value.file) {
-        toast.warning(t('dashboard.publication.missing_fields'), {
-            timeout: 4000,
-            position: 'top-center',
-        })
+        toast.warning(t('dashboard.publication.missing_fields'), { timeout: 4000, position: 'top-center' })
         return
     }
 
     const fileSizeMB = form.value.file.size / (1024 * 1024)
     if (fileSizeMB > 10) {
-        toast.warning(t('dashboard.publication.file_too_large'), {
-            timeout: 4000,
-            position: 'top-center',
-        })
+        toast.warning(t('dashboard.publication.file_too_large'), { timeout: 4000, position: 'top-center' })
         return
     }
 
@@ -268,10 +289,7 @@ async function handleSubmit() {
         if (!form.value.description && suggested) {
             form.value.description = suggested
             suggestedDescription.value = suggested
-            toast.info(t('dashboard.publication.suggested_description_applied'), {
-                timeout: 6000,
-                position: 'top-center'
-            })
+            toast.info(t('dashboard.publication.suggested_description_applied'), { timeout: 6000 })
         }
 
         toast.success(t('dashboard.publication.upload_success'))
@@ -279,48 +297,36 @@ async function handleSubmit() {
     } catch (err) {
         if (err.response?.status === 422) {
             errors.value = err.response.data.errors || {}
-            toast.warning(t('dashboard.publication.validation_failed'), {
-                timeout: 4000,
-                position: 'top-center',
-            })
+            toast.warning(t('dashboard.publication.validation_failed'), { timeout: 4000 })
         } else {
             toast.error(t('dashboard.publication.upload_error'))
         }
-        } finally {
+    } finally {
         uploading.value = false
         progress.value = 0
         resetForm()
     }
 }
 
+// Reset
 function resetForm() {
-    form.value = {
-        title: '',
-        issue: '',
-        description: '',
-        publishedAt: '',
-        file: null
-    }
+    form.value = { title: '', issue: '', description: '', publishedAt: '', file: null }
     selectedFileName.value = ''
     selectedFileSize.value = ''
     suggestedDescription.value = ''
     if (fileInput.value) fileInput.value.value = ''
 }
 
+// AI Description Generator
 async function handleSuggestDescription() {
     if (!form.value.file) {
-        toast('⚠️ ' + t('dashboard.publication.select_file_first'), {
-            timeout: 8000,
+        toast(t('dashboard.publication.select_file_first'), {
+            timeout: 6000,
             position: 'top-center',
             type: 'default',
-            icon: false,
-            closeButton: true,
-            hideProgressBar: false,
             toastClassName: 'bg-gray-800 text-white font-semibold rounded-lg shadow-md px-6 py-4',
             bodyClassName: 'text-sm leading-relaxed'
         })
-
-
         return
     }
 
@@ -335,14 +341,14 @@ async function handleSuggestDescription() {
         } else {
             toast.warning(t('dashboard.publication.no_ai_response'))
         }
-    } catch (err) {
+    } catch {
         toast.error(t('dashboard.publication.ai_error'))
     } finally {
         generatingDescription.value = false
     }
 }
-
 </script>
+
 
 
 

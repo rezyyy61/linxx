@@ -1,134 +1,147 @@
 <template>
-    <div v-if="normVideos.length" class="space-y-6">
-        <div
-            v-for="(video,i) in normVideos"
-            :key="video.src"
-            class="rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 shadow border border-gray-200 dark:border-gray-700"
-        >
-            <div class="relative w-full aspect-video bg-black">
-                <video
-                    :ref="el => setRef(el,i)"
-                    class="plyr-video"
-                    playsinline
-                    preload="none"
-                    :poster="video.poster || defaultPoster"
-                />
-            </div>
-        </div>
+    <div
+        v-if="sources.length"
+        class="player-container"
+        :style="{ '--ratio': ratio }"
+    >
+        <video
+            ref="videoEl"
+            class="video-js vjs-default-skin vjs-big-play-centered vjs-tech vjs-poster"
+            playsinline
+            controls
+            preload="metadata"
+            :poster="current.poster || ''"
+        />
     </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onBeforeUnmount } from 'vue'
-import Plyr from 'plyr'
-import 'plyr/dist/plyr.css'
-import Hls from 'hls.js'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import videojs from 'video.js'
+import 'video.js/dist/video-js.css'
 
 const props = defineProps({
-    videos: {
-        type: Array,
-        default: () => []
-    },
-    baseUrl: {
-        type: String,
-        default: ''
-    }
+    video: { type: Object, default: null },
+    videos: { type: Array, default: () => [] },
+    autoplay: { type: Boolean, default: false },
+    loop: { type: Boolean, default: false },
+    muted: { type: Boolean, default: false }
 })
 
-const defaultPoster = 'https://via.placeholder.com/640x360?text=Preview'
-
-function abs(p) {
-    if (!p) return ''
-    if (/^https?:\/\//i.test(p)) return p
-    const b = props.baseUrl ? props.baseUrl.replace(/\/+$/, '') : ''
-    const rel = String(p).replace(/^\/+/, '')
-    return b ? `${b}/${rel}` : rel
-}
-
-const normVideos = computed(() =>
-    (props.videos || []).map(v => {
-        const src = v.src || v.url || v.hls_path || v.path || ''
-        const poster = v.poster || v.thumb_path || v.meta?.thumb_path || v.thumbnail || ''
-        const type = v.type || (/\.m3u8($|\?)/i.test(src) ? 'hls' : 'mp4')
-        return {
-            src: abs(src),
-            poster: abs(poster),
-            type,
-            duration: v.duration || null
-        }
-    }).filter(v => !!v.src)
+const sources = computed(() =>
+    props.videos?.length ? props.videos : props.video ? [props.video] : []
 )
 
-const els = reactive([])
-const hlsArr = reactive([])
-const plyrArr = reactive([])
-const loaded = reactive([])
+const currentIndex = ref(0)
+const current = computed(() => sources.value[currentIndex.value] || {})
 
-function loadSource(i) {
-    const el = els[i]
-    if (!el) return
-    const v = normVideos.value[i]
-    if (!v) return
-    if (v.type === 'hls' && Hls.isSupported()) {
-        const hls = new Hls()
-        hls.loadSource(v.src)
-        hls.attachMedia(el)
-        hlsArr[i] = hls
-    } else if (el.canPlayType('application/vnd.apple.mpegurl') && /\.m3u8($|\?)/i.test(v.src)) {
-        el.src = v.src
-    } else {
-        el.src = v.src
-    }
-    loaded[i] = true
-}
+const ratio = computed(() => {
+    const { width, height } = current.value
+    return width && height ? height / width : 9 / 16
+})
 
-function handlePlay(i) {
-    if (!loaded[i]) {
-        const plyr = plyrArr[i]
-        if (plyr) plyr.pause()
-        loadSource(i)
-        requestAnimationFrame(() => {
-            const plyr = plyrArr[i]
-            if (plyr) plyr.play()
-            else {
-                const el = els[i]
-                if (el) el.play()
-            }
-        })
-    } else {
-        pauseOthers(i)
-    }
-}
+const videoEl = ref(null)
+let player
 
-function pauseOthers(except) {
-    plyrArr.forEach((p, idx) => {
-        if (idx !== except && p && !p.paused) p.pause()
+onMounted(async () => {
+    await nextTick()
+    player = videojs(videoEl.value, {
+        autoplay: props.autoplay,
+        loop: props.loop,
+        muted: props.muted,
+        controls: true,
+        fluid: true,
+        preload: 'metadata'
     })
-}
 
-function setRef(el, i) {
-    if (!el) return
-    els[i] = el
-    if (plyrArr[i]) return
-    const plyr = new Plyr(el, {
-        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
-        clickToPlay: true
+    loadSource()
+
+    player.on('loadedmetadata', () => {
+        autoZoom()
     })
-    plyr.on('play', () => handlePlay(i))
-    plyrArr[i] = plyr
-}
+
+    player.on('ended', () => {
+        if (++currentIndex.value >= sources.value.length) {
+            if (props.loop) currentIndex.value = 0
+        }
+    })
+})
 
 onBeforeUnmount(() => {
-    plyrArr.forEach(p => p && p.destroy && p.destroy())
-    hlsArr.forEach(h => h && h.destroy && h.destroy())
+    player?.dispose()
 })
+
+watch([sources, currentIndex], loadSource)
+
+function loadSource() {
+    if (!player) return
+    const s = current.value
+    if (!s?.src) return
+    const mime = s.type === 'hls' ? 'application/x-mpegURL' : 'video/mp4'
+    player.poster(s.poster || '')
+    player.src({ src: s.src, type: mime })
+}
+
+function autoZoom() {
+    const s = current.value
+    if (s.orientation !== 'portrait') return
+
+    const tech = player?.el()?.querySelector('.vjs-tech')
+    const posterEl = player?.el()?.querySelector('.vjs-poster')
+    const scale = 1.8
+
+    if (tech) {
+        tech.style.transform = `scale(${scale})`
+        tech.style.transformOrigin = 'center'
+    }
+
+    if (posterEl) {
+        posterEl.style.transform = 'none'
+        posterEl.style.transformOrigin = 'center'
+        posterEl.style.width = '100%'
+        posterEl.style.height = '100%'
+        posterEl.style.backgroundSize = 'cover'
+        posterEl.style.backgroundPosition = 'center'
+        posterEl.style.backgroundRepeat = 'no-repeat'
+    }
+}
+
 </script>
 
 <style scoped>
-.plyr-video {
+.player-container {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background-color: black;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    background-color: #000;
+    aspect-ratio: calc(1 / var(--ratio));
+    max-width: 640px;
+    max-height: 40vh;
+    margin: 0 auto;
+}
+
+.player-container > :deep(.vjs-tech){
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    background: #000;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+:deep(.vjs-poster) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    background-color: #000 !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
 </style>

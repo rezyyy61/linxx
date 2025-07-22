@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Events\PostReady;
 use App\Models\PostMedia;
 use App\Services\Media\AudioProcessor;
 use App\Services\Media\ImageProcessor;
 use App\Services\Media\VideoProcessor;
+use App\Services\PostService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,30 +20,27 @@ class ProcessPostMedia implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var int */
     public $timeout = 3600;
-
-    /** @var int */
-    public $tries   = 3;
+    public $tries = 3;
 
     public function __construct(
         public int $postMediaId,
-    ) {
-    }
+    ) {}
 
     public function handle(
         ImageProcessor $imageProcessor,
         VideoProcessor $videoProcessor,
-        AudioProcessor $audioProcessor
-    ): void
-    {
+        AudioProcessor $audioProcessor,
+        PostService $postService
+    ): void {
         $media = PostMedia::find($this->postMediaId);
+
         if (! $media) {
             Log::error('PostMedia not found', ['id' => $this->postMediaId]);
-            return; }
+            return;
+        }
 
         $tmpPath = $media->meta_tmp['tmp_path'] ?? null;
-
         $absTmp = Storage::disk('local')->path($tmpPath);
 
         if (! $tmpPath || ! Storage::disk('local')->exists($tmpPath)) {
@@ -71,22 +68,6 @@ class ProcessPostMedia implements ShouldQueue
                 'error'    => null,
             ]);
 
-
-
-            if ($media->post->media()->where('status','pending')->doesntExist()) {
-                Log::info('🔥 condition true', ['post'=>$media->post_id]);
-                broadcast(new PostReady(
-                    $media->post->fresh()->load(['media','user'])
-                ));
-            } else {
-                Log::info('⌛ still pending', [
-                    'post'   => $media->post_id,
-                    'remain' => $media->post->media()->where('status','pending')->count()
-                ]);
-            }
-
-
-
         } catch (\Throwable $e) {
             report($e);
             $media->update(['status' => 'failed', 'error' => $e->getMessage()]);
@@ -95,5 +76,8 @@ class ProcessPostMedia implements ShouldQueue
         } finally {
             Storage::disk('local')->delete($tmpPath);
         }
+
+        // ✅ فراخوانی سرویس مرکزی برای بررسی وضعیت نهایی پست
+        $postService->checkAndBroadcastIfReady($media->post);
     }
 }

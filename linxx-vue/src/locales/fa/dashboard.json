@@ -54,7 +54,13 @@
         "delete_success": "با موفقیت حذف شد.",
         "delete_error": "خطا در حذف فایل.",
         "read_more": "ادامه",
-        "read_less": "بستن"
+        "read_less": "بستن",
+
+        "badge": "نشریه رسمی",
+        "format": "فرمت",
+        "view": "مشاهده / دانلود",
+        "defaultTitle": "نشریه",
+        "defaultFile": "فایل نشریه"
 
     }
 

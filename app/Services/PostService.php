@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Services;
 
 use App\Events\PostQueued;
+use App\Events\PostReady;
 use App\Jobs\ProcessPostMedia;
 use App\Models\Post;
 use App\Models\PostMedia;
@@ -10,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-
 class PostService
 {
     public function __construct(
@@ -18,14 +19,6 @@ class PostService
         protected string $tmpDisk = 'local'
     ) {}
 
-
-    /**
-     * @param array          $data
-     * @param array          $media
-     * @param \App\Models\User $user
-     * @return Post
-     * @throws \Throwable
-     */
     public function createPost(array $data, array $media, $user): Post
     {
         return DB::transaction(function () use ($data, $media, $user) {
@@ -58,9 +51,8 @@ class PostService
             $type = $typeMap[$group] ?? $group;
 
             foreach ($files as $file) {
-
-                $uuidName = Str::uuid().'.'.$file->getClientOriginalExtension();
-                $tmpPath  = $file->storeAs('tmp', $uuidName, $this->tmpDisk);
+                $uuidName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+                $tmpPath = $file->storeAs('tmp', $uuidName, $this->tmpDisk);
 
                 $postMedia = PostMedia::create([
                     'post_id'  => $post->id,
@@ -74,7 +66,6 @@ class PostService
                 if (in_array($type, ['image', 'video', 'audio'])) {
                     ProcessPostMedia::dispatch($postMedia->id)->onQueue('media');
                 } elseif ($type === 'file') {
-
                     $absTmp = Storage::disk($this->tmpDisk)->path($tmpPath);
 
                     if (! $this->scanner->isClean($absTmp)) {
@@ -99,6 +90,18 @@ class PostService
                     ]);
                 }
             }
+        }
+
+        $this->checkAndBroadcastIfReady($post);
+    }
+
+    public function checkAndBroadcastIfReady(Post $post): void
+    {
+        if ($post->media()->whereIn('status', ['pending', 'processing'])->doesntExist()) {
+            $post->update(['status' => 'ready']);
+            broadcast(new PostReady(
+                $post->fresh(['media', 'user'])
+            ));
         }
     }
 }

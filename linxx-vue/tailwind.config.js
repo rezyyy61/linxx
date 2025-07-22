@@ -8,5 +8,12 @@ module.exports = {
     theme: {
         extend: {},
     },
-    plugins: [],
+    safelist: [
+        'aspect-video',
+        'aspect-square',
+        'aspect-[9/16]',
+    ],
+    plugins: [
+        require('@tailwindcss/aspect-ratio'),
+    ],
 }

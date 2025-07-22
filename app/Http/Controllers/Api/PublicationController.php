@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePublicationRequest;
 use App\Http\Resources\PublicationResource;
 use App\Models\PoliticalProfile;
+use App\Models\Post;
+use App\Models\PostMedia;
 use App\Models\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -44,9 +46,17 @@ class PublicationController extends Controller
         abort_unless($profile && $publication->political_profile_id === $profile->id, 403);
 
         Storage::disk('public')->delete($publication->file_path);
+
+        if ($publication->post_id) {
+            PostMedia::where('post_id', $publication->post_id)->delete();
+            Post::find($publication->post_id)?->delete();
+        }
+
         $publication->delete();
+
         return response()->noContent();
     }
+
 
     public function suggestDescription(Request $request, SummarizeFile $summarizer)
     {

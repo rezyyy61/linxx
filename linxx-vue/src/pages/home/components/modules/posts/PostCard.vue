@@ -2,31 +2,40 @@
     <div
         class="bg-white/90 dark:bg-gray-800/70 border border-gray-200 dark:border-gray-600 rounded-2xl shadow-sm dark:shadow-md transition-all duration-300 overflow-hidden"
     >
+        <!-- Header -->
         <PostHeader
             :user="post.user"
-            :created-at="post.created_at"
+            v-bind="post.created_at ? { createdAt: post.created_at } : {}"
             :is-owner="currentUserId && post.user.id === currentUserId"
         />
 
+        <!-- Main Content -->
         <div class="p-4 space-y-4">
-            <PostTextClamp
-                v-if="post.text"
-                :text="post.text"
-                v-model:expanded="showFull"
-                :limits="{ sm: 100, md: 300, lg: 400 }"
-                :truncate="true"
+            <PostPublicationCard
+                v-if="isPublication"
+                :post="post"
             />
-
-
-            <PostMedia :post="post" base-url="http://localhost:8080" />
-
+            <template v-else>
+                <PostTextClamp
+                    v-if="post.text"
+                    :text="post.text"
+                    v-model:expanded="showFull"
+                    :limits="{ sm: 100, md: 300, lg: 400 }"
+                    :truncate="true"
+                />
+                <PostMedia :post="post" base-url="http://localhost:8080" />
+            </template>
         </div>
+
+        <!-- Footer -->
         <PostFooter
             :post="post"
             @like="handleLike"
             @comment="toggleComments"
             @share="handleShare"
         />
+
+        <!-- Comments Modal -->
         <PostCommentsModal
             :visible="showModal"
             :post="post"
@@ -45,6 +54,7 @@ import PostMedia from "@/pages/home/components/modules/posts/PostMedia.vue";
 import PostHeader from "@/pages/home/components/modules/posts/PostHeader.vue";
 import PostTextClamp from "@/pages/home/components/modules/posts/PostTextClamp.vue";
 import {CommentAPI} from "@/stores/comments";
+import PostPublicationCard from "@/pages/home/components/modules/posts/media/PostPublicationCard.vue";
 
 
 const props = defineProps({ post: Object })
@@ -86,6 +96,11 @@ function toggleComments() {
 }
 function handleLike() {}
 function handleShare() {}
+
+const isPublication = computed(() => {
+    const media = props.post?.media?.[0]
+    return media?.meta?.source === 'publication'
+})
 </script>
 
 <style scoped>
