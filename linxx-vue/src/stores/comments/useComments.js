@@ -1,33 +1,41 @@
-import { ref, onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
-import { CommentAPI } from "@/stores/comments"
+// src/stores/comments/useComments.js
 
-export function useComments(postId) {
+import {ref, onMounted, nextTick} from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import {CommentAPI} from "@/stores/comments";
+
+
+let newCommentCallback = () => {}
+export function useComments(postId, options = {}) {
+    const endOfComments = options.endOfComments || null
     const comments = ref([])
     const loading = ref(false)
     const inputVal = ref('')
     const totalCount = ref(0)
     const auth = useAuthStore()
 
+
+    function onNewComment(cb) {
+        newCommentCallback = cb || (() => {})
+    }
+
     function mapComment(raw) {
         if (!raw) return null
         return {
             id: raw.id,
+            post_id: raw.post_id,
+            post_user_id: raw.post_user_id,
             parent_id: raw.parent_id,
             name: raw.user?.name || 'Anonymous',
-            avatar: raw.user?.avatar || `https://i.pravatar.cc/40?u=${raw.user?.id || 'guest-' + raw.id}`,
+            avatar: raw.user?.avatar || null,
+            avatarColor: raw.user?.avatar_color || '#b80425',
             user: raw.user,
             text: raw.content,
             likes: raw.like_count || 0,
             liked: !!raw.liked_by_user,
             replies_count: raw.replies_count || 0,
             created_at: raw.created_at,
-            children: (raw.children || []).map(mapComment).filter(Boolean)
         }
-    }
-
-    function countAll(commentsList) {
-        return commentsList.reduce((acc, c) => acc + 1 + countAll(c.children || []), 0)
     }
 
     async function load() {
@@ -37,7 +45,7 @@ export function useComments(postId) {
             const response = await CommentAPI.list(postId, token)
             const raw = response.data?.data || []
             comments.value = raw.map(mapComment)
-            totalCount.value = countAll(comments.value)
+            totalCount.value = comments.value.length
         } catch (e) {
             console.error('Failed to load comments', e)
         } finally {
@@ -48,125 +56,92 @@ export function useComments(postId) {
     function listenRealtime() {
         window.Echo.channel(`post.${postId}`)
             .listen('.comment.created', (e) => {
-                if (!e?.comment) {
-                    console.warn('[Realtime] Payload invalid (missing comment):', e)
-                    return
-                }
+                if (!e?.comment) return
 
-                const newComment = mapComment(e.comment)
+                const real = mapComment(e.comment)
+                if (!real) return
 
-                if (!newComment) {
-                    console.warn('[Realtime] Failed to map comment from payload:', e.comment)
-                    return
-                }
+                // اگر یک fake با همین متن داریم، جایگزین کن
+                const fakeIndex = comments.value.findIndex(c =>
+                    c.isTemp && c.text === real.text && c.user?.id === real.user?.id
+                )
 
-                insertComment(newComment)
-
-                if (e.total_comments !== undefined) {
-                    totalCount.value = e.total_comments
+                if (fakeIndex !== -1) {
+                    comments.value[fakeIndex] = real
                 } else {
-                    totalCount.value += 1
+                    comments.value.push(real)
                 }
+
+                totalCount.value = e.total_comments ?? totalCount.value + 1
+                nextTick(() => requestAnimationFrame(() => newCommentCallback()))
             })
-            .listen('.comment.liked', (e) => {
-                if (!e?.comment_id) {
-                    console.warn('[Realtime] Invalid like event:', e)
-                    return
-                }
-                updateLike(e.comment_id, e.like_count)
+
+            .listen('.comment.updated', (e) => {
+                const updated = mapComment(e.comment)
+                const idx = comments.value.findIndex(c => c.id === updated.id)
+                if (idx !== -1) comments.value[idx] = updated
             })
-    }
 
-    function insertComment(newComment) {
-        if (!newComment.parent_id) {
-            comments.value = [...comments.value, newComment]
-            return
-        }
-
-        const addReply = (list) => {
-            for (const c of list) {
-                if (c.id === newComment.parent_id) {
-                    c.children.push(newComment)
-                    return true
-                } else if (c.children.length) {
-                    if (addReply(c.children)) return true
-                }
-            }
-            return false
-        }
-
-        addReply(comments.value)
-    }
-
-    function updateLike(id, likeCount) {
-        const update = (list) => {
-            for (const c of list) {
-                if (c.id === id) {
-                    c.likes = likeCount
-                    return true
-                } else if (c.children.length) {
-                    if (update(c.children)) return true
-                }
-            }
-            return false
-        }
-        update(comments.value)
+            .listen('.comment.deleted', (e) => {
+                const id = e.commentId ?? e.comment_id ?? e.id
+                comments.value = comments.value.filter(c => c.id !== id)
+                totalCount.value = Math.max(0, totalCount.value - 1)
+            })
     }
 
     async function send({ content, parentId = null }) {
-        if (!auth.user?.id) return
+        if (!auth.user.data.id || !auth.token) return
+
         const cleanContent = content?.trim()
         if (!cleanContent) return
 
         try {
-            await CommentAPI.create({
+            return await CommentAPI.create({
                 post_id: postId,
                 content: cleanContent,
                 parent_id: parentId
             })
-            inputVal.value = ''
         } catch (e) {
             console.error('Failed to send comment', e)
+            throw e
         }
     }
 
-    async function update(commentId, content) {
-        const cleanContent = content?.trim()
-        if (!cleanContent) return
+
+    async function update(commentId, newContent) {
+        const content = newContent?.trim()
+        if (!content) return
+
         try {
-            await CommentAPI.update(commentId, cleanContent)
+            const res = await CommentAPI.update(commentId, content)
+            const updated = mapComment(res.data?.data)
+            const index = comments.value.findIndex(c => c.id === commentId)
+
+            if (index !== -1 && updated) {
+                const prev = comments.value[index]
+                comments.value[index] = {
+                    ...prev,
+                    ...updated,
+                    user: prev.user,
+                    post_user_id: prev.post_user_id,
+                    comment_user_id: prev.comment_user_id ?? prev.user?.id
+                }
+            }
         } catch (e) {
             console.error('Failed to update comment', e)
         }
     }
+
+
     async function remove(commentId) {
         try {
             await CommentAPI.delete(commentId)
-            const findAndDecrement = (list, parent = null) => {
-                for (const c of list) {
-                    if (c.id === commentId && parent) {
-                        parent.replies_count = Math.max(0, (parent.replies_count || 1) - 1)
-                        break
-                    }
-                    if (c.children?.length) {
-                        findAndDecrement(c.children, c)
-                    }
-                }
+            const deleted = comments.value.find(c => c.id === commentId)
+            comments.value = comments.value.filter(c => c.id !== commentId)
+            if (deleted?.parent_id) {
+                const parent = comments.value.find(c => c.id === deleted.parent_id)
+                if (parent) parent.replies_count = Math.max(0, parent.replies_count - 1)
             }
-            findAndDecrement(comments.value)
-            const deleteRecursive = (list) => {
-                return list
-                    .map(c => ({ ...c }))
-                    .filter(c => {
-                        if (c.id === commentId) return false
-                        if (c.children?.length) {
-                            c.children = deleteRecursive(c.children)
-                        }
-                        return true
-                    })
-            }
-
-            comments.value = deleteRecursive(comments.value)
             totalCount.value = Math.max(0, totalCount.value - 1)
         } catch (e) {
             console.error('Failed to delete comment', e)
@@ -174,19 +149,23 @@ export function useComments(postId) {
     }
 
     async function toggleLike(comment) {
-        const original = comment.liked
-        const delta = original ? -1 : 1
-
-        comment.liked = !original
+        const originalLiked = comment.liked
+        const delta = originalLiked ? -1 : 1
+        comment.liked = !originalLiked
         comment.likes += delta
 
         try {
             await CommentAPI.toggleLike(comment.id)
         } catch (e) {
-            comment.liked = original
+            comment.liked = originalLiked
             comment.likes -= delta
             console.error('Failed to toggle like', e)
         }
+    }
+
+    function updateLike(id, count) {
+        const c = comments.value.find(c => c.id === id)
+        if (c) c.likes = count
     }
 
     onMounted(async () => {
@@ -203,6 +182,7 @@ export function useComments(postId) {
         send,
         update,
         remove,
-        toggleLike
+        toggleLike,
+        onNewComment,
     }
 }

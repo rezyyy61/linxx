@@ -1,6 +1,7 @@
 // src/stores/politicalProfile.js
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import {getMyProfile} from "@/api/politicalProfile";
 
 export const usePoliticalProfileStore = defineStore('politicalProfile', () => {
   const general = ref({
@@ -42,6 +43,19 @@ export const usePoliticalProfileStore = defineStore('politicalProfile', () => {
     custom: []
   })
   const allProfiles = ref([])
+
+    const myProfile = ref(null)
+
+    async function fetchMyProfile () {
+        try {
+            const res = await getMyProfile()
+            myProfile.value = res.data.data
+            console.log(myProfile.value)
+        } catch (error) {
+            console.error('❌ خطا در دریافت پروفایل:', error)
+            myProfile.value = null
+        }
+    }
 
   // 🟥 General
   function saveGeneral (data) {
@@ -154,6 +168,10 @@ export const usePoliticalProfileStore = defineStore('politicalProfile', () => {
     // All Profiles
     allProfiles,
     saveAllProfiles,
-    resetAllProfiles
+    resetAllProfiles,
+
+      myProfile,
+      fetchMyProfile
+
   }
 })

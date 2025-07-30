@@ -23,6 +23,7 @@ class PoliticalProfile extends Model
         'goals',
         'activities',
         'structure',
+        'avatar_color'
     ];
 
     public function user(): BelongsTo

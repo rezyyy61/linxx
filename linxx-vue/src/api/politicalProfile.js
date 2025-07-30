@@ -1,4 +1,5 @@
 import axios from '@/lib/axios'
+import publicAxios from "@/lib/publicAxios";
 
 const BASE_URL = '/api/political-profiles'
 
@@ -32,4 +33,8 @@ export async function listPoliticalProfiles () {
 
 export async function deletePoliticalProfile (id) {
   return axios.delete(`${BASE_URL}/${id}`)
+}
+
+export function getMyProfile() {
+    return publicAxios.get('api/user/me')
 }

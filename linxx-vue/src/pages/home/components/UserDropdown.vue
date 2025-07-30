@@ -3,10 +3,17 @@
         <!-- Avatar Button -->
         <button
             @click="open = !open"
-            class="w-9 h-9 rounded-full bg-red-600 text-white uppercase flex items-center justify-center font-bold hover:bg-red-700 transition"
+            class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white hover:opacity-90 transition overflow-hidden shadow-md ring-1 ring-gray-200 dark:ring-gray-600"
         >
-            {{ user.name.charAt(0) }}
+            <UserAvatar
+                :src="user.avatar"
+                :fallback="user.name"
+                :color="user.political_profile?.avatar_color"
+                size="lg"
+            />
+
         </button>
+
 
         <!-- Dropdown Menu -->
         <div
@@ -16,7 +23,6 @@
             <div class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">👤 {{ user.name }}</div>
             <hr class="border-gray-200 dark:border-gray-700" />
 
-            <!-- Main Links -->
             <router-link to="/profile" class="dropdown-item">Profile</router-link>
             <router-link to="/library" class="dropdown-item">Library</router-link>
             <router-link to="/stories" class="dropdown-item">Stories</router-link>
@@ -24,13 +30,11 @@
 
             <hr class="border-gray-200 dark:border-gray-700" />
 
-            <!-- Settings -->
             <router-link to="/settings" class="dropdown-item">Settings</router-link>
             <router-link to="/publications" class="dropdown-item">Manage publications</router-link>
 
             <hr class="border-gray-200 dark:border-gray-700" />
 
-            <!-- Logout -->
             <button @click="logout" class="dropdown-item text-red-600 hover:text-red-700">
                 Sign out
             </button>
@@ -41,34 +45,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import UserAvatar from "@/pages/auth/UserAvatar.vue";
 
 const auth = useAuthStore()
-const user = auth.user
+const user = computed(() => auth.user?.data ?? {})
+
 const open = ref(false)
 
 const logout = () => {
     auth.logout()
     open.value = false
 }
-</script>
 
-<style scoped>
-.dropdown-item {
-    @apply block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition;
-}
-@keyframes fade {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-.animate-fade {
-    animation: fade 0.15s ease-out;
-}
-</style>
+</script>

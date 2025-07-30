@@ -11,10 +11,7 @@ return [
         'register',
         'user',
     ],
-    'allowed_origins' => [
-        'http://localhost:8081',
-        'http://192.168.1.193:8081'
-    ],
+    'allowed_origins' => ['*'],
 
     'allowed_methods' => ['*'],
 

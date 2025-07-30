@@ -15,9 +15,18 @@
     "submit_success": "پست با موفقیت ارسال شد!",
     "submit_error": "ارسال پست با خطا مواجه شد.",
     "remove": "حذف",
+    "visibility_label": "نمایش",
+    "visibility_public": "عمومی",
+    "visibility_private": "خصوصی",
+    "visibility_friends": "فقط دوستان",
+    "archive_label": "افزودن به بایگانی",
 
+    "loading": "در حال بارگذاری",
+    "noMorePosts": "پست بیشتری وجود ندارد",
+    "somethingWentWrong": "مشکلی پیش آمده است. لطفاً دوباره تلاش کنید.",
     "showMore": "نمایش بیشتر",
     "showLess": "نمایش کمتر",
+    "readFull": "مطالعه کامل",
     "viewAllComments": "مشاهده همهٔ {count} نظر",
     "noComments": "هنوز نظری ثبت نشده",
     "comments": "دیدگاه‌ها",
@@ -28,6 +37,16 @@
 
     "downloadAudio": "دانلود فایل صوتی",
 
-    "processingMedia": "در حال پردازش رسانه..."
+    "processingMedia": "در حال پردازش رسانه...",
+
+
+    "share": {
+        "key": {
+            "title": "اشتراک پست",
+            "placeholder": "نظر خود را بنویسید…",
+            "action": "انتشار",
+            "sending": "در حال ارسال…"
+        }
+    }
 
 }

@@ -19,9 +19,9 @@
             <p class="text-base font-medium">{{ $t('post.processingMedia') }}</p>
         </div>
 
-        <div v-if="hasVisibleMedia" class="w-full space-y-4">
+        <div v-if="hasVisibleMedia" class="w-full">
             <ImageGallery v-if="normImages.length" :images="normImages" />
-            <VideoPlayer v-if="normVideos.length" :videos="normVideos"  />
+            <VideoPlayer v-if="normVideos.length" :videos="normVideos"  fitMode="contain" />
             <AudioPlayer v-if="normAudios.length" :audios="normAudios" />
             <FileAttachment v-if="normFiles.length" :files="normFiles" />
         </div>
@@ -111,8 +111,9 @@ const normFiles = computed(() =>
 )
 
 const isProcessing = computed(() => {
-    const s = props.post?.status?.toString()?.toLowerCase?.()
-    return props.post?._localPending === true || s === 'processing'
+    const s = (props.post?.status || '').toString().toLowerCase()
+    return props.post?._localPending === true ||
+        ['queued', 'processing'].includes(s)
 })
 
 const hasVisibleMedia = computed(() =>

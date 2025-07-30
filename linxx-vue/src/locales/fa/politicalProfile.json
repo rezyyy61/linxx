@@ -118,6 +118,22 @@
         "attachments": "فایل‌های پیوست",
         "no_content": "محتوایی برای این بخش ثبت نشده است.",
         "download": "دانلود"
+    },
+
+    "profileMenu": {
+        "posts": "پست‌ها",
+        "noPosts": "هیچ پستی برای این پروفایل ثبت نشده است.",
+        "overview": "نمای کلی",
+        "members": "اعضا",
+        "statements": "بیانیه‌ها",
+        "programs": "برنامه‌ها",
+        "contact": "ارتباط",
+        "search": "جستجو...",
+        "activeTab": "تب فعال"
+    },
+
+    "sidebar": {
+        "title": "اطلاعات تکمیلی"
     }
 
 }

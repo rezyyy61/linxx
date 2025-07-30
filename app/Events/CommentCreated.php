@@ -28,7 +28,7 @@ class CommentCreated implements ShouldBroadcast
     public function broadcastWith(): array
     {
         $postId = $this->comment->post_id;
-        $total = \App\Models\Comment::where('post_id', $postId)
+        $total = Comment::where('post_id', $postId)
             ->where('status', 'visible')
             ->count();
 

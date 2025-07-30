@@ -22,6 +22,7 @@ class PoliticalProfileResource extends JsonResource
             'goals'        => $this->goals,
             'activities'   => $this->activities,
             'structure'    => $this->structure,
+            'avatar_color' => $this->avatar_color,
 
             'links'        => $this->links,
             'ideologies'   => $this->ideologies,

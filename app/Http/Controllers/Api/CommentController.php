@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\CommentDeleted;
+use App\Events\CommentUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
@@ -24,13 +26,17 @@ class CommentController extends Controller
 
     public function store(StoreCommentRequest $request)
     {
-        $comment = $this->commentService->store($request->validated(), auth()->id());
+        $comment = $this->commentService->store(
+            $request->validated(),
+            auth()->id()
+        );
 
         return (new CommentResource($comment))
             ->additional(['message' => 'Comment posted successfully.'])
             ->response()
             ->setStatusCode(201);
     }
+
 
     public function like(Comment $comment)
     {
@@ -55,6 +61,7 @@ class CommentController extends Controller
         $comment->update([
             'content' => $request->input('content'),
         ]);
+        broadcast(new CommentUpdated($comment))->toOthers();
 
         return (new CommentResource($comment))
             ->additional(['message' => 'Comment updated.']);
@@ -64,7 +71,11 @@ class CommentController extends Controller
     {
         $this->authorize('delete', $comment);
 
+        $commentId = $comment->id;
+        $postId    = $comment->post_id;
         $comment->delete();
+
+        broadcast(new CommentDeleted($commentId, $postId))->toOthers();
 
         return response()->json([
             'message' => 'Comment deleted.',

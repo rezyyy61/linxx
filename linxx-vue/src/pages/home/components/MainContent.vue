@@ -5,7 +5,7 @@
     >
         <!-- Navigation Tabs -->
         <div
-            class="flex overflow-x-auto border-b border-gray-200 dark:border-gray-600 text-sm font-medium bg-white dark:bg-gray-800/70 rounded-lg shadow-sm custom-scroll"
+            class="flex overflow-x-auto border-b border-gray-200 dark:border-gray-600 text-sm font-medium bg-gray-100 dark:bg-gray-800/70 rounded-lg shadow-sm custom-scroll"
         >
             <router-link
                 v-for="item in navItems"
@@ -23,8 +23,8 @@
 
         <!-- Main Section (Content area) -->
         <div
-            class="w-full bg-white dark:bg-gray-800/60 rounded-xl shadow p-2 sm:p-4
-         sm:mx-auto sm:max-w-4xl"
+            class="w-full bg-gray-200 dark:bg-gray-800/60 rounded-xl shadow p-2 sm:p-4
+         sm:mx-auto "
         >
 
         <router-view />

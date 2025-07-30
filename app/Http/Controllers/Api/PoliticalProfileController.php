@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePoliticalProfileRequest;
 use App\Http\Requests\UpdatePoliticalProfileRequest;
 use App\Http\Resources\PoliticalProfileResource;
+use App\Http\Resources\PostResource;
 use App\Models\PoliticalProfile;
+use App\Models\Post;
+use App\Models\User;
 use App\Services\PoliticalProfileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -101,5 +104,33 @@ class PoliticalProfileController extends Controller
 
         return response()->json(['message' => 'Deleted successfully']);
     }
+
+    public function showBySlug($slug)
+    {
+        $user = User::where('slug', $slug)->first();
+
+        if (!$user || !$user->politicalProfile) {
+            return response()->json(['message' => 'Profile not found'], 404);
+        }
+
+        return new PoliticalProfileResource($user->politicalProfile->load(['links', 'ideologies', 'files']));
+    }
+
+    public function postsByProfileSlug($slug)
+    {
+        $user = User::where('slug', $slug)->first();
+
+        if (!$user || !$user->politicalProfile) {
+            return response()->json(['message' => 'Profile not found'], 404);
+        }
+
+        $posts = Post::with('user')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->paginate(10);
+
+        return PostResource::collection($posts);
+    }
+
 
 }

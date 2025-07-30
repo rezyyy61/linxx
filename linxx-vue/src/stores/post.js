@@ -1,43 +1,42 @@
 import { defineStore } from 'pinia'
 import axios from '@/lib/axios'
 import { ref } from 'vue'
+import { htmlToRichJson } from '@/utils/htmlToRichJson'
 
 export const usePostStore = defineStore('post', () => {
-    // State
     const postText = ref('')
+    const visibility = ref('public')
+    const isArchived = ref(false)
     const images = ref([])
     const videos = ref([])
     const audio = ref(null)
     const files = ref([])
+
     const posts = ref([])
+    const currentPage = ref(1)
+    const lastPage = ref(null)
+    const loading = ref(false)
+    const allLoaded = ref(false)
+    const error = ref(null)
+
     async function submitPost() {
         try {
             const formData = new FormData()
             formData.append('text', postText.value)
+            formData.append('visibility', visibility.value || 'public')
+            formData.append('is_archived', isArchived.value ? '1' : '0')
 
-            images.value.forEach((item, i) => {
-                formData.append(`images[${i}]`, item.file)
-            })
+            images.value.forEach((item, i) => formData.append(`images[${i}]`, item.file))
+            if (videos.value.length) formData.append('video', videos.value[0].file)
+            if (audio.value) formData.append('audio', audio.value.file)
+            files.value.forEach((file, i) => formData.append(`files[${i}]`, file))
 
-            if (videos.value.length > 0) {
-                formData.append('video', videos.value[0].file)
-            }
-
-
-            if (audio.value) {
-                formData.append('audio', audio.value.file)
-            }
-
-            files.value.forEach((file, i) => {
-                formData.append(`files[${i}]`, file)
-            })
-
-            const response = await axios.post('/api/posts', formData, {
+            const { data } = await axios.post('/api/posts', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
 
             reset()
-            return response.data
+            return data
         } catch (err) {
             console.error('Submit post error:', err)
             throw err
@@ -52,49 +51,65 @@ export const usePostStore = defineStore('post', () => {
         files.value = []
     }
 
-    async function fetchPosts() {
+    async function fetchMorePosts() {
+        if (loading.value || allLoaded.value) return
+
+        loading.value = true
+        error.value = null
+
         try {
-            const response = await axios.get('/api/posts')
-            posts.value = response.data.data
+            const { data, meta } = (await axios.get(`/api/posts?page=${currentPage.value}`)).data
+            posts.value.push(...data.map(normalizePost))
+            currentPage.value++
+            lastPage.value = meta.last_page
+            if (currentPage.value > lastPage.value) allLoaded.value = true
         } catch (err) {
-            console.error('error posts:', err)
-            throw err
+            console.error('Error fetching posts:', err)
+            error.value = 'خطا در دریافت پست‌ها'
+        } finally {
+            loading.value = false
         }
     }
 
-    function subscribeRealtime () {
+    function resetPagination() {
+        posts.value = []
+        currentPage.value = 1
+        lastPage.value = null
+        allLoaded.value = false
+        error.value = null
+    }
+
+    function subscribeRealtime() {
         window.Echo.channel('public-feed')
-            .listen('PostCreated', p => posts.value.unshift(p.post))
-            .listen('PostReady', payload => {
-                const idx = posts.value.findIndex(p => p.id === payload.post.id)
-                if (idx !== -1) {
-                    posts.value.splice(idx, 1, {
-                        ...payload.post,
-                        _localPending: false,
-                    })
-                } else {
-                    posts.value.unshift(payload.post)
-                }
+            .listen('PostCreated', p => posts.value.unshift(normalizePost(p.post)))
+            .listen('PostReady', p => {
+                const idx = posts.value.findIndex(x => x.id === p.post.id)
+                if (idx !== -1) posts.value[idx] = normalizePost(p.post)
+                else posts.value.unshift(normalizePost(p.post))
             })
     }
 
-
-
-    function subscribeUserChannel (userId) {
+    function subscribeUserChannel(userId) {
         if (!userId) return
         window.Echo.private(`user.${userId}`)
-            .listen('PostQueued', payload => {
-                if (!posts.value.find(p => p.id === payload.post.id)) {
+            .listen('PostQueued', p => {
+                if (!posts.value.find(x => x.id === p.post.id)) {
                     posts.value.unshift({
-                        ...payload.post,
+                        ...normalizePost(p.post),
                         media: [],
                         _localPending: true,
-                        created_at: null,
+                        created_at: null
                     })
                 }
             })
     }
 
+    function normalizePost(raw) {
+        return {
+            ...raw,
+            richText: Array.isArray(raw.richText) ? raw.richText : htmlToRichJson(raw.text || '')
+        }
+    }
 
     return {
         postText,
@@ -102,9 +117,17 @@ export const usePostStore = defineStore('post', () => {
         videos,
         audio,
         files,
+        visibility,
+        isArchived,
         posts,
+        currentPage,
+        lastPage,
+        loading,
+        allLoaded,
+        error,
         submitPost,
-        fetchPosts,
+        fetchMorePosts,
+        resetPagination,
         reset,
         subscribeRealtime,
         subscribeUserChannel

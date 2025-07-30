@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\PostResource;
+use App\Models\PoliticalProfile;
 use App\Models\Post;
+use App\Models\User;
 use App\Services\PostService;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -44,9 +45,13 @@ class PostController extends Controller
 
     public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        $posts = Post::with(['user', 'media'])
+        $posts = Post::with([
+            'user.politicalProfile',
+            'media',
+            'likes.user',
+        ])
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return PostResource::collection($posts);
     }

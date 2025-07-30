@@ -1,5 +1,5 @@
 <template>
-    <div class="font-sans min-h-screen bg-white dark:bg-gradient-to-b dark:from-[#1F2937] dark:to-[#374151] text-gray-900 dark:text-gray-100 transition-colors duration-500 ease-in-out">
+    <div class="font-sans min-h-screen bg-gray-100 dark:bg-gradient-to-b dark:from-[#1F2937] dark:to-[#374151] text-gray-900 dark:text-gray-100 transition-colors duration-500 ease-in-out">
         <MainNavbar @toggle-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen" />
 
         <!-- Mobile Sidebar Overlay -->
@@ -15,7 +15,7 @@
         <transition name="slide">
             <aside
                 v-if="isMobileSidebarOpen"
-                class="fixed z-50 top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg p-4 md:hidden overflow-y-auto custom-scroll"
+                class="fixed z-50 top-0 left-0 h-full w-64 bg-gray-100 dark:bg-gray-800 shadow-lg p-4 md:hidden overflow-y-auto custom-scroll"
             >
                 <LeftSidebar />
             </aside>
@@ -24,27 +24,22 @@
         <div
             class="grid h-[calc(100vh-64px)]
          grid-cols-1
-         md:grid-cols-[minmax(200px,1fr)_minmax(500px,2fr)]
-         xl:grid-cols-[minmax(200px,280px)_minmax(600px,1fr)_minmax(200px,320px)]"
+         md:grid-cols-[minmax(260px,1.5fr)_minmax(500px,2fr)]
+         xl:grid-cols-[minmax(300px,400px)_minmax(700px,3fr)]"
         >
-
-        <!-- Left Sidebar -->
+            <!-- Left Sidebar -->
             <aside class="hidden md:block h-full border-r ...">
                 <LeftSidebar />
             </aside>
 
             <!-- Main Content -->
             <main class="h-full overflow-y-auto px-4 py-6 custom-scroll">
-                <div class="max-w-5xl mx-auto w-full">
+                <div class="w-full mx-auto">
                     <MainContent />
                 </div>
             </main>
-
-            <!-- Right Sidebar -->
-            <aside class="hidden xl:block h-full border-l ...">
-                <RightSidebar />
-            </aside>
         </div>
+
 
     </div>
 </template>
@@ -53,7 +48,6 @@
 import MainNavbar from '@/pages/home/components/MainNavbar.vue'
 import LeftSidebar from '@/pages/home/components/LeftSidebar.vue'
 import MainContent from '@/pages/home/components/MainContent.vue'
-import RightSidebar from '@/pages/home/components/RightSidebar.vue'
 
 export default {
     name: 'MainLayout',
@@ -61,7 +55,6 @@ export default {
         MainNavbar,
         LeftSidebar,
         MainContent,
-        RightSidebar
     },
     data() {
         return {

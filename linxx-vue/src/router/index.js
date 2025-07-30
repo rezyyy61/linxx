@@ -69,10 +69,16 @@ const publicRoutes = [
         component: () => import('@/pages/home/components/modules/AnnouncementsCard.vue')
       },
       {
-        path: '/party/:id',
+        path: '/party/:slug',
         name: 'party_profile',
         component: () => import('@/pages/home/components/modules/party-profile/PartyProfile.vue')
-      }
+      },
+        {
+            path: '/:slug',
+            name: 'users.show',
+            component: () => import('@/pages/home/components/modules/Profile/UserProfile.vue'),
+            props: true
+        },
     ]
   }
 

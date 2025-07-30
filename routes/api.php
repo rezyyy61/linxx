@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\MediaDownloadController;
 use App\Http\Controllers\Api\PoliticalProfileController;
 use App\Http\Controllers\Api\PostController;
@@ -13,17 +14,33 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/political-profiles', [PoliticalProfileController::class, 'index']);
+
+
 Route::get('/political-profiles/{politicalProfile}', [PoliticalProfileController::class, 'show'])
     ->where('politicalProfile', '[0-9]+');
+
+
 Route::get('/parties/{id}/publications', [PublicationController::class, 'listByParty']);
+
+
 Route::get('/posts', [PostController::class, 'index']);
+
+
 Route::get('/media/download/{id}', [MediaDownloadController::class, 'show'])
     ->name('media.download')
     ->whereNumber('id');
+
+
 Route::get('/comments', [CommentController::class, 'index'])
     ->middleware(OptionalAuth::class);
 
 
+Route::get('/posts/{post}', [PostController::class, 'sharePreview']);
+
+Route::get('/political-profiles/user/{slug}', [PoliticalProfileController::class, 'showBySlug']);
+
+
+Route::get('/political-profiles/user/{slug}/posts', [PoliticalProfileController::class, 'postsByProfileSlug']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -48,4 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/comments/{comment}', [CommentController::class, 'update']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
     Route::post('/comments/{comment}/report', [CommentController::class, 'report']);
+
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
+
 });

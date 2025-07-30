@@ -118,6 +118,22 @@
         "attachments": "Attachments",
         "no_content": "No content has been added for this section.",
         "download": "Download"
+    },
+
+    "profileMenu": {
+        "posts": "Posts",
+        "noPosts": "No posts available for this profile.",
+        "overview": "Overview",
+        "members": "Members",
+        "statements": "Statements",
+        "programs": "Programs",
+        "contact": "Contact",
+        "search": "Search...",
+        "activeTab": "Active Tab"
+    },
+
+    "sidebar": {
+        "title": "Additional Info"
     }
 
 

@@ -14,9 +14,18 @@
     "submitting": "Submitting...",
     "submit_success": "Post submitted successfully!",
     "remove": "remove",
+    "visibility_label": "Visibility",
+    "visibility_public": "Public",
+    "visibility_private": "Private",
+    "visibility_friends": "Friends Only",
+    "archive_label": "Add to archive",
 
+    "loading": "Loading",
+    "noMorePosts": "No more posts",
+    "somethingWentWrong": "Something went wrong. Please try again.",
     "showMore": "Show more",
     "showLess": "Show less",
+    "readFull": "readFull",
     "viewAllComments": "View all {count} comments",
     "noComments": "No comments yet",
     "comments": "Comments",
@@ -28,6 +37,15 @@
 
     "downloadAudio": "Download audio",
 
-    "processingMedia": "Media is being processed"
+    "processingMedia": "Media is being processed",
+
+    "share": {
+        "key": {
+            "title": "Share Post",
+            "placeholder": "Add your comment...",
+            "action": "Share Now",
+            "sending": "Sharing..."
+        }
+    }
 
 }

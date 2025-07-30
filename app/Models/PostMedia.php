@@ -43,5 +43,13 @@ class PostMedia extends Model
     {
         return asset('storage/' . $this->path);
     }
+
+    public function getFullPosterAttribute(): ?string
+    {
+        return isset($this->meta['thumb_path'])
+            ? asset('storage/' . $this->meta['thumb_path'])
+            : null;
+    }
+
 }
 

@@ -21,7 +21,7 @@ class PostQueued implements ShouldBroadcast
             'id'     => $post->id,
             'user'   => $post->user->only(['id', 'name', 'avatar']),
             'text'   => $post->text,
-            'status' => 'processing',
+            'status' => $post->status,
         ];
     }
 

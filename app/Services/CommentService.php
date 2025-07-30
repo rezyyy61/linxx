@@ -7,6 +7,7 @@ use App\Events\CommentLiked;
 use App\Models\Comment;
 use App\Models\CommentLike;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CommentService
 {
@@ -21,9 +22,16 @@ class CommentService
             abort(429, 'You have exceeded the comment limit (5 per minute).');
         }
 
+        if (!empty($data['parent_id'])) {
+            $parent = Comment::findOrFail($data['parent_id']);
+            $data['parent_id'] = $parent->parent_id ?? $parent->id;
+        }
+
         $comment = Comment::create($data);
 
-        broadcast(new CommentCreated($comment))->toOthers();
+        $comment->loadMissing('user.politicalProfile');
+
+        broadcast(new CommentCreated($comment));
 
         return $comment;
     }
@@ -49,16 +57,11 @@ class CommentService
 
     public function getCommentsForPost(int $postId)
     {
-        return Comment::with([
-            'childrenRecursive',
-            'user',
-            'likes.user'
-        ])
+        return Comment::with(['user', 'likes.user', 'post',])
             ->where('post_id', $postId)
-            ->whereNull('parent_id')
             ->where('status', 'visible')
             ->orderBy('created_at')
             ->get();
-
     }
+
 }

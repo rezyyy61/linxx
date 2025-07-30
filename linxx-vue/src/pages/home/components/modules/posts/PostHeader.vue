@@ -1,27 +1,36 @@
 <template>
-    <div class="flex items-center justify-between gap-4 p-4 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
+    <div class="flex items-center justify-between gap-4 p-4  bg-white dark:bg-gray-900" dir="ltr">
         <div class="flex items-center gap-4">
-            <img
-                :src="avatarUrl"
-                alt="User avatar"
-                loading="lazy"
-                class="w-10 h-10 rounded-full object-cover shadow"
-            />
-            <div class="flex flex-col">
-                <p class="font-semibold text-gray-800 dark:text-gray-100">{{ user.name }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">{{ formattedTime }}</p>
-            </div>
+            <router-link
+                :to="{ name: 'users.show', params: { slug: user.slug } }"
+                class="flex items-center gap-4 group"
+            >
+                <!-- Avatar -->
+                <UserAvatar
+                    :src="user.avatar"
+                    :fallback="user.name"
+                    :color="user.political_profile?.avatar_color"
+                    size="sm"
+                    class="w-9 h-9 shrink-0 rounded-full border border-gray-200 dark:border-gray-700"
+                    style="display: inline-flex;"
+                />
+                <!-- User Info -->
+                <div class="flex flex-col">
+                    <p class="font-semibold text-gray-800 dark:text-gray-100">{{ user.name }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ formattedTime }}</p>
+                </div>
+            </router-link>
         </div>
 
+        <!-- Dropdown Menu Button (if owner) -->
         <button
-            v-if="isOwner"
             @click="$emit('menu')"
-            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition"
+            class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition"
             aria-label="Options"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5"
+                class="w-6 h-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
             >
@@ -37,6 +46,7 @@
 import { computed } from 'vue'
 import dayjs from 'dayjs'
 import relativeTimePlugin from 'dayjs/plugin/relativeTime'
+import UserAvatar from "@/pages/auth/UserAvatar.vue";
 
 dayjs.extend(relativeTimePlugin)
 
@@ -54,12 +64,6 @@ const props = defineProps({
         type: Boolean,
         default: false
     }
-})
-
-const avatarUrl = computed(() => {
-    return props.user.avatar
-        ? props.user.avatar
-        : `https://i.pravatar.cc/150?u=${props.user.id || props.user.name}`
 })
 
 const formattedTime = computed(() => {

@@ -2,11 +2,14 @@
     <div
         v-if="sources.length"
         class="player-container"
-        :style="{ '--ratio': ratio }"
+        :style="{
+      '--ratio': ratio,
+      maxHeight: isPortrait ? '70vh' : '40vh'
+    }"
     >
         <video
             ref="videoEl"
-            class="video-js vjs-default-skin vjs-big-play-centered vjs-tech vjs-poster"
+            class="video-js vjs-default-skin vjs-big-play-centered inner"
             playsinline
             controls
             preload="metadata"
@@ -21,11 +24,11 @@ import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 
 const props = defineProps({
-    video: { type: Object, default: null },
+    video: Object,
     videos: { type: Array, default: () => [] },
-    autoplay: { type: Boolean, default: false },
-    loop: { type: Boolean, default: false },
-    muted: { type: Boolean, default: false }
+    autoplay: Boolean,
+    loop: Boolean,
+    muted: Boolean
 })
 
 const sources = computed(() =>
@@ -35,16 +38,29 @@ const sources = computed(() =>
 const currentIndex = ref(0)
 const current = computed(() => sources.value[currentIndex.value] || {})
 
-const ratio = computed(() => {
-    const { width, height } = current.value
-    return width && height ? height / width : 9 / 16
-})
+const ratio = ref(9 / 16)
+const isPortrait = computed(() => ratio.value > 1)
 
 const videoEl = ref(null)
 let player
 
-onMounted(async () => {
+function setRatio() {
+    const w = player?.videoWidth()
+    const h = player?.videoHeight()
+    if (w && h) ratio.value = h / w
+}
+
+function load() {
+    if (!player) return
+    const s = current.value
+    if (!s?.src) return
+    player.src({ src: s.src, type: s.type === 'hls' ? 'application/x-mpegURL' : 'video/mp4' })
+    player.poster(s.poster || '')
+}
+
+async function initPlayer() {
     await nextTick()
+    if (!videoEl.value || !(videoEl.value instanceof HTMLVideoElement)) return
     player = videojs(videoEl.value, {
         autoplay: props.autoplay,
         loop: props.loop,
@@ -53,59 +69,24 @@ onMounted(async () => {
         fluid: true,
         preload: 'metadata'
     })
-
-    loadSource()
-
-    player.on('loadedmetadata', () => {
-        autoZoom()
-    })
-
+    load()
+    player.on('loadedmetadata', setRatio)
     player.on('ended', () => {
-        if (++currentIndex.value >= sources.value.length) {
-            if (props.loop) currentIndex.value = 0
-        }
+        if (++currentIndex.value >= sources.value.length && props.loop) currentIndex.value = 0
     })
-})
-
-onBeforeUnmount(() => {
-    player?.dispose()
-})
-
-watch([sources, currentIndex], loadSource)
-
-function loadSource() {
-    if (!player) return
-    const s = current.value
-    if (!s?.src) return
-    const mime = s.type === 'hls' ? 'application/x-mpegURL' : 'video/mp4'
-    player.poster(s.poster || '')
-    player.src({ src: s.src, type: mime })
 }
 
-function autoZoom() {
-    const s = current.value
-    if (s.orientation !== 'portrait') return
+onMounted(() => {
+    if (sources.value.length) initPlayer()
+})
 
-    const tech = player?.el()?.querySelector('.vjs-tech')
-    const posterEl = player?.el()?.querySelector('.vjs-poster')
-    const scale = 1.8
+onBeforeUnmount(() => player?.dispose())
 
-    if (tech) {
-        tech.style.transform = `scale(${scale})`
-        tech.style.transformOrigin = 'center'
-    }
-
-    if (posterEl) {
-        posterEl.style.transform = 'none'
-        posterEl.style.transformOrigin = 'center'
-        posterEl.style.width = '100%'
-        posterEl.style.height = '100%'
-        posterEl.style.backgroundSize = 'cover'
-        posterEl.style.backgroundPosition = 'center'
-        posterEl.style.backgroundRepeat = 'no-repeat'
-    }
-}
-
+watch([sources, currentIndex], () => {
+    ratio.value = 9 / 16
+    if (player) load()
+    else if (sources.value.length) initPlayer()
+})
 </script>
 
 <style scoped>
@@ -113,35 +94,28 @@ function autoZoom() {
     width: 100%;
     position: relative;
     overflow: hidden;
-    border-radius: 0.75rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    background-color: #000;
+    background: #000;
     aspect-ratio: calc(1 / var(--ratio));
-    max-width: 640px;
-    max-height: 40vh;
     margin: 0 auto;
 }
-
-.player-container > :deep(.vjs-tech){
+.inner {
     position: absolute;
-    bottom: 0;
-    left: 0;
     inset: 0;
-    width: 100% !important;
     height: 100% !important;
-    object-fit: contain;
-    background: #000;
-    border: none;
-    transition: transform 0.3s ease;
+    width: auto !important;
+    min-width: 100%;
+    object-fit: cover;
+    left: 50%;
+    transform: translateX(-50%);
 }
-
-:deep(.vjs-poster) {
-    width: 100% !important;
+.player-container > :deep(.vjs-poster) {
+    position: absolute;
+    inset: 0;
     height: 100% !important;
-    object-fit: cover !important;
-    background-color: #000 !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
+    width: auto !important;
+    min-width: 100%;
+    object-fit: cover;
+    left: 50%;
+    transform: translateX(-50%);
 }
 </style>

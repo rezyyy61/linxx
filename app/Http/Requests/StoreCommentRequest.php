@@ -16,7 +16,7 @@ class StoreCommentRequest extends FormRequest
         return [
             'post_id' => ['required', 'exists:posts,id'],
             'parent_id' => ['nullable', 'exists:comments,id'],
-            'content' => ['required', 'string', 'max:1000'],
+            'content' => ['required', 'string', 'max:90000'],
         ];
     }
 }

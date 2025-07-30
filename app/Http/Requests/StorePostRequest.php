@@ -16,16 +16,10 @@ class StorePostRequest extends FormRequest
 
     public function rules(): array
     {
-        foreach ($this->file('files', []) as $f) {
-            Log::debug('upload debug', [
-                'name' => $f->getClientOriginalName(),
-                'ext'  => $f->getClientOriginalExtension(),
-                'mime' => $f->getMimeType(),
-            ]);
-        }
         return [
-            'text' => ['nullable', 'string', 'max:70000'],
-
+            'text' => ['nullable', 'string', 'max:90000'],
+            'visibility' => ['required', 'in:public,private,friends'],
+            'is_archived'=> ['sometimes', 'boolean'],
             'images'   => ['nullable', 'array', 'max:10'],
             'images.*' => ['bail', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
 
