@@ -65,7 +65,7 @@ export const usePostStore = defineStore('post', () => {
             if (currentPage.value > lastPage.value) allLoaded.value = true
         } catch (err) {
             console.error('Error fetching posts:', err)
-            error.value = 'خطا در دریافت پست‌ها'
+            error.value = '❌ Failed to fetch posts'
         } finally {
             loading.value = false
         }

@@ -52,9 +52,7 @@ class Post extends Model
 
     public function isLikedBy($user): bool
     {
-        return $this->likes->contains(function ($like) use ($user) {
-            return $like->user_id == $user->id;
-        });
+        return $this->likes()->where('user_id', $user->id)->exists();
     }
 
     public function getFullUrlAttribute(): string

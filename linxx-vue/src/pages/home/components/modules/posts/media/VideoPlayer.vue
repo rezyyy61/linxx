@@ -4,7 +4,7 @@
         class="player-container"
         :style="{
       '--ratio': ratio,
-      maxHeight: isPortrait ? '70vh' : '40vh'
+      maxHeight: isPortrait ? '100vh' : '60vh'
     }"
     >
         <video

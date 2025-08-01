@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\MediaDownloadController;
 use App\Http\Controllers\Api\PoliticalProfileController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PublicationController;
+use App\Http\Controllers\Api\VideoPostController;
 use App\Http\Middleware\OptionalAuth;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,12 @@ Route::get('/political-profiles/user/{slug}', [PoliticalProfileController::class
 
 
 Route::get('/political-profiles/user/{slug}/posts', [PoliticalProfileController::class, 'postsByProfileSlug']);
+
+Route::get('/videos', [VideoPostController::class, 'index']);
+Route::get('/videos/{id}', [VideoPostController::class, 'showVideoById']);
+
+Route::get('/posts/{post}/likes-preview', [LikeController::class, 'preview']);
+
 
 
 Route::middleware('auth:sanctum')->group(function () {

@@ -23,11 +23,11 @@
 
         <div
             class="grid h-[calc(100vh-64px)]
-         grid-cols-1
-         md:grid-cols-[minmax(260px,1.5fr)_minmax(500px,2fr)]
-         xl:grid-cols-[minmax(300px,400px)_minmax(700px,3fr)]"
+    grid-cols-1
+    md:grid-cols-[minmax(180px,1fr)_minmax(520px,3fr)]
+    xl:grid-cols-[minmax(200px,300px)_minmax(700px,4fr)]"
         >
-            <!-- Left Sidebar -->
+        <!-- Left Sidebar -->
             <aside class="hidden md:block h-full border-r ...">
                 <LeftSidebar />
             </aside>

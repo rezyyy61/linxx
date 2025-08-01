@@ -68,7 +68,7 @@ const normVideos = computed(() => {
         .filter(m => m.type === 'video')
         .map(m => {
             const src = m.url || m.hls_path || m.path || m.file_path || ''
-            const thumbPath = m.poster || m.thumb_path || m.meta?.thumb_path || m.thumbnail || ''
+            const thumbPath = m.poster || m.thumb_large || m.meta?.thumb_large || m.thumbnail || ''
             const poster = thumbPath ? abs('storage/' + thumbPath.replace(/^\/+/, '')) : ''
             const type = m.format || m.mime || (/\.(m3u8($|\?))/i.test(src) ? 'hls' : 'video')
             const width = m.width || m.meta?.original_width || m.meta?.width || 640

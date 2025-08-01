@@ -1,6 +1,6 @@
 <template>
     <div
-        class="w-full px-1 sm:px-4 lg:px-6 xl:px-8 space-y-6"
+        class="w-full  space-y-6"
         :dir="$i18n.locale === 'fa' ? 'rtl' : 'ltr'"
     >
         <!-- Navigation Tabs -->
@@ -23,8 +23,7 @@
 
         <!-- Main Section (Content area) -->
         <div
-            class="w-full bg-gray-200 dark:bg-gray-800/60 rounded-xl shadow p-2 sm:p-4
-         sm:mx-auto "
+            class="w-full bg-gray-200 dark:bg-gray-800/60 rounded-xl shadow py-4 sm:mx-auto "
         >
 
         <router-view />

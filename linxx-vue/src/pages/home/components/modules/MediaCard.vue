@@ -1,59 +1,75 @@
+<!-- Valed.vue -->
 <template>
-    <div class="space-y-4">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">لیست احزاب</h2>
+  <section class="py-10 min-h-screen text-zinc-900 dark:text-zinc-100">
+    <div class="max-w-[1600px] mx-auto space-y-12">
 
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-            <div
-                v-for="party in parties"
-                :key="party.id"
-                class="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded transition"
-                @click="goToParty(party.id)"
-            >
-                <div class="flex items-center gap-4">
-                    <img :src="party.logo_url" class="w-12 h-12 rounded-full object-cover border" />
-                    <div>
-                        <h3 class="text-base font-semibold">{{ party.group_name }}</h3>
-                        <p class="text-sm text-gray-500">{{ party.tagline }}</p>
-                    </div>
-                </div>
-                <div class="text-xs text-gray-500 text-right">
-                    📍 {{ party.location }}<br />
-                    📅 {{ party.founded_year }}
-                </div>
-            </div>
+      <div v-for="(group, index) in groupedVideos" :key="'group-' + index" class="space-y-10">
+
+        <!-- Landscape Videos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <VideoCard
+              v-for="video in group.landscape"
+              :key="'landscape-' + video.id"
+              :video="video"
+              size="lg"
+              orientation="landscape"
+          />
         </div>
+
+        <!-- Portrait Videos -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 sm:gap-2">
+          <VideoCard
+              v-for="video in group.portrait"
+              :key="'portrait-' + video.id"
+              :video="video"
+              size="sm"
+              orientation="portrait"
+          />
+        </div>
+
+      </div>
     </div>
+  </section>
 </template>
 
-<script>
-export default {
-    name: "PartiesList",
-    data() {
-        return {
-            parties: [
-                {
-                    id: 18,
-                    group_name: "جنبش عدالت‌خواه",
-                    tagline: "مردم پیشتاز تحول",
-                    founded_year: "2018",
-                    location: "تهران",
-                    logo_url: "https://via.placeholder.com/60x60?text=JA",
-                },
-                {
-                    id: 2,
-                    group_name: "حزب توسعه",
-                    tagline: "برای آینده‌ای بهتر",
-                    founded_year: "2020",
-                    location: "اصفهان",
-                    logo_url: "https://via.placeholder.com/60x60?text=TD",
-                },
-            ],
-        };
-    },
-    methods: {
-        goToParty(id) {
-            this.$router.push({ name: "party_profile", params: { id } });
-        },
-    },
-};
+<script setup>
+import { computed, onMounted } from 'vue'
+import { useVideoStore } from '@/stores/useVideoStore'
+import VideoCard from "@/pages/home/components/modules/VideoCard/VideoCard.vue";
+
+const store = useVideoStore()
+
+onMounted(() => {
+    if (!store.videos.length) store.fetchVideos()
+})
+
+const landscapeVideos = computed(() =>
+    store.videos.filter(v => {
+        const m = v.media?.[0]?.meta
+        return m?.original_width / m?.original_height >= 1
+    })
+)
+
+const portraitVideos = computed(() =>
+    store.videos.filter(v => {
+        const m = v.media?.[0]?.meta
+        return m?.original_width / m?.original_height < 1
+    })
+)
+
+
+const groupedVideos = computed(() => {
+    const groups = []
+    const landscape = [...landscapeVideos.value]
+    const portrait = [...portraitVideos.value]
+
+    while (landscape.length || portrait.length) {
+        groups.push({
+            landscape: landscape.splice(0, 6),
+            portrait: portrait.splice(0, 5),
+        })
+    }
+
+    return groups
+})
 </script>

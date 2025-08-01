@@ -15,6 +15,7 @@
                     v-model:expanded="showFull"
                     :limits="{ sm: 100, md: 300, lg: 400 }"
                     :truncate="true"
+                    :hide-controls="false"
                 />
                 <PostMedia :post="post" :base-url="apiBaseUrl" />
             </template>

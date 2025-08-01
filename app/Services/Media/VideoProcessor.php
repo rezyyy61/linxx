@@ -2,7 +2,6 @@
 
 namespace App\Services\Media;
 
-use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Illuminate\Support\Facades\Log;
@@ -26,126 +25,120 @@ class VideoProcessor
         $this->ffprobe = FFProbe::create($cfg);
     }
 
+    /**
+     * پردازش ویدیو و ساخت HLS + thumbnail هوشمند بدون padding
+     */
     public function process(\SplFileInfo|string $file, int $postId): array
     {
+        /* دیسک‌ها */
         $tmpDisk    = 'local';
         $publicDisk = 'public';
 
-        $uuid      = (string) Str::uuid();
-        $extension = is_string($file) ? pathinfo($file, PATHINFO_EXTENSION) : $file->getExtension();
-        $tmpInput  = "tmp/{$uuid}_src." . $extension;
-        $tmpThumb  = "tmp/{$uuid}.jpg";
-
-        // 1. ذخیره فایل ویدیویی آپلود شده در حافظه موقت
+        /* آپلود ورودی به tmp */
+        $uuid       = (string) Str::uuid();
+        $extension  = is_string($file) ? pathinfo($file, PATHINFO_EXTENSION) : $file->getExtension();
+        $tmpInput   = "tmp/{$uuid}_src.{$extension}";
         Storage::disk($tmpDisk)->put($tmpInput, fopen(is_string($file) ? $file : $file->getRealPath(), 'rb'));
-
-        $absInput = Storage::disk($tmpDisk)->path($tmpInput);
-        $absThumb = Storage::disk($tmpDisk)->path($tmpThumb);
-
+        $absInput   = Storage::disk($tmpDisk)->path($tmpInput);
         if (!is_file($absInput) || filesize($absInput) === 0) {
-            throw new \RuntimeException('Upload to tmp failed: ' . $absInput);
+            throw new \RuntimeException('Upload to tmp failed: '.$absInput);
         }
 
-        // 2. مسیر پوشه خروجی HLS موقتی
+        /* ساخت HLS */
         $hlsDir    = "tmp/{$uuid}_hls";
         $absHlsDir = Storage::disk($tmpDisk)->path($hlsDir);
         mkdir($absHlsDir, 0755, true);
 
-        // 3. فیلترهایی برای scale + pad به سایز مشخص (1280x720 و 854x480)
-        $filter720 = "scale=iw*min(1280/iw\\,720/ih):ih*min(1280/iw\\,720/ih),pad=1280:720:(1280-iw*min(1280/iw\\,720/ih))/2:(720-ih*min(1280/iw\\,720/ih))/2";
-        $filter480 = "scale=iw*min(854/iw\\,480/ih):ih*min(854/iw\\,480/ih),pad=854:480:(854-iw*min(854/iw\\,480/ih))/2:(480-ih*min(854/iw\\,480/ih))/2";
+        // فیلترهای scale بدون padding
+        $filter1080 = "scale='min(1920,iw)':-2";
+        $filter720  = "scale='min(1280,iw)':-2";
+        $filter480  = "scale='min(854,iw)':-2";
+        $filter360  = "scale='min(640,iw)':-2";
+        $filterComplex = "[0:v]split=4[v1080][v720][v480][v360];"
+            . "[v1080]{$filter1080}[out1080];"
+            . "[v720]{$filter720}[out720];"
+            . "[v480]{$filter480}[out480];"
+            . "[v360]{$filter360}[out360]";
 
-        // 4. دستور ffmpeg برای ساخت دو استریم HLS
         $cmd = "/usr/bin/ffmpeg -y -i {$absInput} -preset veryfast -g 48 -sc_threshold 0 "
-            . "-filter_complex \"[0:v]split=2[v1][v2];"
-            . "[v1]{$filter720}[out1];"
-            . "[v2]{$filter480}[out2]\" "
-            . "-map [out1] -map 0:a:0 -map [out2] -map 0:a:0 "
-            . "-b:v:0 3000k -b:v:1 1500k "
-            . "-c:v h264 -c:a aac -ar 48000 -ac 2 "
-            . "-var_stream_map \"v:0,a:0 v:1,a:1\" "
-            . "-f hls -hls_time 6 -hls_playlist_type vod "
-            . "-hls_segment_filename {$absHlsDir}/v%v_%03d.ts "
-            . "{$absHlsDir}/v%v.m3u8";
+            . "-filter_complex \"{$filterComplex}\" "
+            . "-map [out1080] -map 0:a:0 -b:v:0 5000k "
+            . "-map [out720]  -map 0:a:0 -b:v:1 3000k "
+            . "-map [out480]  -map 0:a:0 -b:v:2 1500k "
+            . "-map [out360]  -map 0:a:0 -b:v:3 800k "
+            . "-c:v h264 -profile:v high -level 4.2 -c:a aac -ar 48000 -ac 2 "
+            . "-var_stream_map \"v:0,a:0 v:1,a:1 v:2,a:2 v:3,a:3\" "
+            . "-hls_time 6 -hls_playlist_type vod "
+            . "-hls_segment_filename {$absHlsDir}/v%v_%03d.ts {$absHlsDir}/v%v.m3u8";
 
-        exec($cmd, $output, $result);
-
-        Log::info('✅ FFMPEG HLS created with padding', [
-            'cmd'    => $cmd,
-            'output' => $output,
-            'result' => $result,
-        ]);
-
-        if ($result !== 0) {
-            Log::error('FFmpeg HLS generation failed', ['output' => $output]);
+        exec($cmd, $out, $res);
+        if ($res !== 0) {
+            Log::error('FFmpeg HLS generation failed', ['cmd' => $cmd, 'output' => $out]);
             throw new \RuntimeException('HLS generation failed');
         }
 
-        // 5. ساخت فایل master.m3u8 که لیست کیفیت‌ها را مشخص می‌کند
-        $master = <<<EOT
-#EXTM3U
-#EXT-X-STREAM-INF:BANDWIDTH=3000000,RESOLUTION=1280x720
-v0.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=1500000,RESOLUTION=854x480
-v1.m3u8
-EOT;
-        file_put_contents("{$absHlsDir}/master.m3u8", $master);
+        // master playlist
+        file_put_contents("{$absHlsDir}/master.m3u8", "#EXTM3U\n"
+            . "#EXT-X-STREAM-INF:BANDWIDTH=5000000,RESOLUTION=1920x1080\nv0.m3u8\n"
+            . "#EXT-X-STREAM-INF:BANDWIDTH=3000000,RESOLUTION=1280x720\nv1.m3u8\n"
+            . "#EXT-X-STREAM-INF:BANDWIDTH=1500000,RESOLUTION=854x480\nv2.m3u8\n"
+            . "#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=640x360\nv3.m3u8\n");
 
-        // 6. ساخت thumbnail از ثانیه اول ویدیو
-        $this->ffmpeg->open($absInput)
-            ->frame(TimeCode::fromSeconds(1))
-            ->save($absThumb);
+        /* متادیتا */
+        $format      = $this->ffprobe->format($absInput);
+        $duration    = (int) $format->get('duration');
+        $stream      = $this->ffprobe->streams($absInput)->videos()->first();
+        $origWidth   = $stream?->get('width')  ?? 0;
+        $origHeight  = $stream?->get('height') ?? 0;
+        $aspectRatio = $origHeight ? round($origWidth / $origHeight, 2) : 1.0;
+        $orientation = $aspectRatio < 0.9 ? 'portrait' : ($aspectRatio > 1.1 ? 'landscape' : 'square');
+        $resolutions = ['1080p', '720p', '480p', '360'];
 
-        // 7. گرفتن اطلاعات از ویدیو اصلی (برای original width/height فقط)
-        $meta         = $this->ffprobe->format($absInput);
-        $duration     = (int) $meta->get('duration');
-        $stream       = $this->ffprobe->streams($absInput)->videos()->first();
-        $origWidth    = $stream?->get('width') ?? 0;
-        $origHeight   = $stream?->get('height') ?? 0;
+        /* thumbnail هوشمند */
+        $thumbTmp = Storage::disk($tmpDisk)->path("tmp/{$uuid}.jpg");
 
-        // 8. انتقال همه فایل‌های HLS به public/posts/{id}/hls
-        $folder = "posts/{$postId}/hls";
-        $publicPath = Storage::disk($publicDisk)->path($folder);
-        @mkdir($publicPath, 0755, true);
+        // تلاش اول: فیلتر thumbnail که از بین 100 فریم اول بهترین رو می‌گیره
+        $cmdThumb = "/usr/bin/ffmpeg -y -i {$absInput} -vf \"thumbnail,scale='min(1280,iw)':-2\" -frames:v 1 {$thumbTmp}";
+        exec($cmdThumb, $oT, $rT);
 
-        foreach (glob("{$absHlsDir}/*") as $segment) {
-            $filename = basename($segment);
-            Storage::disk($publicDisk)->put("{$folder}/{$filename}", file_get_contents($segment));
+        // اگر تولید نشد یا خیلی کم‌حجم بود، fallback به ثانیه‌های خاص
+        if ($rT !== 0 || !file_exists($thumbTmp) || filesize($thumbTmp) < 10240) {
+            $candidates = [3, 5, 10, 15, 20, intval($duration / 2)];
+            foreach ($candidates as $sec) {
+                $cmdTmp = "/usr/bin/ffmpeg -y -ss {$sec} -i {$absInput} -vframes 1 -vf scale='min(1280,iw)':-2 -q:v 2 {$thumbTmp}";
+                exec($cmdTmp, $oo, $rr);
+                if ($rr === 0 && file_exists($thumbTmp) && filesize($thumbTmp) >= 10240) {
+                    break;
+                }
+            }
         }
 
-        // 9. ذخیره thumbnail
-        $thumbRel = "posts/{$postId}/{$uuid}.jpg";
-        Storage::disk($publicDisk)->put($thumbRel, fopen($absThumb, 'rb'));
+        Storage::disk($publicDisk)->put("posts/{$postId}/{$uuid}.jpg", fopen($thumbTmp, 'rb'));
 
-        // 10. حذف فایل‌های موقت
-        Storage::disk($tmpDisk)->delete([$tmpInput, $tmpThumb]);
-        foreach (glob("{$absHlsDir}/*") as $f) {
-            unlink($f);
+        /* انتقال HLS به public */
+        $hlsPublic = "posts/{$postId}/hls";
+        foreach (glob("{$absHlsDir}/*") as $seg) {
+            Storage::disk($publicDisk)->put("{$hlsPublic}/".basename($seg), file_get_contents($seg));
         }
-        rmdir($absHlsDir);
 
-        // 11. ثبت لاگ خروجی نهایی
-        Log::info('VideoProcessor HLS Output:', [
-            'path'       => "{$folder}/master.m3u8",
-            'hls_path'   => "{$folder}/master.m3u8",
-            'thumb_path' => $thumbRel,
-            'duration'   => $duration,
-            'width'      => 1280, // سایز خروجی ثابت HLS
-            'height'     => 720,
+        /* پاکسازی */
+        Storage::disk($tmpDisk)->delete([$tmpInput]);
+        @unlink($thumbTmp);
+        array_map('unlink', glob("{$absHlsDir}/*"));
+        @rmdir($absHlsDir);
+
+        return [
+            'path'            => "{$hlsPublic}/master.m3u8",
+            'hls_path'        => "{$hlsPublic}/master.m3u8",
+            'thumb_path'      => "posts/{$postId}/{$uuid}.jpg",
+            'duration'        => $duration,
+            'width'           => $origWidth,
+            'height'          => $origHeight,
             'original_width'  => $origWidth,
             'original_height' => $origHeight,
-        ]);
-
-        // 12. خروجی نهایی برای ذخیره در دیتابیس
-        return [
-            'path'             => "{$folder}/master.m3u8",
-            'hls_path'         => "{$folder}/master.m3u8",
-            'thumb_path'       => $thumbRel,
-            'duration'         => $duration,
-            'width'            => 1280,
-            'height'           => 720,
-            'original_width'   => $origWidth,
-            'original_height'  => $origHeight,
+            'aspect_ratio' => $aspectRatio,
+            'orientation' => $orientation,
+            'resolutions_available' => $resolutions,
         ];
     }
 }

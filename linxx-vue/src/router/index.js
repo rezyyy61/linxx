@@ -79,6 +79,13 @@ const publicRoutes = [
             component: () => import('@/pages/home/components/modules/Profile/UserProfile.vue'),
             props: true
         },
+        {
+            path: '/watch/:id',
+            name: 'watch',
+            component: () => import('@/pages/home/components/modules/VideoCard/WatchPage.vue'),
+            props: true
+        }
+
     ]
   }
 

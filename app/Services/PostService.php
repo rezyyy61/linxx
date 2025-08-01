@@ -32,7 +32,6 @@ class PostService
                 'status'      => 'queued',
             ]);
 
-            Log::info('Post created & queued', ['post_id' => $post->id]);
             PostQueued::dispatch($post);
 
             $this->storeMedia($post, $media);
@@ -103,7 +102,6 @@ class PostService
     {
         if ($post->media()->whereIn('status', ['pending', 'processing'])->doesntExist()) {
             $post->update(['status' => 'ready']);
-            Log::info('Post ready, broadcasting', ['post_id' => $post->id]);
             broadcast(new PostReady(
                 $post->fresh(['media', 'user'])
             ));

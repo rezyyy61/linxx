@@ -8,7 +8,10 @@
             :style="{ fontFamily: dir === 'rtl' ? 'IRANSans' : 'inherit' }"
         >
             <span>{{ truncatedInline }}</span>
-            <button @click="toggle" class="inline text-blue-600 dark:text-blue-400 hover:underline select-none ml-1">
+            <button
+                v-if="!props.hideControls"
+                @click="toggle"
+                class="inline text-blue-600 dark:text-blue-400 hover:underline select-none ml-1">
                 {{ $t('post.showMore') }}
             </button>
         </div>
@@ -88,7 +91,7 @@
             </button>
 
             <button
-                v-if="showReadFull"
+                v-if="!props.hideControls && showReadFull"
                 @click="openModal"
                 class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
             >
@@ -112,7 +115,8 @@ const props = defineProps({
     fullHtml: { type: String, default: '' },
     truncate: { type: Boolean, default: true },
     limit: { type: Number, default: null },
-    limits: { type: Object, default: () => ({ sm: 200, md: 300, lg: 400 }) }
+    limits: { type: Object, default: () => ({ sm: 200, md: 300, lg: 400 }) },
+    hideControls: { type: Boolean, default: false }
 })
 
 const rtlStyle = { direction: 'rtl', unicodeBidi: 'plaintext' }
