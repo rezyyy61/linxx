@@ -10,6 +10,7 @@ return [
         'logout',
         'register',
         'user',
+        'admin/*',
     ],
     'allowed_origins' => ['*'],
 

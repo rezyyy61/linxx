@@ -17,6 +17,8 @@
         "openai-php/client": "^0.14.0",
         "pbmedia/laravel-ffmpeg": "^8.7",
         "spatie/laravel-image-optimizer": "^1.8",
+        "spatie/laravel-permission": "^6.21",
+        "spomky-labs/otphp": "^11.3",
         "xenolope/quahog": "^3.0"
     },
     "require-dev": {
