@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\MediaDownloadController;
@@ -48,7 +49,7 @@ Route::get('/videos/{id}', [VideoPostController::class, 'showVideoById']);
 
 Route::get('/posts/{post}/likes-preview', [LikeController::class, 'preview']);
 
-
+Route::get('/books', [BookController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);

@@ -69,4 +69,21 @@ class User extends Authenticatable
             : null;
     }
 
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'user_books')
+            ->withPivot(['is_downloaded', 'is_read'])
+            ->withTimestamps();
+    }
+
+    public function uploadedBooks()
+    {
+        return $this->hasMany(Book::class, 'uploaded_by');
+    }
+
+    public function bookReviews()
+    {
+        return $this->hasMany(BookReview::class);
+    }
+
 }
