@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Book\BookController;
+use App\Http\Controllers\Api\Book\BookSuggestionController;
+use App\Http\Controllers\Api\Book\CategoryController;
+use App\Http\Controllers\Api\Book\PublicBookController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\MediaDownloadController;
@@ -21,10 +23,6 @@ Route::get('/political-profiles', [PoliticalProfileController::class, 'index']);
 Route::get('/political-profiles/{politicalProfile}', [PoliticalProfileController::class, 'show'])
     ->where('politicalProfile', '[0-9]+');
 
-
-Route::get('/parties/{id}/publications', [PublicationController::class, 'listByParty']);
-
-
 Route::get('/posts', [PostController::class, 'index']);
 
 
@@ -36,9 +34,6 @@ Route::get('/media/download/{id}', [MediaDownloadController::class, 'show'])
 Route::get('/comments', [CommentController::class, 'index'])
     ->middleware(OptionalAuth::class);
 
-
-Route::get('/posts/{post}', [PostController::class, 'sharePreview']);
-
 Route::get('/political-profiles/user/{slug}', [PoliticalProfileController::class, 'showBySlug']);
 
 
@@ -49,7 +44,16 @@ Route::get('/videos/{id}', [VideoPostController::class, 'showVideoById']);
 
 Route::get('/posts/{post}/likes-preview', [LikeController::class, 'preview']);
 
-Route::get('/books', [BookController::class, 'index']);
+Route::get('/books/search', [PublicBookController::class, 'search']);
+Route::get('/books', [PublicBookController::class, 'index']);
+Route::get('/books/{slug}/download', [PublicBookController::class, 'download'])->name('books.download');
+Route::get('/books/{slug}', [PublicBookController::class, 'show']);
+Route::get('/books/{book}/reviews', [PublicBookController::class, 'reviews']);
+Route::get('/books/{book}/read', [PublicBookController::class, 'stream'])->name('books.stream');
+Route::get('/categories', [CategoryController::class, 'index']);
+
+
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
@@ -75,5 +79,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments/{comment}/report', [CommentController::class, 'report']);
 
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
+
+    Route::post('/books/{book}/reviews', [PublicBookController::class, 'submitReview']);
+    Route::post('/books/suggestions', [BookSuggestionController::class, 'store']);
+
 
 });

@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api\Book;
+namespace App\Http\Controllers\Admin\Book;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Book\StoreBookRequest;
 use App\Http\Requests\Book\UpdateBookRequest;
 use App\Http\Resources\Book\BookResource;
-use App\Models\Book;
-use App\Services\Book\BookService;
+use App\Http\Resources\Book\SuggestedBookResource;
+use App\Models\Book\Book;
+use App\Models\Book\BookCategory;
+use App\Services\Admin\Book\BookService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -27,7 +30,12 @@ class BookController extends Controller
 
     public function store(StoreBookRequest $request): JsonResponse
     {
-        $book = $this->bookService->create($request->validated());
+        $adminId = $request->user('admin')?->id;
+
+        $book = $this->bookService->create(
+            [...$request->validated(), 'uploaded_by' => $adminId]
+        );
+
         return response()->json(new BookResource($book), 201);
     }
 
@@ -47,5 +55,10 @@ class BookController extends Controller
     {
         $this->bookService->delete($book);
         return response()->json(['message' => 'Deleted book successfully.']);
+    }
+
+    public function getCategories()
+    {
+        return response()->json(BookCategory::select('id', 'name')->get());
     }
 }

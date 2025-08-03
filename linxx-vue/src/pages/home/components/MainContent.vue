@@ -40,7 +40,7 @@ export default {
             navItems: [
                 { key: "feed" },
                 { key: "parties" },
-                { key: "articles" },
+                { key: "books" },
                 { key: "media" },
                 { key: "campaigns" },
                 { key: "profiles" },

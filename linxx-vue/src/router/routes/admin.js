@@ -20,7 +20,27 @@ export default [
                 name: 'admin.users',
                 component: () => import('@/admin/pages/UsersPage.vue'),
                 meta: { requiresAdmin: true }
+            },
+            {
+                path: 'books',
+                name: 'admin.books',
+                component: () => import('@/admin/pages/book/BookIndex.vue'),
+                meta: { requiresAdmin: true },
+                children: [
+                    {
+                        path: 'create',
+                        name: 'admin.books.create',
+                        component: () => import('@/admin/pages/book/BookCreate.vue')
+                    },
+                    {
+                        path: 'suggestions',
+                        name: 'AdminSuggestedBooks',
+                        component: () => import('@/admin/pages/book/SuggestedBooksPage.vue')
+                    }
+
+                ]
             }
+
         ]
     }
 ]

@@ -41,7 +41,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from '@/lib/axios'
+import axios from '@/lib/axiosAdmin'
 
 const step = ref('login')
 const form = ref({ email: '', password: '' })

@@ -11,6 +11,9 @@
           <router-link to="/admin/users" class="hover:underline">Users</router-link>
         </li>
         <li>
+          <router-link to="/admin/books" class="hover:underline">Books</router-link>
+        </li>
+        <li>
           <button @click="logout" class="text-left w-full hover:underline text-red-400 mt-6">Logout</button>
         </li>
       </ul>

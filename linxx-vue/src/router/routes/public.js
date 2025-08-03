@@ -15,14 +15,14 @@ export default [
                 component: () => import('@/pages/home/components/modules/PartiesCard.vue')
             },
             {
-                path: 'articles',
-                name: 'articles',
-                component: () => import('@/pages/home/components/modules/ArticlesCard.vue')
-            },
-            {
                 path: 'media',
                 name: 'media',
                 component: () => import('@/pages/home/components/modules/MediaCard.vue')
+            },
+            {
+                path: 'books',
+                name: 'books',
+                component: () => import('@/pages/home/components/modules/BooksCard.vue')
             },
             {
                 path: 'campaigns',
@@ -60,7 +60,20 @@ export default [
                 name: 'watch',
                 component: () => import('@/pages/home/components/modules/VideoCard/WatchPage.vue'),
                 props: true
+            },
+            {
+                path: '/books/:slug',
+                name: 'book.show',
+                component: () => import('@/pages/home/components/modules/books/BookShow.vue'),
+                props: true
+            },
+            {
+                path: '/books/:slug/read',
+                name: 'book.read',
+                component: () => import('@/pages/home/components/modules/books/BookReader.vue'),
             }
+
+
         ]
     }
 ]

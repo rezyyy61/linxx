@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Book\Book;
+use App\Models\Book\BookReview;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
