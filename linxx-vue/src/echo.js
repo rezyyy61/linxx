@@ -15,7 +15,7 @@ window.Echo = new Echo({
     authEndpoint: 'http://localhost:8080/broadcasting/auth',
     auth: {
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
 
         },
         withCredentials: true,

@@ -12,9 +12,22 @@ export default [
         meta: { guestOnly: true }
     },
     {
+        path: '/verify-email',
+        name: 'verify-email',
+        component: () => import('@/pages/auth/VerifyEmail.vue'),
+        meta: { guestOnly: true }
+    },
+    {
         path: '/forgot-password',
         name: 'forgot-password',
         component: () => import('@/pages/auth/ForgotPassword.vue'),
         meta: { guestOnly: true }
+    },
+    {
+        path: '/social-login/callback',
+        name: 'social-login-callback',
+        component: () => import('@/pages/auth/SocialLoginCallback.vue'),
+        meta: { guestOnly: true }
     }
+
 ]

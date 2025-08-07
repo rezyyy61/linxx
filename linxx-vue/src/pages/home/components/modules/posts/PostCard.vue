@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full bg-white/90 dark:bg-gray-800/70  dark:border-gray-600 rounded-2xl shadow-sm dark:shadow-md transition-all duration-300 overflow-hidden">
+    <div class="w-full bg-white/90 dark:bg-gray-800/70  dark:border-gray-600  dark:shadow-md transition-all duration-300 overflow-hidden">
         <PostHeader
             :user="post.user"
             v-bind="post.created_at ? { createdAt: post.created_at } : {}"

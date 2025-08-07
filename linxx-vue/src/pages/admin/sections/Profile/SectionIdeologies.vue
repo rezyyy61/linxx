@@ -1,199 +1,121 @@
+<!-- src/pages/admin/sections/Profile/SectionIdeologies.vue -->
 <template>
-    <div class="space-y-12">
-        <!-- Ideologies Section -->
-        <div>
-            <label class="form-label block text-lg mb-4">
-                {{ $t('politicalProfile.ideologies.label') }}
-            </label>
+  <div class="space-y-12">
+    <!-- 🟥 Ideologies -->
+    <div>
+      <label class="form-label block text-lg mb-4">
+        {{ $t('politicalProfile.ideologies.label') }}
+      </label>
 
-            <!-- Predefined Checkboxes -->
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                <label
-                    v-for="option in predefinedIdeologies"
-                    :key="option.key"
-                    class="flex items-center gap-2 px-3 py-2 border rounded-lg transition bg-white dark:bg-gray-800"
-                    :class="{
-            'border-red-500 shadow': selectedKeys.includes(option.key),
-            'border-gray-300 dark:border-gray-600': !selectedKeys.includes(option.key)
-          }"
-                >
-                    <input
-                        type="checkbox"
-                        :value="option.key"
-                        v-model="selectedKeys"
-                        class="checkbox"
-                    />
-                    <span class="text-sm font-medium">{{ option.label }}</span>
-                </label>
-            </div>
+      <!-- predefined list -->
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <label
+            v-for="opt in predefined"
+            :key="opt.key"
+            class="flex items-center gap-2 px-3 py-2 border rounded-lg transition bg-white dark:bg-gray-800"
+            :class="checked(opt.key) ? 'border-red-500 shadow' : 'border-gray-300 dark:border-gray-600'"
+        >
+          <input v-model="selected" :value="opt.key" type="checkbox" class="checkbox" />
+          <span class="text-sm font-medium">{{ opt.label }}</span>
+        </label>
+      </div>
 
-            <!-- Custom Ideologies -->
-            <div class="flex flex-wrap gap-2 mb-4">
+      <!-- custom ideologies -->
+      <label class="form-label block text-lg mb-4">
+        {{ $t('politicalProfile.ideologies.customLabel') }}
+      </label>
+
+      <div class="flex flex-wrap gap-2 mb-4">
         <span
-            v-for="(item, index) in customKeys"
-            :key="'custom-' + index"
-            class="tag-chip"
+            v-for="item in customOnly"
+            :key="item"
+            class="chip chip-red"
         >
           {{ item }}
-          <button @click="removeCustomIdeology(item)">✕</button>
+          <button @click="removeCustom(item)" class="chip-close">✕</button>
         </span>
-            </div>
+      </div>
 
-            <form @submit.prevent="addCustomIdeology" class="flex flex-col sm:flex-row gap-3">
-                <input
-                    v-model="customIdeology"
-                    type="text"
-                    class="form-input flex-1"
-                    :placeholder="$t('politicalProfile.placeholders.ideologies')"
-                />
-                <button type="submit" class="btn-red">
-                    {{ $t('politicalProfile.ideologies.addButton') }}
-                </button>
-            </form>
-        </div>
-
-        <!-- Keywords Section -->
-        <div>
-            <label class="form-label block text-lg mb-4">
-                {{ $t('politicalProfile.ideologies.keywordsLabel') }}
-                <span class="text-sm text-gray-500 dark:text-gray-400 font-normal">
-          ({{ $t('politicalProfile.ideologies.optional') }})
-        </span>
-            </label>
-
-            <div class="flex flex-wrap gap-2 mb-4">
-        <span
-            v-for="(item, index) in store.ideologies.keywords"
-            :key="'kw-' + index"
-            class="tag-chip"
-        >
-          {{ item }}
-          <button @click="removeKeyword(index)">✕</button>
-        </span>
-            </div>
-
-            <form @submit.prevent="addKeyword" class="flex flex-col sm:flex-row gap-3">
-                <input
-                    v-model="newKeyword"
-                    type="text"
-                    class="form-input flex-1"
-                    :placeholder="$t('politicalProfile.ideologies.keywordsPlaceholder')"
-                />
-                <button type="submit" class="btn-red">
-                    {{ $t('politicalProfile.ideologies.addButton') }}
-                </button>
-            </form>
-        </div>
-
-        <!-- Save Button -->
-        <div class="flex justify-end mt-6">
-            <button
-                type="button"
-                @click="handleSave"
-                class="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition"
-            >
-                {{ $t('politicalProfile.general.save') }}
-            </button>
-        </div>
+      <div class="flex gap-2">
+        <input
+            v-model="customInput"
+            type="text"
+            class="input-glass flex-1"
+            :placeholder="$t('politicalProfile.placeholders.ideologies')"
+        />
+        <button @click="addCustom" class="btn-add">+</button>
+      </div>
     </div>
+    <!-- save -->
+    <div class="flex justify-end mt-6">
+      <button @click="save" class="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
+        {{ $t('politicalProfile.general.save') }}
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { usePoliticalProfileStore } from '@/stores/politicalProfile'
+
+const props = defineProps({
+  ideologies: { type: Array, default: () => [] },
+})
+const emit = defineEmits(['save'])
 
 const { t } = useI18n()
-const store = usePoliticalProfileStore()
 
-// --- Ideologies
-const ideologyKeys = [
-    'socialism',
-    'feminism',
-    'anarchism',
-    'environmentalism',
-    'antiCapitalism',
-    'marxism',
-    'humanRights'
+const baseKeys = [
+  'socialism', 'feminism', 'anarchism', 'environmentalism',
+  'antiCapitalism', 'marxism', 'humanRights'
 ]
-
-const predefinedIdeologies = computed(() =>
-    ideologyKeys.map((key) => ({
-        key,
-        label: t(`politicalProfile.ideologies.list.${key}`)
-    }))
+const predefined = computed(() =>
+    baseKeys.map(k => ({ key: k, label: t(`politicalProfile.ideologies.list.${k}`) }))
 )
 
-const selectedKeys = ref(
-    store.ideologies.ideologies.map(i => typeof i === 'string' ? i : i.value)
+const selected = ref([])
+const customInput = ref('')
+const kwInput = ref('')
+
+watch(() => props.ideologies, val => {
+  selected.value = (val ?? []).map(v => typeof v === 'string' ? v : v.value)
+}, { immediate: true })
+
+const customOnly = computed(() =>
+    selected.value.filter(k => !baseKeys.includes(k))
 )
+const checked = key => selected.value.includes(key)
 
-const customKeys = computed(() =>
-    selectedKeys.value.filter(key => !ideologyKeys.includes(key))
-)
-
-const customIdeology = ref('')
-const newKeyword = ref('')
-
-// Add/remove custom ideology
-const addCustomIdeology = () => {
-    const val = customIdeology.value.trim()
-    if (val && !selectedKeys.value.includes(val)) {
-        selectedKeys.value.push(val)
-        customIdeology.value = ''
-    }
+function addCustom () {
+  const v = customInput.value.trim()
+  if (v && !checked(v)) {
+    selected.value.push(v)
+  }
+  customInput.value = ''
 }
 
-const removeCustomIdeology = (val) => {
-    selectedKeys.value = selectedKeys.value.filter(i => i !== val)
+function removeCustom (v) {
+  selected.value = selected.value.filter(k => k !== v)
 }
 
-// --- Keywords
-const addKeyword = () => {
-    const val = newKeyword.value.trim()
-    if (val && !store.ideologies.keywords.includes(val)) {
-        store.ideologies.keywords.push(val)
-        newKeyword.value = ''
-    }
-}
-
-const removeKeyword = (index) => {
-    store.ideologies.keywords.splice(index, 1)
-}
-
-// --- Save
-const handleSave = () => {
-    const mapped = selectedKeys.value.map(key => ({
-        value: key,
-        type: ideologyKeys.includes(key) ? 'predefined' : 'custom'
-    }))
-
-    store.saveIdeologies({
-        ideologies: mapped,
-        keywords: [...store.ideologies.keywords]
-    })
-
-    console.log('✅ Ideologies saved to store:', store.ideologies)
+function save () {
+  emit('save', {
+    ideologies: selected.value.map(k => ({
+      value: k,
+      type: baseKeys.includes(k) ? 'predefined' : 'custom'
+    })),
+  })
 }
 </script>
 
 <style scoped>
-.form-label {
-    @apply font-medium text-gray-700 dark:text-gray-300;
-}
-.form-input {
-    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500;
-}
-.btn-red {
-    @apply px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition;
-}
-.checkbox {
-    @apply accent-red-600 w-4 h-4;
-}
-.tag-chip {
-    @apply flex items-center gap-2 bg-red-100 text-red-700 dark:bg-red-800/40 dark:text-red-300 px-3 py-1 rounded-full;
-}
-.tag-chip button {
-    @apply text-red-500 hover:text-red-700 dark:hover:text-red-200 transition;
-}
+.form-label{ @apply font-medium text-gray-700 dark:text-gray-300 }
+.checkbox{ @apply accent-red-600 w-4 h-4 }
+.chip{ @apply flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium }
+.chip-red{ @apply bg-red-100 text-red-700 dark:bg-red-800/40 dark:text-red-300 }
+.chip-blue{ @apply bg-blue-100 text-blue-700 dark:bg-blue-800/40 dark:text-blue-300 }
+.chip-close{ @apply text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 }
+.input-glass{ @apply px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-red-500 }
+.btn-add{ @apply px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold }
 </style>

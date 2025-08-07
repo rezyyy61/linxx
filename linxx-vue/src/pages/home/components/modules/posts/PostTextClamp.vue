@@ -138,14 +138,20 @@ onBeforeUnmount(() => window.removeEventListener('resize', recomputeLimit))
 
 const currentLimit = computed(() => (props.limit != null ? props.limit : responsiveLimit.value))
 
-const plainText = computed(() =>
-    props.richText
-        .filter(b => b.type === 'paragraph' || b.type === 'heading')
-        .flatMap(b => b.children)
-        .filter(c => c.type === 'text')
-        .map(c => c.text)
-        .join(' ')
-)
+const plainText = computed(() => {
+  return props.richText
+      .filter(b => b.type === 'paragraph' || b.type === 'heading')
+      .map(b =>
+          b.children
+              .filter(c => c.type === 'text')
+              .map(c => c.text)
+              .join(' ')
+              .trim()
+      )
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+})
+
 
 const isTruncatable = computed(() => plainText.value.length > currentLimit.value)
 const truncatedInline = computed(() => plainText.value.slice(0, currentLimit.value).trimEnd() + '…')

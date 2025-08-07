@@ -12,7 +12,7 @@ export default [
             {
                 path: 'parties',
                 name: 'parties',
-                component: () => import('@/pages/home/components/modules/PartiesCard.vue')
+                component: () => import('@/pages/home/components/modules/PartiesLayout.vue')
             },
             {
                 path: 'media',

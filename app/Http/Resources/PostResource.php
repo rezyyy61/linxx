@@ -26,7 +26,8 @@ class PostResource extends JsonResource
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'slug' => $this->user->slug,
-                'avatar' => $this->user->avatar,
+                'avatar_color' => optional($this->user->politicalProfile)->avatar_color,
+                'logo_url' => optional($this->user->politicalProfile)?->logo_url,
             ],
             'media' => $this->media
                 ->where('status', 'done')

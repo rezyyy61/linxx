@@ -23,12 +23,25 @@ class PoliticalProfile extends Model
         'goals',
         'activities',
         'structure',
-        'avatar_color'
+        'avatar_color',
+        'pending_entity_type',
+        'entity_type_approved',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getLogoUrlAttribute()
+    {
+        if ($this->logo_path) {
+            return preg_match('/^https?:\/\//', $this->logo_path)
+                ? $this->logo_path
+                : asset('storage/' . $this->logo_path);
+        }
+
+        return $this->user->avatar ?? null;
     }
 
     public function links(): HasMany
@@ -49,6 +62,11 @@ class PoliticalProfile extends Model
     public function publications(): HasMany
     {
         return $this->hasMany(Publication::class);
+    }
+
+    public function scopeOrganizations($q)
+    {
+        return $q->whereIn('entity_type', ['party', 'collective', 'media']);
     }
 
 }

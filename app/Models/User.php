@@ -22,6 +22,9 @@ class User extends Authenticatable
         'password',
         'uuid',
         'slug',
+        'is_verified',
+        'verification_code',
+        'verification_expires_at'
     ];
 
     protected $hidden = [
@@ -34,6 +37,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'verification_expires_at' => 'datetime',
         ];
     }
 
@@ -60,16 +64,15 @@ class User extends Authenticatable
     {
         return 'slug';
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public function politicalProfile(): HasOne
     {
         return $this->hasOne(PoliticalProfile::class);
-    }
-
-    public function getAvatarAttribute()
-    {
-        return $this->politicalProfile?->logo_path
-            ? asset('storage/' . $this->politicalProfile->logo_path)
-            : null;
     }
 
     public function books()

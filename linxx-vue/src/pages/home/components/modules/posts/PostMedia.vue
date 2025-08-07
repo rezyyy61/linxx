@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="isProcessing || hasVisibleMedia"
-        class="relative bg-white dark:bg-gray-800/70 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-600 p-5 transition-all duration-300 overflow-hidden"
+        class="relative bg-white dark:bg-gray-800/70 dark:shadow-md p-5 transition-all duration-300 overflow-hidden"
         :style="{ minHeight: isProcessing && !hasVisibleMedia ? '200px' : 'auto' }"
     >
         <div
@@ -64,28 +64,31 @@ const normImages = computed(() =>
 )
 
 const normVideos = computed(() => {
-    return (media.value || [])
-        .filter(m => m.type === 'video')
-        .map(m => {
-            const src = m.url || m.hls_path || m.path || m.file_path || ''
-            const thumbPath = m.poster || m.thumb_large || m.meta?.thumb_large || m.thumbnail || ''
-            const poster = thumbPath ? abs('storage/' + thumbPath.replace(/^\/+/, '')) : ''
-            const type = m.format || m.mime || (/\.(m3u8($|\?))/i.test(src) ? 'hls' : 'video')
-            const width = m.width || m.meta?.original_width || m.meta?.width || 640
-            const height = m.height || m.meta?.original_height || m.meta?.height || 360
-            return {
-                src: abs(src),
-                poster,
-                type,
-                width,
-                height,
-                duration: m.duration || null,
-                ratio: width / height,
-                orientation: width / height < 1 ? 'portrait' : 'landscape'
-            }
-        })
-        .filter(v => v.src)
+  return (media.value || [])
+      .filter(m => m.type === 'video')
+      .map(m => {
+        const src = m.url || m.hls_path || m.path || m.file_path || ''
+        const thumbPath = m.poster || m.thumb_large || m.meta?.thumb_large || m.thumbnail || ''
+        const poster = thumbPath ? abs('storage/' + thumbPath.replace(/^\/+/, '')) : ''
+        const type = m.format || m.mime || (/\.(m3u8($|\?))/i.test(src) ? 'hls' : 'video')
+
+        const width = m.meta?.original_width || m.meta?.width || m.width
+        const height = m.meta?.original_height || m.meta?.height || m.height
+        const ratio = m.meta?.aspect_ratio || (width && height ? width / height : null)
+        return {
+          src: abs(src),
+          poster,
+          type,
+          width,
+          height,
+          ratio,
+          duration: m.duration || null,
+          orientation: width / height < 1 ? 'portrait' : 'landscape'
+        }
+      })
+      .filter(v => v.src)
 })
+
 
 const normAudios = computed(() =>
     media.value

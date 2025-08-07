@@ -1,25 +1,26 @@
 <template>
-    <div
-        :class="[
-      'relative flex items-center justify-center rounded-full font-medium text-white overflow-hidden transition-all duration-200',
-      sizeClass,
-      hasValidSrc ? 'ring-0' : 'ring-1 ring-gray-300 dark:ring-gray-700 shadow-sm'
-    ]"
-        :style="avatarStyle"
-    >
-        <template v-if="src">
-            <img
-                :src="src"
-                :alt="altText"
-                class="w-full h-full object-cover"
-                draggable="false"
-            />
-        </template>
-        <template v-else>
-            <span class="leading-none select-none">{{ fallbackChar }}</span>
-        </template>
-    </div>
+  <div
+      :class="[
+            'relative flex items-center justify-center rounded-full font-medium text-white overflow-hidden transition-all duration-200',
+            sizeClass,
+            hasValidSrc ? 'ring-0' : 'ring-1 ring-gray-300 dark:ring-gray-700 shadow-sm'
+        ]"
+      :style="avatarStyle"
+  >
+    <template v-if="hasValidSrc">
+      <img
+          :src="src"
+          :alt="altText"
+          class="w-full h-full object-cover"
+          draggable="false"
+      />
+    </template>
+    <template v-else>
+      <span class="leading-none select-none">{{ fallbackChar }}</span>
+    </template>
+  </div>
 </template>
+
 
 <script setup>
 import { computed } from 'vue'
@@ -40,15 +41,22 @@ const props = defineProps({
 const hasValidSrc = computed(() => !!props.src && props.src !== 'null')
 
 const sizeClass = computed(() => {
-    switch (props.size) {
-        case 'sm':
-            return 'w-9 h-9 text-sm'
-        case 'lg':
-            return 'w-14 h-14 text-xl'
-        default:
-            return 'w-11 h-11 text-base'
-    }
+  switch (props.size) {
+    case 'sm':
+      return 'w-9 h-9 text-sm'
+    case 'md':
+      return 'w-11 h-11 text-base'
+    case 'lg':
+      return 'w-14 h-14 text-xl'
+    case 'xl':
+      return 'w-16 h-16 text-2xl'
+    case '2xl':
+      return 'w-20 h-20 text-3xl'
+    default:
+      return 'w-11 h-11 text-base'
+  }
 })
+
 
 const fallbackChar = computed(() => {
     return props.fallback?.charAt(0)?.toUpperCase() || '?'

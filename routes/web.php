@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\SocialAuthController;
 use App\Http\Controllers\ShareController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,9 @@ Route::get('/test-share/{id}', function ($id) {
         'text' => $post->text,
         'image' => $image,
     ];
+});
+
+Route::prefix('auth')->group(function () {
+    Route::get('{provider}', [SocialAuthController::class, 'redirect']);
+    Route::get('{provider}/callback', [SocialAuthController::class, 'callback']);
 });

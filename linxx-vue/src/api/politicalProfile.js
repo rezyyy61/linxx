@@ -36,5 +36,5 @@ export async function deletePoliticalProfile (id) {
 }
 
 export function getMyProfile() {
-    return publicAxios.get('api/user/me')
+    return axios().get('api/me')
 }

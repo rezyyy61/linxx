@@ -80,18 +80,15 @@ export function usePoliticalProfileSubmit () {
 
       // 🟥 General
       store.saveGeneral({
+        id: data.id,
         groupName: data.group_name,
         tagline: data.tagline,
         entityType: data.entity_type,
         location: data.location,
         foundedYear: data.founded_year,
+        avatarColor: data.avatar_color || null,
         logo: null,
-        logoPreview: data.logo_url
-          ? data.logo_url.startsWith('http')
-            ? data.logo_url
-            : `${import.meta.env.VITE_API_URL}${data.logo_url}`
-          : null
-
+        logoPreview: data.logo_url || null
       })
 
       // 🟨 Ideologies
@@ -100,7 +97,7 @@ export function usePoliticalProfileSubmit () {
           value: i.value,
           type: i.type
         })) || [],
-        keywords: data.keywords || []
+        keywords: []
       })
 
       // 🟦 Description
@@ -116,8 +113,15 @@ export function usePoliticalProfileSubmit () {
       }
 
       for (const f of data.files || []) {
-        const key = `${f.section}Files` // aboutFiles, goalsFiles, ...
-        desc[key].push(f) // f شامل name, url, mime_type است
+        const key = `${f.section}Files`
+        if (desc[key]) {
+          desc[key].push({
+            id: f.id,
+            name: f.name,
+            url: f.url,
+            mimeType: f.mime_type
+          })
+        }
       }
 
       store.saveDescription(desc)
@@ -140,6 +144,7 @@ export function usePoliticalProfileSubmit () {
       })
     } catch (err) {
       console.error('❌ Load profile failed:', err)
+      throw err
     }
   }
 

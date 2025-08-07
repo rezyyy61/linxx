@@ -7,9 +7,9 @@
             >
                 <!-- Avatar -->
                 <UserAvatar
-                    :src="user.avatar"
+                    :src="user.logo_url"
                     :fallback="user.name"
-                    :color="user.political_profile?.avatar_color"
+                    :color="user.avatar_color"
                     size="sm"
                     class="w-9 h-9 shrink-0 rounded-full border border-gray-200 dark:border-gray-700"
                     style="display: inline-flex;"

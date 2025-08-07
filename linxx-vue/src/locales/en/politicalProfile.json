@@ -29,6 +29,10 @@
         "entityTypePlaceholder": "Choose your entity type",
         "uploadButton": "Upload Logo",
         "logoPlaceholder": "Upload Logo",
+        "entityTypeApprovalNotice": "Your request will be submitted, but your profile will not be public until it is approved by an admin.",
+        "requiresApproval": "Requires approval",
+        "changeLogo": "Change Logo",
+
         "types": {
             "party": "Political Party",
             "collective": "Collective / Network",
@@ -41,12 +45,20 @@
         "foundedYearPlaceholder": "e.g. 2010"
     },
 
+    "entityTypes": {
+        "individual": "Individual",
+        "party": "Party",
+        "collective": "Collective",
+        "media": "Media"
+    },
+
     "ideologies": {
         "label": "Political Ideologies",
         "keywordsLabel": "Keywords",
         "optional": "Optional",
         "addButton": "Add",
         "keywordsPlaceholder": "e.g. anti-war, social justice, self-determination",
+        "customLabel": "Add Custom Ideology",
         "list": {
             "socialism": "Socialism",
             "feminism": "Feminism",
@@ -58,25 +70,37 @@
         }
     },
     "description": {
-        "about": "Background and Formation Philosophy",
-        "goals": "Goals and Vision",
-        "activities": "Activities and Fields of Action",
-        "structure": "Structure and Organization",
+        "about": "About Us",
+        "goals": "Goals",
+        "activities": "Activities",
+        "structure": "Structure",
         "optional": "Optional",
-        "uploadHint": "If you already have the text ready (e.g., PDF or Word), you can upload it instead."
+        "placeholder": "Write your description here...",
+        "tabs": {
+            "text": "Write Text",
+            "files": "Upload Files"
+        },
+        "uploadHint": "Click or drag and drop files here to upload",
+        "files": "files"
     },
+
     "links": {
-        "title": "Contact & Links",
+        "title": "Links",
+        "officialLinks": "Official Links",
         "customLinks": "Custom Links",
+        "addNew": "Add New Link",
+        "hideForm": "Hide Form",
         "addButton": "Add Link",
-        "remove": "Remove",
+        "remove": "Remove Link",
+        "validationError": "Please enter a valid title and URL.",
         "placeholders": {
-            "title": "e.g., Official site, membership form, blog...",
-            "url": "https://example.com"
+            "title": "Link title (e.g. YouTube Channel)",
+            "url": "Link URL (https://...)"
         }
     },
     "contact": {
         "website": "Website",
+        "youtube": "YouTube",
         "twitter": "Twitter",
         "facebook": "Facebook",
         "instagram": "Instagram",
@@ -84,15 +108,17 @@
         "email": "Email",
         "phone": "Phone",
         "placeholders": {
-            "website": "https://example.com",
-            "twitter": "https://twitter.com/yourhandle",
-            "facebook": "https://facebook.com/yourpage",
-            "instagram": "https://instagram.com/yourpage",
-            "telegram": "https://t.me/yourchannel",
-            "email": "example\\\\u0040email.com",
-            "phone": "+98..."
+            "website": "Website URL",
+            "youtube": "YouTube URL",
+            "twitter": "Twitter link",
+            "facebook": "Facebook link",
+            "instagram": "Instagram link",
+            "telegram": "Telegram link",
+            "email": "Email address",
+            "phone": "Phone number"
         }
     },
+
     "submit": {
         "title": "Review & Submit",
         "subtitle": "Please review all information before sending.",
@@ -106,7 +132,8 @@
 
     "list": {
         "title": "List of Political Parties",
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "error": "Error"
     },
 
     "description-public": {
@@ -122,20 +149,30 @@
 
     "profileMenu": {
         "posts": "Posts",
-        "noPosts": "No posts available for this profile.",
-        "overview": "Overview",
-        "members": "Members",
-        "statements": "Statements",
-        "programs": "Programs",
+        "about": "About",
+        "videos": "Videos",
+        "photos": "Photos",
+        "files": "Files",
         "contact": "Contact",
+        "noPosts": "No posts available for this profile.",
+        "programs": "Programs",
         "search": "Search...",
         "activeTab": "Active Tab"
     },
 
     "sidebar": {
         "title": "Additional Info"
-    }
+    },
 
+    "errors": {
+        "profile_load": "An error occurred while loading the profile. Please try again."
+    },
+
+    "messages": {
+        "saveSuccess": "✅ Profile saved successfully.",
+        "saveFailed": "❌ Failed to save profile.",
+        "validationError": "⚠️ Please fill out all required fields correctly."
+    }
 
 }
 

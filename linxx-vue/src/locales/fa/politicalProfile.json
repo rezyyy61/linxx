@@ -25,8 +25,12 @@
         "taglinePlaceholder": "مثلاً: صدای ضدسرمایه‌داری از حاشیه‌ها",
         "entityType": "نوع هویت",
         "entityTypePlaceholder": "نوع هویت خود را انتخاب کنید",
+        "entityTypeApprovalNotice": "درخواست شما ثبت می‌شود، اما تا تأیید توسط ادمین، پروفایل عمومی نخواهد شد.",
+        "requiresApproval": "نیاز به تایید",
+        "changeLogo": "تغییر لوگو",
+        "logoPlaceholder": "برای آپلود لوگو کلیک یا بکشید",
         "uploadButton": "آپلود لوگو",
-        "logoPlaceholder": "آپلود لوگو",
+
         "types": {
             "party": "حزب سیاسی",
             "collective": "جمع / شبکه",
@@ -39,12 +43,20 @@
         "foundedYearPlaceholder": "مثلاً: ۲۰۱۰"
     },
 
+    "entityTypes": {
+        "individual": "فردی",
+        "party": "حزب",
+        "collective": "جمعی",
+        "media": "رسانه"
+    },
+
     "ideologies": {
         "label": "گرایش‌های سیاسی",
         "keywordsLabel": "کلیدواژه‌ها",
         "optional": "اختیاری",
         "addButton": "افزودن",
         "keywordsPlaceholder": "مثلاً: ضد جنگ، عدالت اجتماعی، حق تعیین سرنوشت",
+        "customLabel": "افزودن گرایش دلخواه",
         "list": {
             "socialism": "سوسیالیسم",
             "feminism": "فمینیسم",
@@ -55,43 +67,58 @@
             "humanRights": "حقوق بشر"
         }
     },
+
     "description": {
-        "about": "تاریخچه و فلسفه شکل‌گیری",
-        "goals": "اهداف و چشم‌اندازها",
-        "activities": "فعالیت‌ها و حوزه‌های عمل",
-        "structure": "ساختار و سازمان‌دهی",
+        "about": "درباره ما",
+        "goals": "اهداف",
+        "activities": "فعالیت‌ها",
+        "structure": "ساختار",
         "optional": "اختیاری",
-        "uploadHint": "اگر متن آماده دارید (مثلاً PDF یا Word)، می‌توانید آن را بارگذاری کنید."
+        "placeholder": "توضیحات خود را اینجا بنویسید...",
+        "tabs": {
+            "text": "نوشتن متن",
+            "files": "آپلود فایل"
+        },
+        "uploadHint": "برای آپلود فایل کلیک کنید یا اینجا بکشید و رها کنید",
+        "files": "فایل‌ها"
     },
 
     "links": {
-        "title": "راه‌های ارتباطی",
+        "title": "لینک‌ها",
+        "officialLinks": "لینک‌های رسمی",
         "customLinks": "لینک‌های سفارشی",
+        "addNew": "افزودن لینک جدید",
+        "hideForm": "بستن فرم",
         "addButton": "افزودن لینک",
-        "remove": "حذف",
+        "remove": "حذف لینک",
+        "validationError": "لطفا عنوان و آدرس معتبر وارد کنید.",
         "placeholders": {
-            "title": "مثلاً: سایت رسمی، فرم عضویت، بلاگ...",
-            "url": "https://example.com"
+            "title": "عنوان لینک (مثلاً کانال یوتیوب)",
+            "url": "آدرس لینک (https://...)"
         }
     },
+
     "contact": {
-        "website": "سایت رسمی",
+        "website": "وبسایت",
+        "youtube": "یوتیوب",
         "twitter": "توییتر",
-        "facebook": "فیس‌بوک",
+        "facebook": "فیسبوک",
         "instagram": "اینستاگرام",
         "telegram": "تلگرام",
         "email": "ایمیل",
-        "phone": "شماره تماس",
+        "phone": "تلفن",
         "placeholders": {
-            "website": "https://example.com",
-            "twitter": "https://twitter.com/yourhandle",
-            "facebook": "https://facebook.com/yourpage",
-            "instagram": "https://instagram.com/yourpage",
-            "telegram": "https://t.me/yourchannel",
-            "email": "example\\\\u0040email.com",
-            "phone": "+1..."
+            "website": "آدرس وبسایت",
+            "youtube": "لینک یوتیوب",
+            "twitter": "لینک توییتر",
+            "facebook": "لینک فیسبوک",
+            "instagram": "لینک اینستاگرام",
+            "telegram": "لینک تلگرام",
+            "email": "آدرس ایمیل",
+            "phone": "شماره تلفن"
         }
     },
+
     "submit": {
         "title": "بازبینی و ارسال",
         "subtitle": "لطفاً پیش از ارسال، تمام اطلاعات را بررسی کنید.",
@@ -106,7 +133,8 @@
 
     "list": {
         "title": "لیست احزاب سیاسی",
-        "loading": "در حال بارگذاری..."
+        "loading": "در حال بارگذاری...",
+        "error": "error"
     },
 
 "description-public": {
@@ -122,18 +150,29 @@
 
     "profileMenu": {
         "posts": "پست‌ها",
-        "noPosts": "هیچ پستی برای این پروفایل ثبت نشده است.",
-        "overview": "نمای کلی",
-        "members": "اعضا",
-        "statements": "بیانیه‌ها",
-        "programs": "برنامه‌ها",
+        "about": "درباره",
+        "videos": "ویدیوها",
+        "photos": "عکس‌ها",
+        "files": "فایل‌ها",
         "contact": "ارتباط",
+        "noPosts": "هیچ پستی برای این پروفایل ثبت نشده است.",
+        "programs": "برنامه‌ها",
         "search": "جستجو...",
         "activeTab": "تب فعال"
     },
 
     "sidebar": {
         "title": "اطلاعات تکمیلی"
+    },
+
+    "errors": {
+        "profile_load": "مشکلی در بارگذاری پروفایل پیش آمده. لطفاً دوباره تلاش کنید."
+    },
+
+    "messages": {
+        "saveSuccess": "✅ اطلاعات با موفقیت ذخیره شد.",
+        "saveFailed": "❌ ذخیره اطلاعات با خطا مواجه شد.",
+        "validationError": "⚠️ لطفاً فیلدها را به درستی تکمیل کنید."
     }
 
 }
