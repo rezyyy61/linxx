@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Book\Book;
 use App\Models\Book\BookReview;
+use App\Models\Event\Event;
+use App\Models\Event\EventRsvp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -91,5 +93,33 @@ class User extends Authenticatable
     {
         return $this->hasMany(BookReview::class);
     }
+
+    public function createdEvents()
+    {
+        return $this->morphMany(Event::class, 'creator');
+    }
+
+    public function eventRsvps()
+    {
+        return $this->hasMany(EventRsvp::class);
+    }
+
+    public function attendingEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_rsvps')
+            ->withPivot('status', 'checked_in_at')
+            ->withTimestamps();
+    }
+
+    public function isParty(): bool
+    {
+        return $this->role === 'party';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
 
 }

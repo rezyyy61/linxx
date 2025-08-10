@@ -6,11 +6,10 @@
         "login": "Login",
         "logout": "Logout"
     },
-    "adnav": {
+    "tabs": {
         "feed": "Feed",
-        "parties": "Parties & Groups",
+        "parties": "Parties",
         "books": "Books",
-        "topics": "Topics",
         "media": "Media",
         "campaigns": "Campaigns",
         "profiles": "Profiles",
@@ -78,5 +77,101 @@
         "must_login": "To suggest a book, please log in first.",
         "suggestion_success": "✅ Your suggestion was submitted successfully.",
         "submit_failed": "❌ Failed to submit your suggestion."
+    },
+
+    "event": {
+        "title": "Events",
+        "refresh": "Refresh",
+        "retry": "Retry",
+        "empty": "No events found.",
+        "live": "Live now",
+        "today": "Today",
+        "daysLeft": "{n} days left",
+        "ended": "Ended",
+        "view": "View details",
+        "loadMore": "Load more",
+        "descriptionFallback": "No description provided",
+        "locationFallback": "Unknown location",
+        "addToCalendar": "Add to calendar",
+        "addToCalendarShort": "Add to calendar",
+        "defaultCoverAlt": "Default event cover",
+        "addToGoogle": "Add to Google",
+        "share": "Share",
+        "noDescription": "No description provided.",
+        "attachment": {
+            "generic": "Attachment ({ext})"
+        },
+        "show": {
+            "organizer": "Organizer",
+            "back": "Back to events",
+            "whenEventTz": "When (event time)",
+            "whenLocal": "Your local time",
+            "where": "Where",
+            "openMap": "Open in Maps",
+            "online": "Online",
+            "joinLink": "Join link",
+            "streamLink": "Stream link",
+            "accessCode": "Access code",
+            "attachments": "Attachment",
+            "download": "Download",
+            "meta": "Event details",
+            "actions": "Actions",
+            "timezone": "Timezone",
+            "visibility": "Visibility",
+            "status": "Status",
+            "when": "When",
+            "timeModeEvent": "Event time",
+            "timeModeLocal": "Local time"
+        },
+        "filters": {
+            "search_placeholder": "Search events…",
+            "apply": "Apply",
+            "reset": "Reset",
+
+            "type": {
+                "label": "Type",
+                "all": "All types"
+            },
+            "mode": {
+                "label": "Mode",
+                "all": "All modes",
+                "offline": "In-person",
+                "online": "Online",
+                "hybrid": "Hybrid"
+            },
+            "date": {
+                "label": "Date",
+                "any": "Any time",
+                "today": "Today",
+                "tomorrow": "Tomorrow",
+                "next7": "Next 7 days",
+                "next30": "Next 30 days"
+            }
+        },
+
+        "types": {
+            "rally_protest": "Rally / Protest",
+            "town_hall": "Town hall",
+            "meeting_internal": "Internal meeting",
+            "training": "Training",
+            "webinar": "Webinar",
+            "fundraiser": "Fundraiser"
+        },
+        "rsvp": {
+            "title": "Attendance",
+            "going": "Going",
+            "interested": "Interested",
+            "cancel": "Cancel RSVP",
+            "countGoing": "going",
+            "countInterested": "interested",
+            "capacity": "Capacity"
+        }
+    },
+
+    "common": {
+        "copy": "Copy",
+        "copyLink": "Copy link",
+        "showMore": "Show more",
+        "showLess": "Show less"
     }
 }

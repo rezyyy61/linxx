@@ -38,6 +38,11 @@ export default [
                 path: 'settings',
                 name: 'settings',
                 component: () => import('@/pages/admin/sections/Settings.vue')
+            },
+            {
+                path: 'events',
+                name: 'events',
+                component: () => import('@/pages/admin/sections/EventsPage.vue')
             }
         ],
         meta: { requiresAuth: true }

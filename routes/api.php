@@ -5,6 +5,11 @@ use App\Http\Controllers\Api\Book\BookSuggestionController;
 use App\Http\Controllers\Api\Book\CategoryController;
 use App\Http\Controllers\Api\Book\PublicBookController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\Event\EventController;
+use App\Http\Controllers\Api\Event\EventInviteController;
+use App\Http\Controllers\Api\Event\EventMediaController;
+use App\Http\Controllers\Api\Event\EventRsvpController;
+use App\Http\Controllers\Api\Event\Public\PublicEventController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\MediaDownloadController;
 use App\Http\Controllers\Api\PostController;
@@ -62,6 +67,11 @@ Route::get('/media/download/{id}', [MediaDownloadController::class, 'show'])
     ->name('media.download')
     ->whereNumber('id');
 
+// ------------------------ EVENT ------------------------
+Route::get('public/events', [PublicEventController::class, 'index']);
+Route::get('public/events/{idOrSlug}', [PublicEventController::class, 'show']);
+Route::get('events/{event}/attendees', [EventRsvpController::class, 'attendees']);
+
 // ------------------------ AUTH REQUIRED ------------------------
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -101,4 +111,23 @@ Route::middleware('auth:sanctum')->group(function () {
     // BOOKS
     Route::post('/books/{book}/reviews', [PublicBookController::class, 'submitReview']);
     Route::post('/books/suggestions', [BookSuggestionController::class, 'store']);
+
+
+    //EVENTS
+    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{event}', [EventController::class, 'show']);
+    Route::post('/events', [EventController::class, 'store']);
+    Route::put('/events/{event}', [EventController::class, 'update']);
+    Route::patch('/events/{event}/status', [EventController::class, 'updateStatus'])
+        ->name('events.status');
+    Route::delete('/events/{event}', [EventController::class, 'destroy']);
+
+    Route::post('events/{event}/rsvp', [EventRsvpController::class, 'store']);
+    Route::delete('events/{event}/rsvp', [EventRsvpController::class, 'destroy']);
+
+    Route::get('/events/{event}/invites', [EventInviteController::class, 'index']);
+    Route::post('/events/{event}/invites', [EventInviteController::class, 'store']);
+    Route::patch('/event-invites/{invite}', [EventInviteController::class, 'respond']);
+    Route::delete('/event-invites/{invite}', [EventInviteController::class, 'destroy']);
+
 });

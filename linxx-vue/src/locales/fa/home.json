@@ -6,14 +6,13 @@
         "login": "ورود",
         "logout": "خروج"
     },
-    "adnav": {
-        "feed": "جدیدترین ها",
-        "parties": "احزاب و گروه‌ها",
+    "tabs": {
+        "feed": "فید",
+        "parties": "احزاب",
         "books": "کتاب‌ها",
-        "topics": "موضوعات",
         "media": "رسانه",
         "campaigns": "کمپین‌ها",
-        "profiles": "نویسندگان",
+        "profiles": "پروفایل‌ها",
         "events": "رویدادها",
         "announcements": "اطلاعیه‌ها"
     },
@@ -78,5 +77,100 @@
         "must_login": "برای پیشنهاد کتاب، ابتدا وارد حساب کاربری خود شوید.",
         "suggestion_success": "✅ پیشنهاد شما با موفقیت ثبت شد.",
         "submit_failed": "❌ ارسال پیشنهاد با خطا مواجه شد."
+    },
+
+    "event": {
+        "title": "رویدادها",
+        "refresh": "به‌روزرسانی",
+        "retry": "تلاش دوباره",
+        "empty": "رویدادی پیدا نشد.",
+        "live": "در حال برگزاری",
+        "today": "امروز",
+        "daysLeft": "{n} روز مانده",
+        "ended": "پایان یافته",
+        "view": "مشاهده جزئیات",
+        "loadMore": "نمایش بیشتر",
+        "locationFallback": "نامشخص",
+        "descriptionFallback": "توضیحی ثبت نشده است",
+        "addToCalendar": "افزودن به تقویم",
+        "addToGoogle": "افزودن به گوگل",
+        "addToCalendarShort": "افزودن به تقویم",
+        "defaultCoverAlt": "کاور پیش‌فرض ایونت",
+        "share": "اشتراک‌گذاری",
+        "noDescription": "توضیحی ثبت نشده.",
+        "attachment": {
+            "generic": "پیوست ({ext})"
+        },
+        "show": {
+            "organizer": "برگزارکننده",
+            "back": "بازگشت به ایونت‌ها",
+            "whenEventTz": "زمان (به وقت ایونت)",
+            "whenLocal": "زمان محلی شما",
+            "where": "مکان",
+            "openMap": "باز کردن در نقشه",
+            "online": "آنلاین",
+            "joinLink": "لینک ورود",
+            "streamLink": "لینک پخش",
+            "accessCode": "کد دسترسی",
+            "attachments": "پیوست",
+            "download": "دانلود",
+            "meta": "جزئیات ایونت",
+            "timezone": "منطقه زمانی",
+            "actions": "اقدامات",
+            "visibility": "قابلیت نمایش",
+            "status": "وضعیت",
+            "when": "زمان",
+            "timeModeEvent": "به‌وقت ایونت",
+            "timeModeLocal": "زمان محلی"
+        },
+        "filters": {
+            "search_placeholder": "جستجوی رویداد…",
+            "apply": "اعمال",
+            "reset": "بازنشانی",
+
+            "type": {
+                "label": "نوع",
+                "all": "همهٔ انواع"
+            },
+            "mode": {
+                "label": "حالت",
+                "all": "همهٔ حالت‌ها",
+                "offline": "حضوری",
+                "online": "آنلاین",
+                "hybrid": "ترکیبی"
+            },
+            "date": {
+                "label": "تاریخ",
+                "any": "هر زمان",
+                "today": "امروز",
+                "tomorrow": "فردا",
+                "next7": "۷ روز آینده",
+                "next30": "۳۰ روز آینده"
+            }
+        },
+
+        "types": {
+            "rally_protest": "تجمع / اعتراض",
+            "town_hall": "تالار گفت‌وگو",
+            "meeting_internal": "جلسهٔ داخلی",
+            "training": "آموزش",
+            "webinar": "وبینار",
+            "fundraiser": "جمع‌آوری کمک مالی"
+        },
+        "rsvp": {
+            "title": "شرکت در ایونت",
+            "going": "می‌آیم",
+            "interested": "علاقه‌مندم",
+            "cancel": "لغو ",
+            "countGoing": "نفر می‌آیند",
+            "countInterested": "نفر علاقه‌مندند",
+            "capacity": "ظرفیت"
+        }
+    },
+    "common": {
+        "copy": "کپی",
+        "copyLink": "کپی لینک",
+        "showMore": "نمایش بیشتر",
+        "showLess": "نمایش کمتر"
     }
 }

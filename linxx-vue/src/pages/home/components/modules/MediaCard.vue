@@ -1,7 +1,7 @@
 <!-- Valed.vue -->
 <template>
   <section class="py-10 min-h-screen text-zinc-900 dark:text-zinc-100">
-    <div class="max-w-[1600px] mx-auto space-y-12">
+    <div class="w-[80%] mx-auto space-y-12">
 
       <div v-for="(group, index) in groupedVideos" :key="'group-' + index" class="space-y-10">
 

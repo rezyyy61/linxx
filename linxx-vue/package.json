@@ -13,6 +13,7 @@
     "@liripeng/vue-audio-player": "^2.0.4",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tiptap/extension-image": "^3.0.7",
+    "@vuepic/vue-datepicker": "^11.0.2",
     "axios": "^1.10.0",
     "core-js": "^3.8.3",
     "date-fns": "^4.1.0",

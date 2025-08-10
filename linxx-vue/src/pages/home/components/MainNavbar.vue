@@ -1,77 +1,163 @@
 <template>
-    <div>
-        <!-- Navbar -->
-        <header
-            class="sticky top-0 z-40 backdrop-blur bg-white/70 dark:bg-gray-900/80 shadow-sm border-b border-gray-200 dark:border-gray-700"
-            dir="ltr"
-        >
-            <div class="w-full px-8 py-4 flex justify-between items-center">
-                <!-- Brand -->
-                <router-link
-                    to="/"
-                    class="font-playfair text-3xl font-extrabold tracking-wide text-red-700 dark:text-red-400 hover:opacity-90 transition"
-                >
-                    Linxx
+  <div>
+    <!-- NAVBAR -->
+    <header
+        class="sticky top-0 z-40 backdrop-blur bg-white/90 dark:bg-[#0f1115]/90 border-b border-gray-200 dark:border-white/10"
+        dir="ltr"
+    >
+      <div class=" mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
+        <!-- Left: Brand (fully left) -->
+        <router-link to="/" class="flex items-center gap-3 group">
+          <!-- red circular logo -->
+          <span class="inline-flex h-8 w-8 rounded-full bg-red-600 relative overflow-hidden">
+            <span class="absolute inset-0 bg-gradient-to-br from-red-500/40 to-black/20"></span>
+            <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-white dark:bg-[#0f1115]"></span>
+          </span>
+          <span class="font-extrabold tracking-wide text-gray-900 dark:text-white text-2xl leading-none">
+            Linxx
+          </span>
+        </router-link>
+
+        <!-- Right: nav + toggles + auth (with bottom border like screenshot) -->
+        <div class="ml-auto flex items-center gap-6 right-rail">
+          <!-- Menu -->
+          <nav class="hidden md:flex">
+            <ul class="flex items-center gap-8">
+              <li>
+                <router-link to="/about" class="nav-link" exact-active-class="nav-link--active">
+                  About Us
                 </router-link>
+              </li>
+              <li>
+                <router-link to="/contact" class="nav-link" exact-active-class="nav-link--active">
+                  Contact Us
+                </router-link>
+              </li>
+            </ul>
+          </nav>
 
-                <!-- Right Side: Actions -->
-                <div class="flex items-center gap-6">
-                    <!-- Locale Toggle -->
-                    <button
-                        @click="toggleLocale"
-                        class="text-sm font-semibold text-gray-700 dark:text-gray-300 hover:underline transition"
-                    >
-                        {{ currentLocale.toUpperCase() }}
-                    </button>
+          <!-- Locale Toggle EN/FA -->
+          <button
+              @click="toggleLocale"
+              class="text-sm font-semibold text-gray-700 dark:text-gray-300 hover:opacity-80 transition"
+              :aria-label="`Switch language (current: ${currentLocale.toUpperCase()})`"
+              title="Language"
+          >
+            {{ currentLocale.toUpperCase() === 'EN' ? 'EN' : 'FA' }}
+          </button>
 
-                    <!-- Theme Toggle -->
-                    <button
-                        @click="toggleTheme"
-                        class="text-xl text-gray-600 dark:text-gray-300 hover:text-red-500 transition"
-                    >
-                        <Icon :icon="isDark ? moonIcon : sunIcon" class="w-6 h-6" />
-                    </button>
+          <!-- Theme Toggle -->
+          <button
+              @click="toggleTheme"
+              class="text-xl text-gray-700 dark:text-gray-300 hover:text-red-500 transition"
+              aria-label="Toggle dark mode"
+              title="Dark Mode"
+          >
+            <Icon :icon="isDark ? moonIcon : sunIcon" class="w-6 h-6" />
+          </button>
 
-                    <!-- Auth Section -->
-                    <div class="hidden sm:flex gap-4 items-center">
-                        <template v-if="!auth.user">
-                            <router-link to="/login" class="nav-btn flex items-center gap-1">
-                                <Icon :icon="loginIcon" class="w-5 h-5" />
-                                {{ $t('home.nav.login') }}
-                            </router-link>
-                            <router-link
-                                to="/register"
-                                class="nav-btn bg-red-600 text-white hover:bg-red-700 flex items-center gap-1"
-                            >
-                                <Icon :icon="registerIcon" class="w-5 h-5" />
-                                {{ $t('home.nav.register') }}
-                            </router-link>
-                        </template>
+          <!-- Auth -->
+          <div class="hidden sm:flex gap-3 items-center">
+            <template v-if="!auth.user">
+              <router-link
+                  to="/login"
+                  class="inline-flex items-center gap-2 bg-white text-red-600 border border-gray-200 px-4 py-2 rounded-xl shadow-sm hover:shadow transition dark:bg-white/90"
+              >
+                <Icon :icon="loginIcon" class="w-5 h-5" />
+                <span>{{ $t('home.nav.login') }}</span>
+              </router-link>
+              <router-link
+                  to="/register"
+                  class="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-xl shadow-sm hover:bg-red-700 transition"
+              >
+                <Icon :icon="registerIcon" class="w-5 h-5" />
+                <span>{{ $t('home.nav.register') }}</span>
+              </router-link>
+            </template>
+            <template v-else>
+              <button
+                  @click="showCreatePostModal = true"
+                  class="p-2 rounded-full text-red-500 hover:text-red-400 hover:bg-black/5 dark:hover:bg-white/5 transition"
+                  title="Create Post"
+              >
+                <Icon :icon="createPostIcon" class="w-6 h-6" />
+              </button>
+              <UserDropdown />
+            </template>
+          </div>
 
-                        <template v-else>
-                            <!-- Create Post Icon -->
-                            <button
-                                @click="showCreatePostModal = true"
-                                class="text-red-600 dark:text-red-400 hover:opacity-80 transition"
-                                title="Create Post"
-                            >
-                                <Icon :icon="createPostIcon" class="w-6 h-6" />
-                            </button>
+          <!-- Mobile: hamburger -->
+          <button
+              @click="mobileOpen = !mobileOpen"
+              class="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5"
+              aria-label="Open menu"
+          >
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-                            <!-- User Dropdown -->
-                            <UserDropdown />
-                        </template>
-                    </div>
-                </div>
+      <!-- Mobile drawer -->
+      <transition name="fade">
+        <div v-if="mobileOpen" class="md:hidden border-t border-gray-200 dark:border-white/10">
+          <div class="px-4 py-3 space-y-1">
+            <router-link @click="mobileOpen=false" to="/about" class="mobile-link">About Us</router-link>
+            <router-link @click="mobileOpen=false" to="/contact" class="mobile-link">Contact Us</router-link>
+
+            <div class="flex items-center gap-4 pt-2">
+              <button @click="toggleLocale; mobileOpen=false" class="mobile-link inline-flex items-center justify-center">
+                {{ currentLocale.toUpperCase() === 'EN' ? 'EN' : 'FA' }}
+              </button>
+              <button @click="toggleTheme; mobileOpen=false" class="mobile-link inline-flex items-center gap-2">
+                <Icon :icon="isDark ? moonIcon : sunIcon" class="w-5 h-5" />
+                <span>Dark Mode</span>
+              </button>
             </div>
-        </header>
 
-        <!-- Modal OUTSIDE header -->
-        <CreatePostModal
-            v-if="showCreatePostModal"
-            @close="showCreatePostModal = false"
-        />
-    </div>
+            <div class="pt-2">
+              <template v-if="!auth.user">
+                <div class="flex gap-2">
+                  <router-link
+                      @click="mobileOpen=false"
+                      to="/login"
+                      class="flex-1 inline-flex justify-center items-center gap-2 bg-white text-red-600 font-semibold px-4 py-2 rounded-xl shadow-sm"
+                  >
+                    <Icon :icon="loginIcon" class="w-5 h-5" />
+                    <span>{{ $t('home.nav.login') }}</span>
+                  </router-link>
+                  <router-link
+                      @click="mobileOpen=false"
+                      to="/register"
+                      class="flex-1 inline-flex justify-center items-center gap-2 bg-red-600 text-white font-semibold px-4 py-2 rounded-xl shadow-sm hover:bg-red-700"
+                  >
+                    <Icon :icon="registerIcon" class="w-5 h-5" />
+                    <span>{{ $t('home.nav.register') }}</span>
+                  </router-link>
+                </div>
+              </template>
+              <template v-else>
+                <button
+                    @click="showCreatePostModal = true; mobileOpen=false"
+                    class="w-full inline-flex justify-center items-center gap-2 text-red-500 px-4 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"
+                >
+                  <Icon :icon="createPostIcon" class="w-5 h-5" />
+                  <span>Create Post</span>
+                </button>
+                <div class="pt-2">
+                  <UserDropdown />
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </header>
+
+    <!-- Modal OUTSIDE header -->
+    <CreatePostModal v-if="showCreatePostModal" @close="showCreatePostModal = false" />
+  </div>
 </template>
 
 <script>
@@ -87,52 +173,65 @@ import { usePreferencesStore } from '@/stores/preferences'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import UserDropdown from '@/pages/home/components/UserDropdown.vue'
-import CreatePostModal from "@/pages/home/components/CreatePostModal.vue";
+import CreatePostModal from '@/pages/home/components/CreatePostModal.vue'
 
 export default {
-    name: 'MainNavbar',
-    components: {
-        Icon,
-        UserDropdown,
-        CreatePostModal
-    },
-    setup() {
-        const prefs = usePreferencesStore()
-        const auth = useAuthStore()
-        const { isDark, locale: currentLocale } = storeToRefs(prefs)
+  name: 'MainNavbar',
+  components: { Icon, UserDropdown, CreatePostModal },
+  setup () {
+    const prefs = usePreferencesStore()
+    const auth = useAuthStore()
+    const { isDark, locale: currentLocale } = storeToRefs(prefs)
 
-        const showCreatePostModal = ref(false)
+    const showCreatePostModal = ref(false)
+    const mobileOpen = ref(false)
 
-        return {
-            toggleTheme: prefs.toggleTheme,
-            toggleLocale: prefs.toggleLocale,
-            currentLocale,
-            isDark,
-            auth,
-            showCreatePostModal,
-            createPostIcon,
-            sunIcon,
-            moonIcon,
-            loginIcon,
-            registerIcon
-        }
+    return {
+      toggleTheme: prefs.toggleTheme,
+      toggleLocale: prefs.toggleLocale,
+      currentLocale,
+      isDark,
+      auth,
+      showCreatePostModal,
+      mobileOpen,
+      createPostIcon,
+      sunIcon,
+      moonIcon,
+      loginIcon,
+      registerIcon
     }
+  }
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+/* link style – works in light & dark */
+.nav-link {
+  @apply text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition relative tracking-wide inline-flex items-center py-2;
+}
+.nav-link::after {
+  content: "";
+  @apply absolute left-0 -bottom-1 h-0.5 w-0 bg-red-500 transition-all;
+}
+.nav-link:hover::after { @apply w-full; }
+.nav-link--active { @apply text-gray-900 dark:text-white; }
+.nav-link--active::after { @apply w-full; }
 
-.font-playfair {
-    font-family: 'Playfair Display', serif;
+/* right-rail underline like screenshot (only under the right group) */
+.right-rail {
+  @apply relative;
+}
+.right-rail::after {
+  content: "";
+  @apply absolute left-0 right-0 -bottom-[13px] h-px bg-gray-200 dark:bg-white/10;
 }
 
-.nav-btn {
-    @apply text-sm font-medium px-4 py-2 rounded-md border border-transparent transition
-    text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400;
+/* mobile */
+.mobile-link {
+  @apply px-2 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5;
 }
 
-.dropdown-item {
-    @apply w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 block transition;
-}
+/* simple fade for mobile drawer */
+.fade-enter-active, .fade-leave-active { transition: opacity .15s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

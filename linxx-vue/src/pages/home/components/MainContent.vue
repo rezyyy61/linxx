@@ -44,7 +44,7 @@ export default {
                 { key: "media" },
                 { key: "campaigns" },
                 { key: "profiles" },
-                { key: "events" },
+                { key: "public_events" },
                 { key: "announcements" },
             ],
         };

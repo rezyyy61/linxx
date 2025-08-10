@@ -7,7 +7,7 @@ export default [
             {
                 path: '',
                 name: 'feed',
-                component: () => import('@/pages/home/components/modules/FeedCard.vue')
+                component: () => import('@/pages/home/components/modules/Feed/FeedCard.vue')
             },
             {
                 path: 'parties',
@@ -36,8 +36,14 @@ export default [
             },
             {
                 path: 'events',
-                name: 'events',
+                name: 'public_events',
                 component: () => import('@/pages/home/components/modules/EventsCard.vue')
+            },
+            {
+                path: '/events/:idOrSlug',
+                name: 'public_event',
+                component: () => import('@/pages/home/components/modules/events/EventShow.vue'),
+                props: true
             },
             {
                 path: 'announcements',

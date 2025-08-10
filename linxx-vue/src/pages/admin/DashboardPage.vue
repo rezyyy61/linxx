@@ -19,7 +19,8 @@
                     class="fixed inset-0 z-40 flex md:hidden"
                     @click.self="isSidebarOpen = false"
                 >
-                    <div class="w-64 bg-white dark:bg-gray-800 shadow-lg h-full">
+                    <div class="w-64 bg-white dark:bg-gray-800 shadow-lg h-full" dir
+                    >
                         <SidebarMenu />
                     </div>
                 </div>

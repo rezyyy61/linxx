@@ -73,7 +73,7 @@ const AudioSvgIcon = defineComponent({
 })
 
 /**
- * Map of icon types to actual components
+ * Map of icon types to actual sections
  */
 const iconMap = {
     image: ImageIcon,
