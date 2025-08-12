@@ -1,7 +1,5 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
-    <!-- Logo Upload -->
     <div class="flex flex-col items-center gap-4">
       <div
           class="relative w-40 h-40 md:w-48 md:h-48 border-2 border-dashed rounded-xl cursor-pointer transition flex items-center justify-center overflow-hidden group"
@@ -29,13 +27,7 @@
           </template>
         </transition>
 
-        <input
-            type="file"
-            id="logoFileInput"
-            class="hidden"
-            @change="handleLogoUpload"
-            accept="image/*"
-        />
+        <input id="logoFileInput" type="file" class="hidden" @change="handleLogoUpload" accept="image/*" />
 
         <button
             v-if="previewSrc"
@@ -60,24 +52,23 @@
       </span>
     </div>
 
-    <!-- General Info Fields -->
     <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-      <!-- Name -->
       <div class="col-span-2">
         <label class="form-label flex items-center gap-2">
-          <Icon icon="mdi:account-group" />
-          {{ $t('politicalProfile.general.groupName') }}
+          <Icon icon="mdi:account" />
+          Account name
         </label>
         <input
             type="text"
-            v-model="general.groupName"
-            class="form-input"
-            :placeholder="$t('politicalProfile.general.groupNamePlaceholder')"
+            v-model="general.userName"
+            class="form-input opacity-90"
+            readonly
         />
+        <div class="mt-1 text-xs text-zinc-500">
+          {{ $t('politicalProfile.general.accountNameHint') || 'This comes from your account.' }}
+        </div>
       </div>
 
-      <!-- Slogan -->
       <div class="col-span-2">
         <label class="form-label flex items-center gap-2">
           <Icon icon="mdi:format-quote-close" />
@@ -91,7 +82,6 @@
         />
       </div>
 
-      <!-- Entity Type -->
       <div class="col-span-2">
         <label class="form-label flex items-center gap-2 mb-2">
           <Icon icon="mdi:label" />
@@ -112,9 +102,8 @@
           >
             <Icon :icon="type.icon" class="text-3xl" />
             <span class="font-medium">{{ $t(type.labelKey) }}</span>
-
             <span
-                v-if="['party', 'collective', 'media'].includes(type.value)"
+                v-if="needsApproval(type.value) && !approvedNow"
                 class="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
             >
               {{ $t('politicalProfile.general.requiresApproval') }}
@@ -122,22 +111,41 @@
           </div>
         </div>
 
-        <transition name="fade">
+        <Transition name="fade" mode="out-in">
           <div
-              v-if="requiresApproval"
-              class="p-3 mt-3 bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 rounded-lg text-sm flex items-start gap-2"
+              v-if="isPending"
+              key="pending"
+              class="p-3 mt-3 rounded-lg text-sm flex items-start gap-2 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
           >
-            <Icon icon="mdi:shield-alert" class="text-xl flex-shrink-0" />
+            <Icon icon="mdi:clock-outline" class="text-xl flex-shrink-0" />
             <span>
-              {{ $t('politicalProfile.general.entityTypeApprovalNotice') }}
-              <br />
-              <strong>({{ general.entityType }})</strong>
+              {{ $t('politicalProfile.general.pendingReview') }}
+              <strong>({{ label(currentType) }} → {{ label(pendingType) }})</strong>
             </span>
           </div>
-        </transition>
+
+          <div
+              v-else-if="approvedNow"
+              key="approved"
+              class="p-3 mt-3 rounded-lg text-sm flex items-start gap-2 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200"
+          >
+            <Icon icon="mdi:check-decagram" class="text-xl flex-shrink-0" />
+            <span>{{ $t('politicalProfile.general.typeApproved') }} <strong>({{ label(currentType) }})</strong></span>
+          </div>
+
+          <div
+              v-else-if="unsavedNeedsApproval"
+              key="unsaved"
+              class="p-3 mt-3 rounded-lg text-sm flex items-start gap-2 bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
+          >
+            <Icon icon="mdi:shield-alert" class="text-xl flex-shrink-0" />
+            <span>{{ $t('politicalProfile.general.entityTypeApprovalNotice') }} <strong>({{ label(general.entityType) }})</strong></span>
+          </div>
+
+          <div v-else key="none"></div>
+        </Transition>
       </div>
 
-      <!-- Location -->
       <div>
         <label class="form-label flex items-center gap-2">
           <Icon icon="mdi:map-marker" />
@@ -151,7 +159,6 @@
         />
       </div>
 
-      <!-- Founded Year -->
       <div>
         <label class="form-label flex items-center gap-2">
           <Icon icon="mdi:calendar" />
@@ -166,7 +173,6 @@
       </div>
     </div>
 
-    <!-- Save Button -->
     <div class="col-span-1 lg:col-span-3 flex justify-end mt-4">
       <button
           type="button"
@@ -180,19 +186,15 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { Icon } from '@iconify/vue'
 
-const props = defineProps({
-  profile: { type: Object, default: () => ({}) }
-})
-
+const props = defineProps({ profile: { type: Object, default: () => ({}) } })
 const emit = defineEmits(['save'])
 
 const general = ref({
-  groupName: '',
+  userName: '',
   tagline: '',
   entityType: '',
   location: '',
@@ -205,9 +207,7 @@ const previewSrc = ref(null)
 
 const previewBgStyle = computed(() => {
   if (previewSrc.value) return {}
-  return general.value.avatarColor
-      ? { backgroundColor: general.value.avatarColor }
-      : { backgroundColor: '#e5e7eb' }
+  return general.value.avatarColor ? { backgroundColor: general.value.avatarColor } : { backgroundColor: '#e5e7eb' }
 })
 
 const entityTypes = [
@@ -217,22 +217,39 @@ const entityTypes = [
   { value: 'media', icon: 'mdi:television-classic', labelKey: 'politicalProfile.entityTypes.media' }
 ]
 
-const requiresApproval = computed(() =>
-    ['party', 'collective', 'media'].includes(general.value.entityType)
-)
+const currentType = computed(() => props.profile?.entity_type || '')
+const pendingType = computed(() => props.profile?.pending_entity_type || '')
+const isApprovedFlag = computed(() => !!props.profile?.entity_type_approved)
+const isPending = computed(() => !!pendingType.value && props.profile?.entity_type_approved === false)
+const approvedNow = computed(() => isApprovedFlag.value && !pendingType.value && currentType.value && currentType.value !== 'individual')
+
+const needsApproval = (t) => ['party', 'collective', 'media'].includes(t)
+const unsavedNeedsApproval = computed(() => {
+  const sel = general.value.entityType
+  if (!sel) return false
+  if (isPending.value) return false
+  return needsApproval(sel) && sel !== currentType.value
+})
+
+const label = (t) => {
+  if (t === 'individual') return 'Individual'
+  if (t === 'party') return 'Party'
+  if (t === 'collective') return 'Collective'
+  if (t === 'media') return 'Media'
+  return t || '—'
+}
 
 watch(
     () => props.profile,
-    (profile) => {
-      if (profile && Object.keys(profile).length) {
-        general.value.groupName = profile.group_name || ''
-        general.value.tagline = profile.tagline || ''
-        general.value.entityType = profile.entity_type || ''
-        general.value.location = profile.location || ''
-        general.value.foundedYear = profile.founded_year || ''
-        general.value.avatarColor = profile.avatar_color || ''
-        previewSrc.value = profile.logo_url || null
-      }
+    (p) => {
+      if (!p) return
+      general.value.userName = p.user?.name || p.user?.slug || ''
+      general.value.tagline = p.tagline || ''
+      general.value.entityType = p.entity_type || ''
+      general.value.location = p.location || ''
+      general.value.foundedYear = p.founded_year || ''
+      general.value.avatarColor = p.avatar_color || ''
+      previewSrc.value = p.logo_url || null
     },
     { immediate: true }
 )
@@ -262,23 +279,14 @@ function handleDrop(e) {
 
 function handleSave() {
   const payload = {
-    group_name: general.value.groupName,
     tagline: general.value.tagline,
     entity_type: general.value.entityType,
     location: general.value.location,
-    founded_year:
-        general.value.foundedYear != null && general.value.foundedYear !== ''
-            ? String(general.value.foundedYear)
-            : null,
+    founded_year: general.value.foundedYear != null && general.value.foundedYear !== '' ? String(general.value.foundedYear) : null,
     avatar_color: general.value.avatarColor
   }
-
-  if (general.value.logo instanceof File) {
-    payload.logo = general.value.logo
-  } else if (general.value.logo === null && previewSrc.value === null) {
-    payload.logo = null
-  }
-
+  if (general.value.logo instanceof File) payload.logo = general.value.logo
+  else if (general.value.logo === null && previewSrc.value === null) payload.logo = null
   emit('save', payload)
 }
 </script>
@@ -291,11 +299,7 @@ function handleSave() {
   @apply block mb-1 font-medium text-gray-700 dark:text-gray-300;
 }
 .fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
+.fade-leave-active { transition: opacity .3s }
 .fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
+.fade-leave-to { opacity: 0 }
 </style>

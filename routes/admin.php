@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\Auth\TwoFactorController;
 use App\Http\Controllers\Admin\Auth\TwoFactorLoginController;
 use App\Http\Controllers\Admin\Book\BookController;
 use App\Http\Controllers\Admin\Book\SuggestedBookController;
+use App\Http\Controllers\Admin\Users\UserController;
+use App\Http\Controllers\Admin\Users\UserTypeRequestController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,4 +34,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/books/{book}', [BookController::class, 'update']);
     Route::delete('/books/{book}', [BookController::class, 'destroy']);
 
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::put('users/{id}', [UserController::class, 'update']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
+    Route::get('user-type-requests', [UserTypeRequestController::class, 'index']);
+    Route::post('users/{id}/type-requests/approve', [UserTypeRequestController::class, 'approve']);
+    Route::post('users/{id}/type-requests/reject', [UserTypeRequestController::class, 'reject']);
+
+
 });
+

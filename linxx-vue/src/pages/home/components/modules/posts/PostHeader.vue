@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-between gap-4 p-4  bg-white dark:bg-gray-900" dir="ltr">
+    <div class="flex items-center justify-between gap-4 p-4 border-b  bg-white dark:bg-gray-900" dir="ltr">
         <div class="flex items-center gap-4">
             <router-link
                 :to="{ name: 'users.show', params: { slug: user.slug } }"

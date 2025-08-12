@@ -32,6 +32,7 @@ export const usePublicProfileStore = defineStore('publicProfile', () => {
         try {
             const res = await axios.get(`/api/profile/slug/${slug}`)
             profile.value = res.data.data
+            console.log(profile.value)
         } catch (err) {
             console.error('❌ Failed to fetch public profile:', err)
             error.value = err?.response?.data?.message || 'Failed to fetch public profile'

@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\Book\PublicBookController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\Event\EventController;
 use App\Http\Controllers\Api\Event\EventInviteController;
-use App\Http\Controllers\Api\Event\EventMediaController;
 use App\Http\Controllers\Api\Event\EventRsvpController;
 use App\Http\Controllers\Api\Event\Public\PublicEventController;
 use App\Http\Controllers\Api\LikeController;
@@ -34,6 +33,10 @@ Route::prefix('auth')->group(function () {
 
 // ------------------------ PROFILE ------------------------
 Route::prefix('profile')->group(function () {
+    Route::get('/', [PublicProfileController::class, 'index']);
+    Route::get('parties', [PublicProfileController::class, 'index'])->defaults('types', 'party');
+    Route::get('individuals', [PublicProfileController::class, 'index'])->defaults('group', 'individuals');
+
     Route::get('slug/{slug}', [PublicProfileController::class, 'showProfile']);
     Route::get('slug/{slug}/posts', [PublicProfileController::class, 'getPosts']);
     Route::get('slug/{slug}/posts/images', [PublicProfileController::class, 'getImagePosts']);

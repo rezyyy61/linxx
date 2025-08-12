@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Admin\Admin;
 use App\Models\Book\Book;
 use App\Models\Event\Event;
 use App\Models\Post;
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
+            'admin' => Admin::class,
             'user' => User::class,
             'post' => Post::class,
             'event' => Event::class,

@@ -35,10 +35,6 @@ v-for="f in quickFilters" :key="f"
         <h3 class="card-title">Followed parties</h3>
         <ul class="mt-3 space-y-2">
           <li v-for="p in followedParties" :key="p.slug">
-            <router-link :to="{ name: 'party_profile', params: { slug: p.slug } }" class="row hover">
-              <span class="avatar" :style="{ background: p.color }"></span>
-              <span class="truncate">{{ p.name }}</span>
-            </router-link>
           </li>
         </ul>
       </section>

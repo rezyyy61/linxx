@@ -17,6 +17,12 @@
         "announcements": "Announcements"
     },
 
+    "organizations": {
+        "title": "Political Organizations",
+        "search": "Search organizations…",
+        "empty": "No organizations found."
+    },
+
     "party": {
         "loading": "Loading information...",
         "publication_list": "Publications List",

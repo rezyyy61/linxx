@@ -2,8 +2,10 @@
 
 namespace App\Services\PoliticalProfile;
 
+use App\Mail\EntityTypeApprovalRequested;
 use App\Models\PoliticalProfile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class PoliticalProfileUpdater
@@ -12,8 +14,8 @@ class PoliticalProfileUpdater
     {
         return DB::transaction(function () use ($data, $profile) {
             $fillableFields = $profile->getFillable();
-
             $toUpdate = [];
+            $requestedTypeForEmail = null;
 
             foreach ($fillableFields as $field) {
                 if (!array_key_exists($field, $data)) continue;
@@ -26,6 +28,7 @@ class PoliticalProfileUpdater
                     if ($newType !== $currentType && $newType !== 'individual') {
                         $profile->pending_entity_type = $newType;
                         $profile->entity_type_approved = false;
+                        $requestedTypeForEmail = $newType;
                     } elseif ($newType === 'individual') {
                         $toUpdate[$field] = $newType;
                         $profile->pending_entity_type = null;
@@ -45,6 +48,12 @@ class PoliticalProfileUpdater
             $this->handleLinks($profile, $data);
             $this->handleIdeologies($profile, $data['ideologies'] ?? []);
             $this->handleFiles($profile, $data);
+
+            if ($requestedTypeForEmail && $profile->user?->email) {
+                DB::afterCommit(function () use ($profile, $requestedTypeForEmail) {
+                    Mail::to($profile->user->email)->queue(new EntityTypeApprovalRequested($profile->fresh('user'), $requestedTypeForEmail));
+                });
+            }
 
             return $profile->load(['links', 'ideologies', 'files']);
         });

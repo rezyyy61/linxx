@@ -30,14 +30,4 @@ class PoliticalProfileService
             ->first();
     }
 
-    public function listOrganizations(int $perPage = 12)
-    {
-        return PoliticalProfile::with(
-            'links',
-            'ideologies',
-            'files'
-        )->organizations()
-            ->latest()
-            ->paginate($perPage);
-    }
 }

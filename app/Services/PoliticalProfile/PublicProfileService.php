@@ -9,20 +9,50 @@ class PublicProfileService
 {
     public function getProfileBySlug(string $slug): ?PoliticalProfile
     {
-        $query = PoliticalProfile::query();
+        return PoliticalProfile::query()
+            ->whereHas('user', fn($q) => $q->where('slug', $slug))
+            ->with(['links','ideologies','files','user'])
+            ->first();
+    }
 
-        $query->whereHas('user', function ($q) use ($slug) {
-            $q->where('slug', $slug);
-        });
+    public function listProfiles(?array $types, array $filters = [], int $perPage = 12)
+    {
+        $q = PoliticalProfile::query()
+            ->with(['user'])
+            ->when($types, fn($qq) => $qq->ofTypes($types));
 
-        $query->with([
-            'links',
-            'ideologies',
-            'files',
-            'user'
-        ]);
+        if (!empty($filters['q'])) {
+            $term = $filters['q'];
+            $q->where(function ($qq) use ($term) {
+                $qq->where('group_name', 'like', "%$term%")
+                    ->orWhere('tagline', 'like', "%$term%")
+                    ->orWhere('location', 'like', "%$term%");
+            });
+        }
 
-        return $query->first();
+        if (!empty($filters['location'])) {
+            $q->where('location', 'like', '%'.$filters['location'].'%');
+        }
+
+        if (!empty($filters['year_from'])) {
+            $q->where('founded_year', '>=', $filters['year_from']);
+        }
+
+        if (!empty($filters['year_to'])) {
+            $q->where('founded_year', '<=', $filters['year_to']);
+        }
+
+        return $q->latest()->paginate($perPage);
+    }
+
+    public function listOrganizations(array $filters = [], int $perPage = 12)
+    {
+        return $this->listProfiles(PoliticalProfile::ORG_TYPES, $filters, $perPage);
+    }
+
+    public function listIndividuals(array $filters = [], int $perPage = 12)
+    {
+        return $this->listProfiles(['individual'], $filters, $perPage);
     }
 
     public function getPaginatedPostsBySlug(string $slug, int $perPage = 10)
@@ -50,19 +80,13 @@ class PublicProfileService
         $user = User::where('slug', $slug)->firstOrFail();
 
         $query = $user->posts()
-            ->with('media')
-            ->with('likes')
-            ->with('comments')
+            ->with('media', 'likes', 'comments')
             ->latest();
 
         if ($type !== null) {
-            $query->whereHas('media', function ($q) use ($type) {
-                $q->where('type', $type);
-            });
+            $query->whereHas('media', fn($q) => $q->where('type', $type));
         }
 
         return $query->paginate($perPage);
     }
-
-
 }

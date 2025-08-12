@@ -18,9 +18,6 @@
         <EdgeAction icon="mdi:bell-outline" :badge="counts.notifications" label="Notifications" @click="$emit('open-notifications')" />
       </div>
       <div class="scale-90">
-        <EdgeAction icon="mdi:email-outline" :badge="counts.messages" label="Messages" @click="$emit('open-messages')" />
-      </div>
-      <div class="scale-90">
         <EdgeAction icon="mdi:pencil-plus" label="New Post" highlight @click="openCreatePostModal" />
       </div>
 

@@ -1,5 +1,6 @@
 <template>
-    <div class="space-y-6">
+  <div class="min-h-screen pt-6 pb-12 bg-gray-50 dark:bg-gray-900">
+    <div>
         <h2 class="text-xl font-bold text-gray-800 dark:text-white border-b border-red-400 pb-2">لیست احزاب</h2>
 
         <div class="space-y-3">
@@ -26,15 +27,14 @@
             </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
     name: "PartiesList",
     methods: {
-        goToParty(id) {
-            this.$router.push({ name: "party_profile", params: { id } });
-        },
+
     },
 };
 </script>

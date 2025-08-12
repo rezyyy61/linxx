@@ -51,9 +51,6 @@ export default {
         };
     },
     methods: {
-        goToParty(id) {
-            this.$router.push({ name: "party_profile", params: { id } });
-        },
     },
 };
 </script>

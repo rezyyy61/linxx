@@ -18,7 +18,7 @@ export default [
             {
                 path: 'users',
                 name: 'admin.users',
-                component: () => import('@/admin/pages/UsersPage.vue'),
+                component: () => import('@/admin/pages/Users/UsersIndex.vue'),
                 meta: { requiresAdmin: true }
             },
             {
