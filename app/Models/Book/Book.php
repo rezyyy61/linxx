@@ -4,6 +4,8 @@ namespace App\Models\Book;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model
 {
@@ -21,12 +23,16 @@ class Book extends Model
         'download_count',
     ];
 
-    public function category()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function category(): BelongsTo
     {
         return $this->belongsTo(BookCategory::class, 'category_id');
     }
 
-    public function uploader()
+    public function uploader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uploaded_by');
     }
@@ -38,7 +44,7 @@ class Book extends Model
             ->withTimestamps();
     }
 
-    public function reviews()
+    public function reviews(): HasMany
     {
         return $this->hasMany(BookReview::class);
     }

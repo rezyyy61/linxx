@@ -56,11 +56,8 @@ import UserAvatar from '@/pages/auth/UserAvatar.vue'
 const open = ref(false)
 const authStore = useAuthStore()
 
-// On mount, fetch user if not already loaded
 onMounted(async () => {
-  if (!authStore.user) {
-    await authStore.fetchUser()
-  }
+  await authStore.ensureUser()
 })
 
 // Data from authStore

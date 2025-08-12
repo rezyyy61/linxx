@@ -394,7 +394,7 @@ function downloadICS(e) {
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url)
 }
 
-// share
+// shares
 const canShare = typeof navigator !== 'undefined' && !!navigator.share
 async function shareEvent() { try { await navigator.share({ title: ev.value?.title, text: ev.value?.description, url: window.location.href }) } catch {} }
 

@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Book\Book;
+use App\Models\Event\Event;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Relation::enforceMorphMap([
+            'user' => User::class,
+            'post' => Post::class,
+            'event' => Event::class,
+            'book'  => Book::class,
+        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Share\Share;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class Post extends Model
         'visibility',
         'status',
         'is_archived',
+        'share_id'
     ];
 
     protected $casts = [
@@ -48,6 +50,23 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function share(): BelongsTo
+    {
+        return $this->belongsTo(Share::class);
+    }
+
+    public function getIsReshareAttribute(): bool
+    {
+        return !is_null($this->share_id);
+    }
+
+    public function getOriginalPostAttribute(): ?Post
+    {
+        return ($this->share && $this->share->shareable instanceof Post)
+            ? $this->share->shareable
+            : null;
     }
 
     public function isLikedBy($user): bool

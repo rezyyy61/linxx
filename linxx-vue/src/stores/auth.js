@@ -6,15 +6,35 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     token: localStorage.getItem('token') || null,
-    pendingVerificationEmail: localStorage.getItem('pendingVerificationEmail') || null
+    pendingVerificationEmail: localStorage.getItem('pendingVerificationEmail') || null,
+    userLoading: false,
+    _ensurePromise: null,
   }),
 
   getters: {
     isAuthenticated: (state) => !!state.token,
-    getUser: (state) => state.user
+    getUser: (state) => state.user,
+    safeUser: (s) => s.user ?? { id: null, slug: '', email: '', avatar_color: null, logo_url: null },
+    currentUserId: (s) => s.user?.id ?? s.user?.data?.id ?? null
   },
 
   actions: {
+    async ensureUser() {
+      if (!this.token) return null
+      if (this.user) return this.user
+      if (this._ensurePromise) return this._ensurePromise
+
+      this.userLoading = true
+      this._ensurePromise = this.fetchUser()
+          .catch((e) => { throw e })
+          .finally(() => {
+            this.userLoading = false
+            this._ensurePromise = null
+          })
+
+      return this._ensurePromise
+    },
+
     async register(payload) {
       try {
         await axios.post('/api/auth/register', payload)
@@ -88,7 +108,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         this.setAxiosHeader()
         const response = await axios.get('/api/me')
-        this.user = response.data
+        this.user = this.normalizeUser(response.data)
       } catch (error) {
         this.clearAuth()
         window.location.href = '/login'
@@ -116,9 +136,13 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    normalizeUser(u) {
+      return u?.data ?? u ?? null
+    },
+
     setAuthData(token, user) {
       this.token = token
-      this.user = user
+      this.user = this.normalizeUser(user)
       localStorage.setItem('token', token)
       this.setAxiosHeader()
     },

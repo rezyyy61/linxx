@@ -39,12 +39,14 @@
 
     "processingMedia": "Media is being processed",
 
-    "share": {
+    "shares": {
         "key": {
             "title": "Share Post",
             "placeholder": "Add your comment...",
+            "hint": "Write your comment or description about this post.",
             "action": "Share Now",
-            "sending": "Sharing..."
+            "sending": "Sharing...",
+            "cancel": "Cancel"
         }
     }
 

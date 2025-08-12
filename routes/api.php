@@ -16,6 +16,10 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\Profile\PoliticalProfileController;
 use App\Http\Controllers\Api\Profile\PublicProfileController;
 use App\Http\Controllers\Api\PublicationController;
+use App\Http\Controllers\Api\Share\ReshareController;
+use App\Http\Controllers\Api\Share\RevokeShareController;
+use App\Http\Controllers\Api\Share\ShowShareController;
+use App\Http\Controllers\Api\Share\StoreShareController;
 use App\Http\Controllers\Api\VideoPostController;
 use App\Http\Middleware\OptionalAuth;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +44,7 @@ Route::prefix('profile')->group(function () {
 
 // ------------------------ POSTS ------------------------
 Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{id}', [PostController::class, 'show']);
 Route::get('/posts/{post}/likes-preview', [LikeController::class, 'preview']);
 
 // ------------------------ VIDEOS ------------------------
@@ -98,6 +103,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // POSTS
     Route::post('/posts', [PostController::class, 'store']);
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
+    Route::post('/reshare', ReshareController::class)->name('shares.reshare');
 
     // COMMENTS
     Route::prefix('comments')->group(function () {
@@ -129,5 +135,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/events/{event}/invites', [EventInviteController::class, 'store']);
     Route::patch('/event-invites/{invite}', [EventInviteController::class, 'respond']);
     Route::delete('/event-invites/{invite}', [EventInviteController::class, 'destroy']);
+
+    //SHARES
+    Route::post('/shares', StoreShareController::class)->name('shares.store');
+    Route::get('/shares/{slug}', ShowShareController::class)->name('shares.show');
+    Route::post('/shares/{id}/revoke', RevokeShareController::class)->name('shares.revoke');
 
 });

@@ -7,6 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Services\PostService;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class PostController extends Controller
 {
@@ -22,10 +23,9 @@ class PostController extends Controller
         $media = [
             'images' => $request->file('images', []),
             'videos' => array_filter([$request->file('video')]),
-            'audio' => array_filter([$request->file('audio')]),
+            'audio'  => array_filter([$request->file('audio')]),
             'files'  => $request->file('files', []),
         ];
-
 
         $post = $this->postService->createPost(
             $request->validated(),
@@ -38,20 +38,50 @@ class PostController extends Controller
             'post_id'   => $post->id,
             'mediaJobs' => $post->media->pluck('id'),
         ]);
-
     }
 
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index()
     {
-        $posts = Post::with([
-            'user.politicalProfile',
-            'media',
-            'likes.user',
-        ])
+        $posts = Post::query()
+            ->with([
+                'user.politicalProfile',
+                'media',
+                'likes.user',
+                'comments',
+                'share',
+                // morphWith برای هر نوع shareable
+                'share.shareable' => function (MorphTo $morphTo) {
+                    $morphTo->morphWith([
+                        \App\Models\Post::class => ['user.politicalProfile', 'media'],
+                        \App\Models\Event\Event::class => ['user.politicalProfile'],
+                    ]);
+                },
+            ])
             ->latest()
             ->paginate(10);
 
         return PostResource::collection($posts);
+    }
+
+    public function show(int $id): PostResource
+    {
+        $post = Post::query()
+            ->with([
+                'user.politicalProfile',
+                'media',
+                'likes.user',
+                'comments',
+                'share',
+                'share.shareable' => function (MorphTo $morphTo) {
+                    $morphTo->morphWith([
+                        \App\Models\Post::class => ['user.politicalProfile', 'media'],
+                        \App\Models\Event\Event::class => ['user.politicalProfile'],
+                    ]);
+                },
+            ])
+            ->findOrFail($id);
+
+        return new PostResource($post);
     }
 
 }

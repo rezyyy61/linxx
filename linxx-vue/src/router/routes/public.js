@@ -77,6 +77,12 @@ export default [
                 path: '/books/:slug/read',
                 name: 'book.read',
                 component: () => import('@/pages/home/components/modules/books/BookReader.vue'),
+            },
+            {
+                path: '/posts/:id/:slug?',
+                name: 'post.show',
+                component: () => import('@/pages/home/components/modules/posts/PostShow.vue'),
+                props: route => ({ id: Number(route.params.id || 0), slug: route.params.slug || '' })
             }
 
 
