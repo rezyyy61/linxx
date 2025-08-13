@@ -1,0 +1,178 @@
+{
+
+    "_comment_about": "این بخش مربوط به ترجمه Dashboard است",
+
+        "sections": {
+            "general": "General Information",
+            "ideologies": "Ideological Positions",
+            "description": "Full Description",
+            "links": "Social Media & Links",
+            "files": "Logo & Manifesto",
+            "submit": "Final Submission"
+        },
+        "placeholders": {
+            "general": "Fill in name, type, year, location...",
+            "ideologies": "Choose or add political ideologies",
+            "description": "Describe your mission and background",
+            "links": "Provide website and social links",
+            "files": "Upload your logo and manifesto file",
+            "submit": "Submit and publish your profile"
+        },
+
+    "general": {
+        "save": "Save",
+        "groupName": "Group or Person Name",
+        "groupNamePlaceholder": "e.g. Solidarity Workers Collective",
+        "tagline": "Slogan / Short Description",
+        "taglinePlaceholder": "e.g. Anti-capitalist voices from the margins",
+        "entityType": "Entity Type",
+        "entityTypePlaceholder": "Choose your entity type",
+        "uploadButton": "Upload Logo",
+        "logoPlaceholder": "Upload Logo",
+        "entityTypeApprovalNotice": "Your request will be submitted, but your profile will not be public until it is approved by an admin.",
+        "requiresApproval": "Requires approval",
+        "changeLogo": "Change Logo",
+
+        "types": {
+            "party": "Political Party",
+            "collective": "Collective / Network",
+            "media": "Media",
+            "individual": "Individual Activist"
+        },
+        "location": "Location",
+        "locationPlaceholder": "e.g. Berlin, Germany",
+        "foundedYear": "Founded Year",
+        "foundedYearPlaceholder": "e.g. 2010"
+    },
+
+    "entityTypes": {
+        "individual": "Individual",
+        "party": "Party",
+        "collective": "Collective",
+        "media": "Media"
+    },
+
+    "ideologies": {
+        "label": "Political Ideologies",
+        "keywordsLabel": "Keywords",
+        "optional": "Optional",
+        "addButton": "Add",
+        "keywordsPlaceholder": "e.g. anti-war, social justice, self-determination",
+        "customLabel": "Add Custom Ideology",
+        "list": {
+            "socialism": "Socialism",
+            "feminism": "Feminism",
+            "anarchism": "Anarchism",
+            "environmentalism": "Environmentalism",
+            "antiCapitalism": "Anti-Capitalism",
+            "marxism": "Marxism",
+            "humanRights": "Human Rights"
+        }
+    },
+    "description": {
+        "about": "About Us",
+        "goals": "Goals",
+        "activities": "Activities",
+        "structure": "Structure",
+        "optional": "Optional",
+        "placeholder": "Write your description here...",
+        "tabs": {
+            "text": "Write Text",
+            "files": "Upload Files"
+        },
+        "uploadHint": "Click or drag and drop files here to upload",
+        "files": "files"
+    },
+
+    "links": {
+        "title": "Links",
+        "officialLinks": "Official Links",
+        "customLinks": "Custom Links",
+        "addNew": "Add New Link",
+        "hideForm": "Hide Form",
+        "addButton": "Add Link",
+        "remove": "Remove Link",
+        "validationError": "Please enter a valid title and URL.",
+        "placeholders": {
+            "title": "Link title (e.g. YouTube Channel)",
+            "url": "Link URL (https://...)"
+        }
+    },
+    "contact": {
+        "website": "Website",
+        "youtube": "YouTube",
+        "twitter": "Twitter",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "telegram": "Telegram",
+        "email": "Email",
+        "phone": "Phone",
+        "placeholders": {
+            "website": "Website URL",
+            "youtube": "YouTube URL",
+            "twitter": "Twitter link",
+            "facebook": "Facebook link",
+            "instagram": "Instagram link",
+            "telegram": "Telegram link",
+            "email": "Email address",
+            "phone": "Phone number"
+        }
+    },
+
+    "submit": {
+        "title": "Review & Submit",
+        "subtitle": "Please review all information before sending.",
+        "confirmText": "I confirm that the above information is correct.",
+        "button": "Submit",
+        "sending": "Sending...",
+        "success": "✅ Profile submitted successfully!"
+    },
+
+    "_comment_about2": "این بخش مربوط به ترجمه Public است",
+
+    "list": {
+        "title": "List of Political Parties",
+        "loading": "Loading...",
+        "error": "Error"
+    },
+
+    "description-public": {
+        "about_title": "About the Group",
+        "about": "Introduction",
+        "goals": "Goals",
+        "activities": "Activities",
+        "structure": "Structure",
+        "attachments": "Attachments",
+        "no_content": "No content has been added for this section.",
+        "download": "Download"
+    },
+
+    "profileMenu": {
+        "posts": "Posts",
+        "about": "About",
+        "videos": "Videos",
+        "photos": "Photos",
+        "files": "Files",
+        "contact": "Contact",
+        "noPosts": "No posts available for this profile.",
+        "programs": "Programs",
+        "search": "Search...",
+        "activeTab": "Active Tab"
+    },
+
+    "sidebar": {
+        "title": "Additional Info"
+    },
+
+    "errors": {
+        "profile_load": "An error occurred while loading the profile. Please try again."
+    },
+
+    "messages": {
+        "saveSuccess": "✅ Profile saved successfully.",
+        "saveFailed": "❌ Failed to save profile.",
+        "validationError": "⚠️ Please fill out all required fields correctly."
+    }
+
+}
+

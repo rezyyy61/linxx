@@ -1,0 +1,146 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                USER_UID: ${UID:-1000}
+                USER_GID: ${GID:-1000}
+        image: linxx_app
+        container_name: linxx_app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - ./docker-config/php/php.ini:/usr/local/etc/php/php.ini
+        environment:
+            CLAMAV_SOCKET: tcp://clam:3310
+        depends_on:
+            mysql:
+                condition: service_started
+            redis:
+                condition: service_started
+            clam:
+                condition: service_healthy
+        networks:
+            - linxx_net
+
+
+    webserver:
+        image: nginx:alpine
+        container_name: linxx_nginx
+        restart: unless-stopped
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/var/www
+            - ./docker-config/nginx/:/etc/nginx/conf.d
+        depends_on:
+            - app
+        networks:
+            - linxx_net
+
+    mysql:
+        image: mysql:8.0
+        container_name: linxx_mysql
+        restart: unless-stopped
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-linxx_db}
+            MYSQL_USER: ${MYSQL_USER:-linxx_user}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        volumes:
+            - linxx_mysql_data:/var/lib/mysql
+            - ./docker-config/mysql/mysql.cnf:/etc/mysql/my.cnf:ro
+        networks:
+            - linxx_net
+
+    redis:
+        image: redis:alpine
+        container_name: linxx_redis
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        networks:
+            - linxx_net
+
+    clam:
+        image: clamav/clamav:latest
+        container_name: linxx_clamav
+        restart: unless-stopped
+        ports:
+            - "3310:3310"
+        volumes:
+            - ./storage/app/private/tmp:/var/www/storage/app/private/tmp
+        healthcheck:
+            test: [ "CMD-SHELL", "clamdscan --version || exit 1" ]
+            interval: 90s
+            timeout: 10s
+            retries: 3
+        networks:
+            - linxx_net
+
+
+    queue-default:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: linxx_app
+        container_name: linxx_queue_default
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan queue:work --queue=default,emails,notifications,high,low --tries=3 --timeout=90
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+            - redis
+        networks:
+            - linxx_net
+
+
+    queue-media:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: linxx_app
+        container_name: linxx_queue_media
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan queue:work --queue=media --tries=3 --timeout=300
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+            - redis
+        networks:
+            - linxx_net
+
+
+    reverb:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: linxx_app
+        container_name: linxx_reverb
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan reverb:start
+        ports:
+            - "6001:6001"
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - app
+        networks:
+            - linxx_net
+
+
+volumes:
+    linxx_mysql_data:
+
+networks:
+    linxx_net:
+        driver: bridge

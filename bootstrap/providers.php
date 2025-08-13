@@ -5,4 +5,5 @@ return [
     App\Providers\BroadcastServiceProvider::class,
     App\Providers\OpenAiServiceProvider::class,
     App\Services\Share\ShareServiceProvider::class,
+    App\Providers\NotificationServiceProvider::class,
 ];

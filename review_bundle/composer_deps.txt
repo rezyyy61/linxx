@@ -1,0 +1,21 @@
+fakerphp/faker                 v1.24.1  Faker is a PHP library that generates fake data for you.
+guzzlehttp/guzzle              7.9.3    Guzzle is a PHP HTTP client library
+intervention/image             3.11.3   PHP image manipulation
+intervention/image-laravel     1.5.6    Laravel Integration of Intervention Image
+laravel/framework              v12.19.3 The Laravel Framework.
+laravel/pail                   v1.2.3   Easily delve into your Laravel application's log files directly from the command line.
+laravel/pint                   v1.22.1  An opinionated code formatter for PHP.
+laravel/reverb                 v1.5.1   Laravel Reverb provides a real-time WebSocket communication backend for Laravel applications.
+laravel/sail                   v1.43.1  Docker files for running a basic Laravel application.
+laravel/sanctum                v4.1.1   Laravel Sanctum provides a featherweight authentication system for SPAs and simple APIs.
+laravel/socialite              v5.23.0  Laravel wrapper around OAuth 1 & OAuth 2 libraries.
+laravel/tinker                 v2.10.1  Powerful REPL for the Laravel framework.
+mockery/mockery                1.6.12   Mockery is a simple yet flexible PHP mock object framework
+nunomaduro/collision           v8.8.2   Cli error handling for console/command-line PHP applications.
+openai-php/client              v0.14.0  OpenAI PHP is a supercharged PHP API client that allows you to interact with the Open AI API
+pbmedia/laravel-ffmpeg         8.7.1    FFMpeg for Laravel
+phpunit/phpunit                11.5.25  The PHP Unit Testing framework.
+spatie/laravel-image-optimizer 1.8.2    Optimize images in your Laravel app
+spatie/laravel-permission      6.21.0   Permission handling for Laravel 8.0 and up
+spomky-labs/otphp              11.3.0   A PHP library for generating one time passwords according to RFC 4226 (HOTP Algorithm) and the RF...
+xenolope/quahog                v3.0.0   A PHP client library for ClamAV clamd daemon

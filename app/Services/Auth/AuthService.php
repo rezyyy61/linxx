@@ -34,7 +34,6 @@ class AuthService
 
         PoliticalProfile::create([
             'user_id'      => $user->id,
-            'group_name'   => $user->name,
             'entity_type'  => 'individual',
             'tagline'      => '',
             'avatar_color' => $randomColor,

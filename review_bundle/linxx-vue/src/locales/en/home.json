@@ -1,0 +1,183 @@
+{
+    "welcome": "Welcome to the App",
+    "nav": {
+        "home": "Home",
+        "register": "Register",
+        "login": "Login",
+        "logout": "Logout"
+    },
+    "tabs": {
+        "feed": "Feed",
+        "parties": "Parties",
+        "books": "Books",
+        "media": "Media",
+        "campaigns": "Campaigns",
+        "profiles": "Profiles",
+        "events": "Events",
+        "announcements": "Announcements"
+    },
+
+    "organizations": {
+        "title": "Political Organizations",
+        "search": "Search organizations…",
+        "empty": "No organizations found."
+    },
+
+    "party": {
+        "loading": "Loading information...",
+        "publication_list": "Publications List",
+        "view_file": "View file",
+        "no_description": "No description provided.",
+        "no_publications": "No publications found."
+    },
+
+    "books": {
+        "title": "Books",
+        "cover_alt": "Book cover",
+        "unknown_author": "Unknown author",
+        "views": "Views:",
+        "downloads": "Downloads:",
+        "loading_more": "Loading more books...",
+        "search_placeholder": "Search for a book...",
+        "all_categories": "All Categories",
+        "all_prices": "All Prices",
+        "free": "Free",
+        "paid": "Paid",
+        "sort_newest": "Newest",
+        "sort_popular": "Most popular",
+        "sort_downloads": "Most downloads",
+        "sort_rating": "Top rated",
+        "sort_views": "Most views",
+        "reviews_section": "User Reviews",
+        "your_rating": "Your Rating",
+        "your_review": "Your Review",
+        "submit_review": "Submit Review",
+        "review_placeholder": "Write your review here...",
+        "no_reviews_yet": "No reviews yet.",
+        "anonymous": "Anonymous User",
+        "loading_book": "Loading book details...",
+        "back_to_list": "Back to book list",
+        "reviews": "Review",
+        "loading_reviews": "Loading reviews...",
+        "must_login_to_review": "You must be logged in to leave a review.",
+        "login_now": "Login now",
+        "download_now": "Download Now",
+        "read_now": "Read Online",
+        "night_mode": "Night mode",
+        "day_mode": "Day mode",
+        "reader_footer": "For a better experience use full-screen mode.",
+        "reader_unavailable": "Online reader is not available for this file.",
+        "suggest_book": "📚 Suggest a Book",
+        "suggest_title": "📚 Suggest a Book",
+        "title_label": "Book Title",
+        "author_label": "Author Name",
+        "description_label": "Short Description",
+        "link_label": "Link or Source",
+        "optional": "Optional",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "cover_upload": "Upload Book Cover",
+        "file_upload": "Upload PDF File",
+        "remove_file": "Remove file",
+        "translator_label": "Translator",
+        "must_login": "To suggest a book, please log in first.",
+        "suggestion_success": "✅ Your suggestion was submitted successfully.",
+        "submit_failed": "❌ Failed to submit your suggestion."
+    },
+
+    "event": {
+        "title": "Events",
+        "refresh": "Refresh",
+        "retry": "Retry",
+        "empty": "No events found.",
+        "live": "Live now",
+        "today": "Today",
+        "daysLeft": "{n} days left",
+        "ended": "Ended",
+        "view": "View details",
+        "loadMore": "Load more",
+        "descriptionFallback": "No description provided",
+        "locationFallback": "Unknown location",
+        "addToCalendar": "Add to calendar",
+        "addToCalendarShort": "Add to calendar",
+        "defaultCoverAlt": "Default event cover",
+        "addToGoogle": "Add to Google",
+        "share": "Share",
+        "noDescription": "No description provided.",
+        "attachment": {
+            "generic": "Attachment ({ext})"
+        },
+        "show": {
+            "organizer": "Organizer",
+            "back": "Back to events",
+            "whenEventTz": "When (event time)",
+            "whenLocal": "Your local time",
+            "where": "Where",
+            "openMap": "Open in Maps",
+            "online": "Online",
+            "joinLink": "Join link",
+            "streamLink": "Stream link",
+            "accessCode": "Access code",
+            "attachments": "Attachment",
+            "download": "Download",
+            "meta": "Event details",
+            "actions": "Actions",
+            "timezone": "Timezone",
+            "visibility": "Visibility",
+            "status": "Status",
+            "when": "When",
+            "timeModeEvent": "Event time",
+            "timeModeLocal": "Local time"
+        },
+        "filters": {
+            "search_placeholder": "Search events…",
+            "apply": "Apply",
+            "reset": "Reset",
+
+            "type": {
+                "label": "Type",
+                "all": "All types"
+            },
+            "mode": {
+                "label": "Mode",
+                "all": "All modes",
+                "offline": "In-person",
+                "online": "Online",
+                "hybrid": "Hybrid"
+            },
+            "date": {
+                "label": "Date",
+                "any": "Any time",
+                "today": "Today",
+                "tomorrow": "Tomorrow",
+                "next7": "Next 7 days",
+                "next30": "Next 30 days"
+            }
+        },
+
+        "types": {
+            "rally_protest": "Rally / Protest",
+            "town_hall": "Town hall",
+            "meeting_internal": "Internal meeting",
+            "training": "Training",
+            "webinar": "Webinar",
+            "fundraiser": "Fundraiser"
+        },
+        "rsvp": {
+            "title": "Attendance",
+            "going": "Going",
+            "interested": "Interested",
+            "cancel": "Cancel RSVP",
+            "countGoing": "going",
+            "countInterested": "interested",
+            "capacity": "Capacity"
+        }
+    },
+
+    "common": {
+        "copy": "Copy",
+        "copyLink": "Copy link",
+        "showMore": "Show more",
+        "showLess": "Show less"
+    }
+}

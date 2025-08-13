@@ -1,0 +1,260 @@
+{
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "dashboard_home": "Dashboard",
+    "new_post": "New Post",
+    "publications": "Publications",
+    "drafts": "Drafts",
+    "scheduled": "Scheduled",
+    "media_library": "Media Library",
+    "campaigns": "Campaigns",
+    "events": "Events",
+    "announcements": "Announcements",
+    "templates": "Templates",
+    "moderation": "Moderation",
+    "my_posts": "My Posts",
+    "archive": "Archive",
+    "political_profile": "Political Profile",
+    "settings": "Settings",
+
+    "publication": {
+        "title": "Publication Management",
+        "new": "New Publication",
+
+        "tip_message": "Please upload the publication file before filling in the information.",
+        "title_form": "Publication Submission Form",
+        "file_note": "File must be PDF, DOC, or DOCX and up to 20 MB in size.",
+        "basic_info": "Basic Information",
+        "issue": "Issue Number",
+        "published_at": "Published Date",
+        "description_title": "Description",
+        "description": "A brief description of this publication issue",
+        "upload_file": "Upload Publication File",
+        "file": "Publication File",
+        "remove_file": "Remove File",
+        "uploading": "Uploading file...",
+        "submit": "Submit Publication",
+        "suggest_description": "✦ AI Suggested Description",
+        "loading": "Generating description...",
+        "missing_fields": "Please enter both title and file.",
+        "file_too_large": "File size must not exceed 10 MB.",
+        "upload_success": "Publication submitted successfully.",
+        "upload_error": "There was an error submitting the publication.",
+        "ai_description_loaded": "AI-generated description loaded successfully.",
+        "no_ai_response": "No response received from AI.",
+        "ai_error": "An error occurred while fetching the AI description.",
+        "suggested_description_applied": "AI-suggested description applied.",
+        "validation_failed": "Please check the form errors.",
+        "title_required": "Title is required.",
+        "file_required": "File is required.",
+        "file_invalid_type": "File must be a PDF or DOC format.",
+        "select_file_first": "Please upload the publication file before generating a smart description.",
+
+
+        "search_placeholder": "Search by title or issue...",
+        "loadingList": "Loading...",
+        "empty": "No publications found.",
+        "label": "No Issue",
+        "download": "Download",
+        "delete": "Delete",
+        "confirm_delete": "Are you sure you want to delete this item?",
+        "delete_success": "Successfully deleted.",
+        "delete_error": "Error deleting file.",
+        "read_more": "Read more",
+        "read_less": "Show less",
+
+        "badge": "Official Publication",
+        "format": "Format",
+        "view": "View / Download",
+        "defaultTitle": "Publication",
+        "defaultFile": "Publication File"
+
+    },
+
+    "breadcrumb": {
+        "home": "Dashboard"
+    },
+    "common": {
+        "retry_error": "Something went wrong. Please try again.",
+        "retry": "Retry",
+        "cancel": "Cancel",
+        "sending": "Sending…"
+    },
+    "event": {
+        "title": "Events",
+        "createTitle": "Create Event",
+        "editTitle": "Edit Event",
+        "desc": "Create your first event to get started.",
+        "cta": "Create event",
+        "location_fallback": "Location not set",
+        "header": {
+            "title": "Events",
+            "subtitle": "Create, edit, and manage your events with ease."
+        },
+        "search": {
+            "placeholder": "Search events..."
+        },
+        "filters": {
+            "status": {
+                "all": "All statuses",
+                "active": "Active",
+                "draft": "Draft",
+                "cancelled": "Cancelled"
+            }
+        },
+        "sections": {
+            "general": "General Information",
+            "time": "Time & Schedule",
+            "location": "Location",
+            "media": "Media"
+        },
+        "fields": {
+            "title": "Title",
+            "description": "Description",
+            "type": "Type",
+            "visibility": "Visibility",
+            "mode": "Mode",
+            "startDate": "Start Date",
+            "startTime": "Start Time",
+            "endDate": "End Date",
+            "endTime": "End Time",
+            "timezone": "Timezone",
+            "city": "City",
+            "venue": "Venue Name",
+            "address": "Address",
+            "venue_name": "Venue",
+            "country": "country",
+            "cover": "Cover photo",
+            "attachment": "Attachment",
+            "start_date": "Start date",
+            "start_time": "Start time",
+            "end_date": "End date",
+            "end_time": "End time",
+            "platform": "Platform",
+            "link": "Meeting link",
+            "access_code": "Access code",
+            "type_custom_hint": "If it isn’t in the list, type your custom event type above."
+        },
+        "placeholders": {
+            "title": "Political Party Meeting",
+            "description": "Describe your event...",
+            "type": "Select event type...",
+            "city": "Tehran",
+            "venue": "City Hall",
+            "address": "Street, District..."
+        },
+        "visibility": {
+            "public": "Public",
+            "unlisted": "Unlisted",
+            "private": "Private"
+        },
+        "mode": {
+            "offline": "Offline",
+            "online": "Online",
+            "hybrid": "Hybrid"
+        },
+        "types": {
+            "rally_protest": "Rally / Protest",
+            "town_hall": "Town hall (Q&A)",
+            "meeting_internal": "Internal meeting",
+            "training": "Training / Workshop",
+            "webinar": "Webinar / Online event",
+            "fundraiser": "Fundraiser",
+            "custom": "Custom"
+        },
+        "actions": {
+            "create": "Create Event",
+            "reset": "Reset",
+            "save": "Save",
+            "new": "New Event",
+            "back": "Back",
+            "edit": "Edit",
+            "delete": "Delete",
+            "deleting": "Deleting…",
+            "invite": "Invite"
+        },
+        "messages": {
+            "created": "Event created successfully!"
+        },
+        "hints": {
+            "autoSave": "Fill the required fields and click Create.",
+            "timezone": "Times are saved in the selected timezone."
+        },
+        "preview": {
+            "title": "Live preview",
+            "placeholderTitle": "Event title",
+            "start": "Starts",
+            "end": "Ends",
+            "placeholderDesc": "A short description of your event..."
+        },
+        "common": {
+            "back": "Back",
+            "next": "Next",
+            "choose_image": "Choose image",
+            "choose_file": "Choose file",
+            "replace": "Replace",
+            "remove": "Remove"
+        },
+        "state": {
+            "live": "Live now",
+            "upcoming": "Upcoming",
+            "today": "Today",
+            "days_left": "in {n} days",
+            "ended": "Ended"
+        },
+        "invite": {
+            "title": "Invite user",
+            "user_id_label": "User ID",
+            "user_id_placeholder": "Enter user ID",
+            "send": "Send invite",
+            "success": "Invitation sent",
+            "error": "Failed to send invite"
+        },
+        "list": {
+            "empty": {
+                "title": "No events found",
+                "desc": "Try adjusting filters or create a new event.",
+                "cta": "Create your first event"
+            },
+            "location_fallback": "Location not set"
+        },
+        "statuses": {
+            "draft": "Draft",
+            "published": "Published",
+            "cancelled": "Cancelled",
+            "archived": "Archived"
+        },
+        "statusActions": {
+            "publish": "Publish",
+            "moveToDraft": "Move to draft",
+            "cancel": "Cancel event",
+            "restore": "Restore event",
+            "archive": "Archive",
+            "unarchive": "Unarchive"
+        },
+        "statusHelp": {
+            "publish": "Makes the event visible based on visibility settings; registrations/invites open.",
+            "moveToDraft": "Hides the event from audiences; registrations are disabled.",
+            "cancel": "Cancels the event; registrations close and invites are void.",
+            "restore": "Reopens the event and moves it back to draft.",
+            "archive": "Removes the event from active lists while keeping its page.",
+            "unarchive": "Returns the event from archive to active management."
+        },
+        "rsvp": {
+            "going": "Going",
+            "interested": "Interested",
+            "view": "View attendees",
+            "drawer": {
+                "title": "Attendees",
+                "close": "Close",
+                "loading": "Loading attendees…",
+                "error": "Failed to load attendees.",
+                "counts": {
+                    "going": "Going",
+                    "interested": "Interested"
+                }
+            }
+        }
+    }
+
+}

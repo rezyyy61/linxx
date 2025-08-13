@@ -1,0 +1,76 @@
+{
+  "name": "linxx-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@iconify-icons/mdi": "^1.2.48",
+    "@liripeng/vue-audio-player": "^2.0.4",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tiptap/extension-image": "^3.0.7",
+    "@vuepic/vue-datepicker": "^11.0.2",
+    "axios": "^1.10.0",
+    "core-js": "^3.8.3",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
+    "dompurify": "^3.2.6",
+    "hls.js": "^1.6.7",
+    "lucide-vue-next": "^0.525.0",
+    "pinia": "^3.0.3",
+    "plyr": "^3.7.8",
+    "quill": "^2.0.3",
+    "video.js": "^7.21.7",
+    "videojs-contrib-quality-levels": "^2.2.1",
+    "videojs-http-source-selector": "^1.1.6",
+    "vue": "^3.2.13",
+    "vue-audio-player": "^0.0.2",
+    "vue-easy-lightbox": "^1.19.0",
+    "vue-i18n": "^9.14.4",
+    "vue-router": "^4.5.1",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-quill": "^0.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@iconify/vue": "^5.0.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.56.0",
+    "eslint-formatter-table": "^7.32.1",
+    "eslint-plugin-vue": "^9.33.0",
+    "laravel-echo": "^2.1.6",
+    "postcss": "^8.5.6",
+    "pusher-js": "^8.4.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

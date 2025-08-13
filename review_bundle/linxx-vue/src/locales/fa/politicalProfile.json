@@ -1,0 +1,178 @@
+{
+
+    "_comment_about": "این بخش مربوط به ترجمه Dashboard است",
+
+        "sections": {
+            "general": "اطلاعات کلی و لوگو",
+            "ideologies": "گرایش‌های سیاسی",
+            "description": "توضیحات کامل و مانیفست",
+            "links": "شبکه‌های اجتماعی",
+            "submit": "ارسال نهایی"
+        },
+        "placeholders": {
+            "general": "نام، نوع، سال، موقعیت را وارد کنید...",
+            "ideologies": "گرایش‌های سیاسی را انتخاب یا اضافه کنید",
+            "description": "اهداف، دیدگاه‌ها و پیش‌زمینه را شرح دهید",
+            "links": "لینک‌های شبکه اجتماعی و وب‌سایت را وارد کنید",
+            "submit": "پروفایل را ذخیره و منتشر کنید"
+        },
+
+    "general": {
+        "save": "ذخیره",
+        "groupName": "نام فرد یا گروه",
+        "groupNamePlaceholder": "مثلاً: جمع همبستگی کارگران",
+        "tagline": "شعار / معرفی کوتاه",
+        "taglinePlaceholder": "مثلاً: صدای ضدسرمایه‌داری از حاشیه‌ها",
+        "entityType": "نوع هویت",
+        "entityTypePlaceholder": "نوع هویت خود را انتخاب کنید",
+        "entityTypeApprovalNotice": "درخواست شما ثبت می‌شود، اما تا تأیید توسط ادمین، پروفایل عمومی نخواهد شد.",
+        "requiresApproval": "نیاز به تایید",
+        "changeLogo": "تغییر لوگو",
+        "logoPlaceholder": "برای آپلود لوگو کلیک یا بکشید",
+        "uploadButton": "آپلود لوگو",
+
+        "types": {
+            "party": "حزب سیاسی",
+            "collective": "جمع / شبکه",
+            "media": "رسانه",
+            "individual": "فرد فعال"
+        },
+        "location": "موقعیت مکانی",
+        "locationPlaceholder": "مثلاً: برلین، آلمان",
+        "foundedYear": "سال تأسیس",
+        "foundedYearPlaceholder": "مثلاً: ۲۰۱۰"
+    },
+
+    "entityTypes": {
+        "individual": "فردی",
+        "party": "حزب",
+        "collective": "جمعی",
+        "media": "رسانه"
+    },
+
+    "ideologies": {
+        "label": "گرایش‌های سیاسی",
+        "keywordsLabel": "کلیدواژه‌ها",
+        "optional": "اختیاری",
+        "addButton": "افزودن",
+        "keywordsPlaceholder": "مثلاً: ضد جنگ، عدالت اجتماعی، حق تعیین سرنوشت",
+        "customLabel": "افزودن گرایش دلخواه",
+        "list": {
+            "socialism": "سوسیالیسم",
+            "feminism": "فمینیسم",
+            "anarchism": "آنارشیسم",
+            "environmentalism": "محیط‌زیستی",
+            "antiCapitalism": "ضد سرمایه‌داری",
+            "marxism": "مارکسیسم",
+            "humanRights": "حقوق بشر"
+        }
+    },
+
+    "description": {
+        "about": "درباره ما",
+        "goals": "اهداف",
+        "activities": "فعالیت‌ها",
+        "structure": "ساختار",
+        "optional": "اختیاری",
+        "placeholder": "توضیحات خود را اینجا بنویسید...",
+        "tabs": {
+            "text": "نوشتن متن",
+            "files": "آپلود فایل"
+        },
+        "uploadHint": "برای آپلود فایل کلیک کنید یا اینجا بکشید و رها کنید",
+        "files": "فایل‌ها"
+    },
+
+    "links": {
+        "title": "لینک‌ها",
+        "officialLinks": "لینک‌های رسمی",
+        "customLinks": "لینک‌های سفارشی",
+        "addNew": "افزودن لینک جدید",
+        "hideForm": "بستن فرم",
+        "addButton": "افزودن لینک",
+        "remove": "حذف لینک",
+        "validationError": "لطفا عنوان و آدرس معتبر وارد کنید.",
+        "placeholders": {
+            "title": "عنوان لینک (مثلاً کانال یوتیوب)",
+            "url": "آدرس لینک (https://...)"
+        }
+    },
+
+    "contact": {
+        "website": "وبسایت",
+        "youtube": "یوتیوب",
+        "twitter": "توییتر",
+        "facebook": "فیسبوک",
+        "instagram": "اینستاگرام",
+        "telegram": "تلگرام",
+        "email": "ایمیل",
+        "phone": "تلفن",
+        "placeholders": {
+            "website": "آدرس وبسایت",
+            "youtube": "لینک یوتیوب",
+            "twitter": "لینک توییتر",
+            "facebook": "لینک فیسبوک",
+            "instagram": "لینک اینستاگرام",
+            "telegram": "لینک تلگرام",
+            "email": "آدرس ایمیل",
+            "phone": "شماره تلفن"
+        }
+    },
+
+    "submit": {
+        "title": "بازبینی و ارسال",
+        "subtitle": "لطفاً پیش از ارسال، تمام اطلاعات را بررسی کنید.",
+        "confirmText": "صحت اطلاعات فوق را تأیید می‌کنم.",
+        "button": "ارسال",
+        "sending": "در حال ارسال...",
+        "success": "✅ پروفایل با موفقیت ثبت شد!"
+    },
+
+
+    "_comment_about2": "این بخش مربوط به ترجمه Public است",
+
+    "list": {
+        "title": "لیست احزاب سیاسی",
+        "loading": "در حال بارگذاری...",
+        "error": "error"
+    },
+
+"description-public": {
+        "about_title": "درباره حزب",
+        "about": "معرفی",
+        "goals": "اهداف",
+        "activities": "فعالیت‌ها",
+        "structure": "ساختار",
+        "attachments": "فایل‌های پیوست",
+        "no_content": "محتوایی برای این بخش ثبت نشده است.",
+        "download": "دانلود"
+    },
+
+    "profileMenu": {
+        "posts": "پست‌ها",
+        "about": "درباره",
+        "videos": "ویدیوها",
+        "photos": "عکس‌ها",
+        "files": "فایل‌ها",
+        "contact": "ارتباط",
+        "noPosts": "هیچ پستی برای این پروفایل ثبت نشده است.",
+        "programs": "برنامه‌ها",
+        "search": "جستجو...",
+        "activeTab": "تب فعال"
+    },
+
+    "sidebar": {
+        "title": "اطلاعات تکمیلی"
+    },
+
+    "errors": {
+        "profile_load": "مشکلی در بارگذاری پروفایل پیش آمده. لطفاً دوباره تلاش کنید."
+    },
+
+    "messages": {
+        "saveSuccess": "✅ اطلاعات با موفقیت ذخیره شد.",
+        "saveFailed": "❌ ذخیره اطلاعات با خطا مواجه شد.",
+        "validationError": "⚠️ لطفاً فیلدها را به درستی تکمیل کنید."
+    }
+
+}
